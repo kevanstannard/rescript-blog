@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Minimal Hello World using Apollo GraphQL and ReasonML - Hello
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="ReasonML and Bucklescript">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Minimal Hello World using Apollo GraphQL and ReasonML</h1>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><h2 id="overview">Overview</h2>
+<p>This is an absolutely bare-bones, minimal example application to<span class="widont">&nbsp;</span>demonstrate:</p>
+<ul>
+<li>Apollo GraphQL on the<span class="widont">&nbsp;</span>server.</li>
+<li>ReasonML on the<span class="widont">&nbsp;</span>client.</li>
+</ul>
+<h2 id="server-code">Server code</h2>
+<p>Our server code does the<span class="widont">&nbsp;</span>following:</p>
+<ol>
+<li>Accepts a GraphQL query “hello”,<span class="widont">&nbsp;</span>and</li>
+<li>Responds with the text<span class="widont">&nbsp;</span>“World”.</li>
+</ol>
+<p>Create a <code>package.json</code> file.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-server&quot;,
+  &quot;private&quot;: true
+}</code></pre><p>Install our dependencies:</p>
+<pre><code>yarn add express
+yarn add graphql
+yarn add apollo-server
+yarn add apollo-server-express</code></pre><p>Create <code>src/index.js</code> for the server<span class="widont">&nbsp;</span>application.</p>
+<pre><code class="language-js"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);
+<span class="keyword">const</span> { ApolloServer, gql } = <span class="built_in">require</span>(<span class="string">"apollo-server-express"</span>);
+
+<span class="comment">// Declare the GraphQL types.</span>
+<span class="comment">// Here, we support a query "hello" that returns a string.</span>
+<span class="keyword">const</span> typeDefs = gql<span class="string">`
+  type Query {
+    hello: String!
+  }
+`</span>;
+
+<span class="comment">// Declare a function to execute when we send the "hello" query.</span>
+<span class="comment">// Here, we wait a couple of seconds and return the string "World".</span>
+<span class="keyword">const</span> helloQuery = <span class="function"><span class="params">()</span> =&gt;</span>
+  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> {
+    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> {
+      resolve(<span class="string">"World"</span>);
+    }, <span class="number">2000</span>);
+  });
+
+<span class="comment">// Declare the GraphQL resolvers.</span>
+<span class="comment">// These map queries to implementations.</span>
+<span class="keyword">const</span> resolvers = {
+  <span class="attr">Query</span>: {
+    <span class="attr">hello</span>: helloQuery
+  }
+};
+
+<span class="comment">// Create and start the server</span>
+<span class="keyword">const</span> server = <span class="keyword">new</span> ApolloServer({ typeDefs, resolvers });
+<span class="keyword">const</span> app = express();
+server.applyMiddleware({ app });
+
+<span class="keyword">const</span> port = <span class="number">4000</span>;
+app.listen({ port }, () =&gt;
+  <span class="built_in">console</span>.log(<span class="string">`Server ready at http://localhost:<span class="subst">${port}</span><span class="subst">${server.graphqlPath}</span>`</span>)
+);</code></pre>
+<p>Add a script to <code>package.json</code> that starts the<span class="widont">&nbsp;</span>server.</p>
+<pre><code>&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;node src/index&quot;
+},</code></pre><p>Start the server:</p>
+<pre><code>yarn start</code></pre><p>Test that the server is working, by browsing to <a href="http://localhost:4000/graphql">http://localhost:4000/graphql</a></p>
+<p>Enter the following GraphQL<span class="widont">&nbsp;</span>query:</p>
+<pre><code class="language-graphql">query {
+  hello
+}</code></pre>
+<p>You should see the<span class="widont">&nbsp;</span>response:</p>
+<pre><code class="language-graphql">{
+  &quot;data&quot;: {
+    &quot;hello&quot;: &quot;World&quot;
+  }
+}</code></pre>
+<h2 id="client">Client</h2>
+<p>Create a minimal<span class="widont">&nbsp;</span>package.json:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-client&quot;,
+  &quot;private&quot;: true
+}</code></pre><p>Install our application<span class="widont">&nbsp;</span>dependencies:</p>
+<pre><code>yarn add --exact react
+yarn add --exact react-dom
+yarn add --exact reason-apollo
+yarn add --exact reason-react</code></pre><p>Install our development<span class="widont">&nbsp;</span>dependencies:</p>
+<pre><code>yarn add --exact bs-platform@5.2.1
+yarn add --exact graphql_ppx
+yarn add --exact html-webpack-plugin
+yarn add --exact webpack
+yarn add --exact webpack-cli
+yarn add --exact webpack-dev-server</code></pre><p><strong>Important: At the time of writing (December 2019) you must install <a href="mailto:bs-platform@5.2.1">bs-platform@5.2.1</a>. <a href="https://github.com/apollographql/reason-apollo/issues/215">Later versions are not yet compatible with<span class="widont">&nbsp;</span>reason-apollo.</a></strong></p>
+<p>Add some useful scripts to <code>package.json</code>:</p>
+<pre><code>&quot;scripts&quot;: {
+  &quot;re:build&quot;: &quot;bsb -make-world -clean-world&quot;,
+  &quot;re:watch&quot;: &quot;bsb -make-world -clean-world -w&quot;,
+  &quot;build&quot;: &quot;webpack&quot;,
+  &quot;start&quot;: &quot;webpack-dev-server&quot;
+},</code></pre><p>Add a <code>bsconfig.json</code> file:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-client&quot;,
+  &quot;reason&quot;: { &quot;react-jsx&quot;: 3 },
+  &quot;bsc-flags&quot;: [&quot;-bs-super-errors&quot;],
+  &quot;sources&quot;: [
+    {
+      &quot;dir&quot;: &quot;src&quot;,
+      &quot;subdirs&quot;: true
+    }
+  ],
+  &quot;package-specs&quot;: [
+    {
+      &quot;module&quot;: &quot;es6&quot;,
+      &quot;in-source&quot;: true
+    }
+  ],
+  &quot;suffix&quot;: &quot;.bs.js&quot;,
+  &quot;namespace&quot;: true,
+  &quot;bs-dependencies&quot;: [&quot;reason-react&quot;, &quot;reason-apollo&quot;],
+  &quot;ppx-flags&quot;: [&quot;graphql_ppx/ppx&quot;],
+  &quot;refmt&quot;: 3
+}</code></pre><p>Generate a GraphQL schema file for the client. This will generate a <code>graphql_schema.json</code> file.</p>
+<pre><code>yarn send-introspection-query http://localhost:4000/graphql</code></pre><p>The <code>graphql_schema.json</code> file contains the types for the queries that the server is handling. The reason-apollo package uses these types to ensure that our handling of the responses is type<span class="widont">&nbsp;</span>safe.</p>
+<p>Add a <code>webpack.config.js</code> file:</p>
+<pre><code class="language-js"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">"html-webpack-plugin"</span>);
+<span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);
+<span class="built_in">module</span>.exports = {
+  <span class="attr">entry</span>: <span class="string">"./src/Index.bs.js"</span>,
+  <span class="attr">mode</span>: <span class="string">"development"</span>,
+  <span class="attr">plugins</span>: [<span class="keyword">new</span> HtmlWebpackPlugin({ <span class="attr">template</span>: <span class="string">"templates/index.html"</span> })],
+  <span class="attr">devServer</span>: {
+    <span class="attr">contentBase</span>: path.join(__dirname, <span class="string">"build"</span>),
+    <span class="attr">port</span>: <span class="number">9000</span>
+  }
+};</code></pre>
+<p>Add a template for the application in <code>templates/index.html</code>:</p>
+<pre><code class="language-html"><span class="meta">&lt;!<span class="caps">DOCTYPE</span> <span class="meta-keyword">html</span>&gt;</span>
+<span class="tag">&lt;<span class="name">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="name">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"<span class="caps">UTF</span>-8"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello Client<span class="tag">&lt;/<span class="name">title</span>&gt;</span>
+  <span class="tag">&lt;/<span class="name">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="name">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>
+  <span class="tag">&lt;/<span class="name">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">html</span>&gt;</span></code></pre>
+<p>Create a <code>src/Index.re</code> file:</p>
+<pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(
+  &lt;ReasonApollo.Provider client=Client.instance&gt;
+    &lt;App /&gt;
+  &lt;/ReasonApollo.Provider&gt;,
+  "root",
+);</code></pre>
+<p>Create a <code>src/Client.re</code> file:</p>
+<pre><code class="language-reasonml"><span class="keyword">let</span> inMemoryCache = <span class="module-access"><span class="module"><span class="identifier">ApolloInMemoryCache</span>.</span></span>create<span class="constructor">InMemoryCache()</span>;
+
+<span class="keyword">let</span> httpLink =
+  <span class="module-access"><span class="module"><span class="identifier">ApolloLinks</span>.</span></span>create<span class="constructor">HttpLink(~<span class="params">uri</span>=<span class="string">"http://localhost:4000/graphql"</span>, ()</span>);
+
+<span class="keyword">let</span> instance =
+  <span class="module-access"><span class="module"><span class="identifier">ReasonApollo</span>.</span></span>create<span class="constructor">ApolloClient(~<span class="params">link</span>=<span class="params">httpLink</span>, ~<span class="params">cache</span>=<span class="params">inMemoryCache</span>, ()</span>);</code></pre>
+<p>Create a <code>src/App.re</code> file:</p>
+<pre><code class="language-reasonml"><span class="comment">/* Create a GraphQL Query by using the graphql_ppx */</span>
+<span class="keyword">module</span> GetHello = <span class="literal">[%<span class="identifier">graphql</span> {|
+  <span class="identifier">query</span> <span class="identifier">getHello</span> {
+    <span class="identifier">hello</span>
+  }
+|}]</span>;
+
+<span class="keyword">module</span> GetHelloQuery = ReasonApollo.<span class="constructor">CreateQuery(GetHello)</span>;
+
+<span class="literal">[@<span class="identifier">react</span>.<span class="identifier">component</span>]</span>
+<span class="keyword">let</span> make =<span class="function"> <span class="params">()</span> =&gt;</span> {
+  &lt;GetHelloQuery&gt;
+    ...{({result}) =&gt;
+      switch (result) {
+      <span class="pattern-match">| <span class="constructor">Loading</span> =&gt;</span>
+        &lt;div&gt; {<span class="module-access"><span class="module"><span class="identifier">ReasonReact</span>.</span></span><span class="built_in">string</span>(<span class="string">"Loading"</span>)} &lt;/div&gt;
+      <span class="pattern-match">| <span class="constructor">Error(<span class="params">error</span>)</span> =&gt;</span>
+        &lt;div&gt; {<span class="module-access"><span class="module"><span class="identifier">ReasonReact</span>.</span></span><span class="built_in">string</span>(error##message)} &lt;/div&gt;
+      <span class="pattern-match">| <span class="constructor">Data(<span class="params">response</span>)</span> =&gt;</span>
+        &lt;div&gt;
+          {<span class="module-access"><span class="module"><span class="identifier">ReasonReact</span>.</span></span><span class="built_in">string</span>(<span class="string">"Hello"</span>)}
+          {<span class="module-access"><span class="module"><span class="identifier">ReasonReact</span>.</span></span><span class="built_in">string</span>(response##hello)}
+        &lt;/div&gt;
+      }
+    }
+  &lt;/GetHelloQuery&gt;;
+};</code></pre>
+<p>Start the client<span class="widont">&nbsp;</span>application</p>
+<pre><code>yarn start</code></pre><p>You should then be able to browse to <a href="http://localhost:9000">http://localhost:9000</a></p>
+<p>In the browser<span class="widont">&nbsp;</span>see:</p>
+<pre><code>HelloWorld</code></pre><h2 id="references">References</h2>
+<p>ReasonApollo installation<br><a href="https://github.com/apollographql/reason-apollo">https://github.com/apollographql/reason-apollo</a></p>
+<p>ReasonReact installation<br><a href="https://reasonml.github.io/reason-react/docs/en/installation.html">https://reasonml.github.io/reason-react/docs/en/installation.html</a></p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">&laquo; Full blog</a></div>
+        <section class="copy">
+          <p>&copy; 2019 Kevan Stannard &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a></p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

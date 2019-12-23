@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hello</title>
+    <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://localhost:8080</link>
+    <description>ReasonML and Bucklescript</description>
+    <pubDate>Sat, 21 Dec 2019 09:00:00 +1100</pubDate>
+    <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
+    <language>en</language>
+    <item>
+      <title>How to create a JavaScript object in ReasonML</title>
+      <link>http://localhost:8080/articles/javascript-object/</link>
+      <pubDate>Sat, 21 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/javascript-object/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;&lt;span class=&quot;more&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h2 id=&quot;bucklescript-7&quot;&gt;Bucklescript &amp;lt; 7&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;abstract&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; payload = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;
+};
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; obj: payload = payload(~name=&lt;span class=&quot;string&quot;&gt;&quot;John&quot;&lt;/span&gt;, ~age=&lt;span class=&quot;number&quot;&gt;30&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;bucklescript-v7&quot;&gt;Bucklescript ≥ v7&lt;/h2&gt;
+&lt;p&gt;From &lt;a href=&quot;https://bucklescript.github.io/docs/en/object&quot;&gt;the docs&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; payload = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;
+};
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; obj: payload = {name: &lt;span class=&quot;string&quot;&gt;&quot;John&quot;&lt;/span&gt;, age: &lt;span class=&quot;number&quot;&gt;30&lt;/span&gt;};&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Simple example of a polymorphic object in ReasonML</title>
+      <link>http://localhost:8080/articles/polymorphic-object/</link>
+      <pubDate>Sat, 21 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/polymorphic-object/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;The &lt;code&gt;..&lt;/code&gt; notation declares an open object type:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; logName =&lt;span class=&quot;function&quot;&gt; (&lt;span class=&quot;params&quot;&gt;o&lt;/span&gt;: {.. &quot;&lt;span class=&quot;params&quot;&gt;name&lt;/span&gt;&quot;: &lt;span class=&quot;params&quot;&gt;string&lt;/span&gt;}) =&amp;gt;&lt;/span&gt; &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(o##name);
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; a = {&lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;age&quot;&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;20&lt;/span&gt;};
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; b = {&lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;Cybertruck&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;make&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;Tesla&quot;&lt;/span&gt;};
+log&lt;span class=&quot;constructor&quot;&gt;Name(&lt;span class=&quot;params&quot;&gt;a&lt;/span&gt;)&lt;/span&gt;;
+log&lt;span class=&quot;constructor&quot;&gt;Name(&lt;span class=&quot;params&quot;&gt;b&lt;/span&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>“Unused variable this” with ReasonML objects</title>
+      <link>http://localhost:8080/articles/unused-variable-this/</link>
+      <pubDate>Fri, 20 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/unused-variable-this/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;If you declare a simple ReasonML object such as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {. name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;};
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; p1 = {
+  pub name = &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You may see a compiler warning:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Unused variable this&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To hide this warning, add &lt;code&gt;as _;&lt;/code&gt; at the beginning of your object:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; p = {
+  &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; _;
+  pub name = &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These object types have an implicit this available, and if you don’t use it, then you will receive the warning.&lt;/p&gt;
+&lt;p&gt;Here’s an example that uses the &lt;code&gt;this&lt;/code&gt; reference:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {
+  .
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  greet:&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;unit&lt;/span&gt; =&amp;gt;&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; p: person = {
+  pub name = &lt;span class=&quot;string&quot;&gt;&quot;Joe&quot;&lt;/span&gt;;
+  pub greet =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Hello &quot;&lt;/span&gt;&lt;span class=&quot;operator&quot;&gt; ++ &lt;/span&gt;this#name;
+};&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Comparing ReasonML object and record data structures</title>
+      <link>http://localhost:8080/articles/objects-and-records/</link>
+      <pubDate>Fri, 20 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/objects-and-records/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;h2 id=&quot;record&quot;&gt;Record&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; personRec = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; pRec: personRec = {name: &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;, age: &lt;span class=&quot;number&quot;&gt;21&lt;/span&gt;};
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pRec);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pRec.name);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pRec.age);
+
+&lt;span class=&quot;comment&quot;&gt;// [ 'Hello', 21 ]&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Hello&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// 21&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;abstract-record&quot;&gt;Abstract Record&lt;/h2&gt;
+&lt;p&gt;An abstract record is useful when you want to work with a native JavaScript object.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;abstract&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; personAbs = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; pAbs: personAbs = person&lt;span class=&quot;constructor&quot;&gt;Abs(~&lt;span class=&quot;params&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;, ~&lt;span class=&quot;params&quot;&gt;age&lt;/span&gt;=21)&lt;/span&gt;;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pAbs);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pAbs-&amp;gt;nameGet);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pAbs-&amp;gt;ageGet);
+
+&lt;span class=&quot;comment&quot;&gt;// { name: 'Hello', age: 21 }&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Hello&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// 21&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;reason-object&quot;&gt;Reason Object&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; personObj = {
+  .
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; pObj: personObj = {
+  &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; _; &lt;span class=&quot;comment&quot;&gt;/* Suppress &quot;unused variable this&quot; warning */&lt;/span&gt;
+  pub name = &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;;
+  pub age = &lt;span class=&quot;number&quot;&gt;21&lt;/span&gt;
+};
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pObj);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pObj#name);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pObj#age);
+
+&lt;span class=&quot;comment&quot;&gt;// [[2,7,[Function],-922783157,[Function],4846783],3,tag:248]&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Hello&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// 21&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;javascript-object&quot;&gt;JavaScript Object&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; personJsObj = {
+  .
+  &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  &lt;span class=&quot;string&quot;&gt;&quot;age&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; pJsObj: personJsObj = {&lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;age&quot;&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;21&lt;/span&gt;};
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pJsObj);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pJsObj##name);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pJsObj##age);
+
+&lt;span class=&quot;comment&quot;&gt;// { name: 'Hello', age: 21 }&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Hello&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// 21&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;dictionary&quot;&gt;Dictionary&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; pDict: &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;t(&lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;) = &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;empty&lt;span class=&quot;literal&quot;&gt;()&lt;/span&gt;;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;set(pDict, &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;set(pDict, &lt;span class=&quot;string&quot;&gt;&quot;age&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;21&quot;&lt;/span&gt;);
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(pDict);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get(pDict, &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;));
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Dict&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get(pDict, &lt;span class=&quot;string&quot;&gt;&quot;age&quot;&lt;/span&gt;));
+
+&lt;span class=&quot;comment&quot;&gt;// { name: 'Hello', age: '21' }&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Hello&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// 21&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>How to define errors in ReasonML</title>
+      <link>http://localhost:8080/articles/define-errors/</link>
+      <pubDate>Mon, 16 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/define-errors/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;Errors in ReasonML belong to the &lt;code&gt;exn&lt;/code&gt; type.&lt;/p&gt;
+&lt;p&gt;We can extend this type with our own exceptions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;type exn +=
+  | MyError
+  | MyOtherError(string);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However ReasonML provides some syntactic sugar to make this more readable:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;exception&lt;/span&gt; MyError;
+&lt;span class=&quot;keyword&quot;&gt;exception&lt;/span&gt; &lt;span class=&quot;constructor&quot;&gt;MyOtherError(&lt;span class=&quot;params&quot;&gt;string&lt;/span&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;ReasonML Exception Handling
+&lt;a href=&quot;https://medium.com/w3reality/reasonml-exception-handling-c2ea747f71df&quot;&gt;https://medium.com/w3reality/reasonml-exception-handling-c2ea747f71df&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>ReasonML switch statement with multiple values</title>
+      <link>http://localhost:8080/articles/switch-multiple-values/</link>
+      <pubDate>Mon, 16 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/switch-multiple-values/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;ReasonML supports a &lt;code&gt;switch&lt;/code&gt; statement with multiple values.&lt;/p&gt;
+&lt;p&gt;For example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; a = &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; b = &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; x = switch (a, b) {
+  &lt;span class=&quot;pattern-match&quot;&gt;| (&lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;, &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;) =&amp;gt;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Both False&quot;&lt;/span&gt;
+  &lt;span class=&quot;pattern-match&quot;&gt;| (&lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;, &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;) =&amp;gt;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;False and True&quot;&lt;/span&gt;
+  &lt;span class=&quot;pattern-match&quot;&gt;| (&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;, &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;) =&amp;gt;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;True and False&quot;&lt;/span&gt;
+  &lt;span class=&quot;pattern-match&quot;&gt;| (&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;, &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;) =&amp;gt;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Both True&quot;&lt;/span&gt;
+};&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>How to access values in a ReasonML Abstract Record?</title>
+      <link>http://localhost:8080/articles/abstract-record-values/</link>
+      <pubDate>Mon, 16 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/abstract-record-values/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;An abstract record type is declared as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;abstract&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This looks like a ReasonML record, but it’s not a record.&lt;/p&gt;
+&lt;p&gt;This declaration causes the creation of three functions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;person()&lt;/code&gt; the creation function.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nameGet()&lt;/code&gt; to access the name of a person&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ageGet()&lt;/code&gt; to access the age of a person&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; joe: person = person(~name=&lt;span class=&quot;string&quot;&gt;&quot;Joe&quot;&lt;/span&gt;, ~age=&lt;span class=&quot;number&quot;&gt;20&lt;/span&gt;);
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; joeName: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt; = name&lt;span class=&quot;constructor&quot;&gt;Get(&lt;span class=&quot;params&quot;&gt;joe&lt;/span&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As noted above this is not a record, consider the difference between a normal record and an abstract record:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;abstract&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; abstractPerson = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+  age: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; abstractJoe = abstract&lt;span class=&quot;constructor&quot;&gt;Person(~&lt;span class=&quot;params&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;Joe&quot;&lt;/span&gt;, ~&lt;span class=&quot;params&quot;&gt;age&lt;/span&gt;=20)&lt;/span&gt;;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; joe = {name: &lt;span class=&quot;string&quot;&gt;&quot;Joe&quot;&lt;/span&gt;, age: &lt;span class=&quot;number&quot;&gt;20&lt;/span&gt;};
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(abstractJoe);
+&lt;span class=&quot;comment&quot;&gt;// {name: &quot;Joe&quot;, age: 20}&lt;/span&gt;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(joe);
+&lt;span class=&quot;comment&quot;&gt;// [&quot;Joe&quot;, 20]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This makes the &lt;code&gt;abstract&lt;/code&gt; annotation useful for inter-op with JavaScript.&lt;/p&gt;
+&lt;p&gt;Suppose you have a object named &lt;code&gt;joe&lt;/code&gt; in JavaScript with the fields &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;age&lt;/code&gt;, we can access this object in ReasonML using:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;val&lt;/span&gt;]&lt;/span&gt; external john : person = &lt;span class=&quot;string&quot;&gt;&quot;john&quot;&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>How to create a multiline string in ReasonML</title>
+      <link>http://localhost:8080/articles/multiline-string/</link>
+      <pubDate>Sun, 15 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/multiline-string/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;Multiline strings are created by enclosing the string with &lt;code&gt;{|&lt;/code&gt; and &lt;code&gt;|}&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; message = {&lt;span class=&quot;pattern-match&quot;&gt;|
+&lt;span class=&quot;constructor&quot;&gt;Hello&lt;/span&gt;
+&lt;span class=&quot;constructor&quot;&gt;World&lt;/span&gt;
+|};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;String &amp;amp; Char
+&lt;a href=&quot;https://reasonml.github.io/docs/en/string-and-char&quot;&gt;https://reasonml.github.io/docs/en/string-and-char&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>De-structuring ReasonML type data (using pattern matching)</title>
+      <link>http://localhost:8080/articles/destructuring-types/</link>
+      <pubDate>Thu, 12 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/destructuring-types/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;Suppose we have the following type:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = &lt;span class=&quot;constructor&quot;&gt;Person(&lt;span class=&quot;params&quot;&gt;string&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;int&lt;/span&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can use this type as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; joe = &lt;span class=&quot;constructor&quot;&gt;Person(&lt;span class=&quot;string&quot;&gt;&quot;Joe&quot;&lt;/span&gt;, 23)&lt;/span&gt;;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; jim = &lt;span class=&quot;constructor&quot;&gt;Person(&lt;span class=&quot;string&quot;&gt;&quot;Jim&quot;&lt;/span&gt;, 31)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When we have variables like this, we can use pattern matching to extract the values:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;constructor&quot;&gt;Person(&lt;span class=&quot;params&quot;&gt;name1&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;age1&lt;/span&gt;)&lt;/span&gt; = joe;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;constructor&quot;&gt;Person(&lt;span class=&quot;params&quot;&gt;name2&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;age2&lt;/span&gt;)&lt;/span&gt; = jim;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log2(name1, age1);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log2(name2, age2);
+
+&lt;span class=&quot;comment&quot;&gt;// &quot;Joe&quot; 23&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// &quot;Jim&quot; 31&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Writing a simple stateful Redux store in ReasonML (without React)</title>
+      <link>http://localhost:8080/articles/stateful-store/</link>
+      <pubDate>Thu, 12 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/stateful-store/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;h2 id=&quot;creating-our-store&quot;&gt;Creating our store&lt;/h2&gt;
+&lt;p&gt;Firstly, we need to create a stateful store that can be mutated by actions.&lt;/p&gt;
+&lt;p&gt;Let’s create a &lt;code&gt;Store.re&lt;/code&gt; module and add a type for the store.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; t('action, 'state) = {
+  &lt;span class=&quot;keyword&quot;&gt;mutable&lt;/span&gt; state: 'state,
+  reducer:&lt;span class=&quot;function&quot;&gt; ('&lt;span class=&quot;params&quot;&gt;state&lt;/span&gt;, '&lt;span class=&quot;params&quot;&gt;action&lt;/span&gt;) =&amp;gt;&lt;/span&gt; 'state,
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This follows the naming convention &lt;code&gt;t&lt;/code&gt; for a module. Also notice here that we’re using the &lt;code&gt;mutable&lt;/code&gt; attribute for the state.&lt;/p&gt;
+&lt;p&gt;Next, add a function that creates the initial store.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; create =&lt;span class=&quot;function&quot;&gt; (&lt;span class=&quot;params&quot;&gt;reducer&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;initialState&lt;/span&gt;): &lt;span class=&quot;params&quot;&gt;t&lt;/span&gt;('&lt;span class=&quot;params&quot;&gt;action&lt;/span&gt;, '&lt;span class=&quot;params&quot;&gt;state&lt;/span&gt;) =&amp;gt;&lt;/span&gt; {
+  state: initialState,
+  reducer,
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Plus a function for dispatching actions. This mutates the state inside the store.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; dispatch = (store, action):&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;unit&lt;/span&gt; =&amp;gt;&lt;/span&gt; {
+  store.state = store.reducer(store.state, action);
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Lastly, let’s add a function for extracting the state from the store.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; getState = (store: t('action, 'state)): 'state =&amp;gt; store.state;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;using-the-store&quot;&gt;Using the store&lt;/h2&gt;
+&lt;p&gt;Create an &lt;code&gt;Index.re&lt;/code&gt; as our main application module.&lt;/p&gt;
+&lt;p&gt;Declare our types; we’ll create a simple increment/decrement behaviour.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; state = {counter: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;};
+
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; action =
+  &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Increment&lt;/span&gt;
+  | &lt;span class=&quot;constructor&quot;&gt;Decrement&lt;/span&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, create the reducer to process the actions.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; reducer =&lt;span class=&quot;function&quot;&gt; (&lt;span class=&quot;params&quot;&gt;state&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;action&lt;/span&gt;) =&amp;gt;&lt;/span&gt; {
+  switch (action) {
+  &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Increment&lt;/span&gt; =&amp;gt;&lt;/span&gt; {counter: state.counter + &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;}
+  &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Decrement&lt;/span&gt; =&amp;gt;&lt;/span&gt; {counter: state.counter - &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;}
+  };
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we can create our store.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; initalState = {counter: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; store = &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Store&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;create(reducer, initalState);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s also create two convenience functions that operate on the store we just created:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; dispatch =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;action&lt;/span&gt; =&amp;gt;&lt;/span&gt; &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Store&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;dispatch(store, action);
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; getState =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt; &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Store&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State(&lt;span class=&quot;params&quot;&gt;store&lt;/span&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now we can write some code that uses the store:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State()&lt;/span&gt;);
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;dispatch(CounterStore.Increment);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State()&lt;/span&gt;);
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;dispatch(CounterStore.Increment);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State()&lt;/span&gt;);
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;dispatch(CounterStore.Decrement);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State()&lt;/span&gt;);
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;dispatch(CounterStore.Decrement);
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log(&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;CounterStore&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;get&lt;span class=&quot;constructor&quot;&gt;State()&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Which outputs:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;{ counter: 0 }
+{ counter: 1 }
+{ counter: 2 }
+{ counter: 1 }
+{ counter: 0 }&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;Redux in Reason&lt;br&gt;&lt;a href=&quot;https://github.com/reasonml-community/reductive&quot;&gt;https://github.com/reasonml-community/reductive&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Using ReasonML server side with Node.js</title>
+      <link>http://localhost:8080/articles/server-side-nodejs/</link>
+      <pubDate>Wed, 11 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/server-side-nodejs/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;p&gt;Node version &lt;code&gt;13.3.0&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Bucklescript version &lt;code&gt;5.2.1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;When writing client side code in ReasonML, you would typically have a &lt;code&gt;bsconfig.json&lt;/code&gt; setting for es6 modules:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;package-specs&amp;quot;: [
+  {
+   &amp;quot;module&amp;quot;: &amp;quot;es6&amp;quot;,
+   &amp;quot;in-source&amp;quot;: true
+  }
+]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This generates import statements that don’t work in the current version of Node.&lt;/p&gt;
+&lt;p&gt;To fix this, change the module setting to commonjs , which will generate require statements instead:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;package-specs&amp;quot;: [
+  {
+   &amp;quot;module&amp;quot;: &amp;quot;commonjs&amp;quot;,
+   &amp;quot;in-source&amp;quot;: true
+  }
+]&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    <item>
+      <title>Converting between ReasonML records and JavaScript objects</title>
+      <link>http://localhost:8080/articles/converting-records-to-objects/</link>
+      <pubDate>Wed, 11 Dec 2019 08:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/converting-records-to-objects/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Update Dec 2019&lt;/strong&gt;: In BuckleScript &amp;gt;= v7 records are already compiled to JS objects. jsConverter is therefore obsolete and will generate a no-op function for compatibility instead.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;BuckleScript provides a &lt;a href=&quot;https://bucklescript.github.io/docs/en/generate-converters-accessors&quot;&gt;convenience decorator&lt;/a&gt; to convert between ReasonML records and JavaScript objects.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;[@bs.deriving jsConverter]&lt;/code&gt; decorator declared above a record type causes two functions to become available:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;typename&amp;gt;ToJs&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;typename&amp;gt;FromJs&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Suppose you have a person type, when you add the decorator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;jsConverter&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {
+  id: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It causes the following two functions to become available:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; personToJs:&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;person&lt;/span&gt; =&amp;gt;&lt;/span&gt; {. &lt;span class=&quot;string&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; personFromJs: {.. &lt;span class=&quot;string&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;} =&amp;gt; person;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Example usage:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;bs&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;deriving&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;jsConverter&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; person = {
+  id: &lt;span class=&quot;built_in&quot;&gt;int&lt;/span&gt;,
+  name: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;,
+};
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; sherlock = {id: &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, name: &lt;span class=&quot;string&quot;&gt;&quot;Holmes&quot;&lt;/span&gt;};
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log2(&lt;span class=&quot;string&quot;&gt;&quot;sherlock&quot;&lt;/span&gt;, sherlock);
+&lt;span class=&quot;comment&quot;&gt;// &amp;gt; sherlock [ 1, 'Holmes' ]&lt;/span&gt;
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; sherlockJs = person&lt;span class=&quot;constructor&quot;&gt;ToJs(&lt;span class=&quot;params&quot;&gt;sherlock&lt;/span&gt;)&lt;/span&gt;;
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log2(&lt;span class=&quot;string&quot;&gt;&quot;sherlockJs&quot;&lt;/span&gt;, sherlockJs);
+&lt;span class=&quot;comment&quot;&gt;// &amp;gt; sherlockJs { id: 1, name: 'Holmes' }&lt;/span&gt;
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; sherlockRe = person&lt;span class=&quot;constructor&quot;&gt;FromJs(&lt;span class=&quot;params&quot;&gt;sherlockJs&lt;/span&gt;)&lt;/span&gt;;
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;log2(&lt;span class=&quot;string&quot;&gt;&quot;sherlockRs&quot;&lt;/span&gt;, sherlockRe);
+&lt;span class=&quot;comment&quot;&gt;// &amp;gt; sherlockRs [ 1, 'Holmes' ]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Minimal Hello World using Apollo GraphQL and ReasonML</title>
+      <link>http://localhost:8080/articles/hello-world-graphql-apollo/</link>
+      <pubDate>Sun, 08 Dec 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/hello-world-graphql-apollo/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;This is an absolutely bare-bones, minimal example application to demonstrate:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Apollo GraphQL on the server.&lt;/li&gt;
+&lt;li&gt;ReasonML on the client.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;server-code&quot;&gt;Server code&lt;/h2&gt;
+&lt;p&gt;Our server code does the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Accepts a GraphQL query “hello”, and&lt;/li&gt;
+&lt;li&gt;Responds with the text “World”.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Create a &lt;code&gt;package.json&lt;/code&gt; file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;hello-server&amp;quot;,
+  &amp;quot;private&amp;quot;: true
+}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Install our dependencies:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn add express
+yarn add graphql
+yarn add apollo-server
+yarn add apollo-server-express&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Create &lt;code&gt;src/index.js&lt;/code&gt; for the server application.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; express = &lt;span class=&quot;built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;express&quot;&lt;/span&gt;);
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; { ApolloServer, gql } = &lt;span class=&quot;built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;apollo-server-express&quot;&lt;/span&gt;);
+
+&lt;span class=&quot;comment&quot;&gt;// Declare the GraphQL types.&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Here, we support a query &quot;hello&quot; that returns a string.&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; typeDefs = gql&lt;span class=&quot;string&quot;&gt;`
+  type Query {
+    hello: String!
+  }
+`&lt;/span&gt;;
+
+&lt;span class=&quot;comment&quot;&gt;// Declare a function to execute when we send the &quot;hello&quot; query.&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// Here, we wait a couple of seconds and return the string &quot;World&quot;.&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; helloQuery = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;Promise&lt;/span&gt;(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;params&quot;&gt;resolve&lt;/span&gt; =&amp;gt;&lt;/span&gt; {
+    setTimeout(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt; {
+      resolve(&lt;span class=&quot;string&quot;&gt;&quot;World&quot;&lt;/span&gt;);
+    }, &lt;span class=&quot;number&quot;&gt;2000&lt;/span&gt;);
+  });
+
+&lt;span class=&quot;comment&quot;&gt;// Declare the GraphQL resolvers.&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;// These map queries to implementations.&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; resolvers = {
+  &lt;span class=&quot;attr&quot;&gt;Query&lt;/span&gt;: {
+    &lt;span class=&quot;attr&quot;&gt;hello&lt;/span&gt;: helloQuery
+  }
+};
+
+&lt;span class=&quot;comment&quot;&gt;// Create and start the server&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; server = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; ApolloServer({ typeDefs, resolvers });
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; app = express();
+server.applyMiddleware({ app });
+
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; port = &lt;span class=&quot;number&quot;&gt;4000&lt;/span&gt;;
+app.listen({ port }, () =&amp;gt;
+  &lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(&lt;span class=&quot;string&quot;&gt;`Server ready at http://localhost:&lt;span class=&quot;subst&quot;&gt;${port}&lt;/span&gt;&lt;span class=&quot;subst&quot;&gt;${server.graphqlPath}&lt;/span&gt;`&lt;/span&gt;)
+);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Add a script to &lt;code&gt;package.json&lt;/code&gt; that starts the server.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;scripts&amp;quot;: {
+  &amp;quot;start&amp;quot;: &amp;quot;node src/index&amp;quot;
+},&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Start the server:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn start&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Test that the server is working, by browsing to &lt;a href=&quot;http://localhost:4000/graphql&quot;&gt;http://localhost:4000/graphql&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Enter the following GraphQL query:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query {
+  hello
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You should see the response:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;{
+  &amp;quot;data&amp;quot;: {
+    &amp;quot;hello&amp;quot;: &amp;quot;World&amp;quot;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;client&quot;&gt;Client&lt;/h2&gt;
+&lt;p&gt;Create a minimal package.json:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;hello-client&amp;quot;,
+  &amp;quot;private&amp;quot;: true
+}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Install our application dependencies:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn add --exact react
+yarn add --exact react-dom
+yarn add --exact reason-apollo
+yarn add --exact reason-react&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Install our development dependencies:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn add --exact bs-platform@5.2.1
+yarn add --exact graphql_ppx
+yarn add --exact html-webpack-plugin
+yarn add --exact webpack
+yarn add --exact webpack-cli
+yarn add --exact webpack-dev-server&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Important: At the time of writing (December 2019) you must install &lt;a href=&quot;mailto:bs-platform@5.2.1&quot;&gt;bs-platform@5.2.1&lt;/a&gt;. &lt;a href=&quot;https://github.com/apollographql/reason-apollo/issues/215&quot;&gt;Later versions are not yet compatible with reason-apollo.&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Add some useful scripts to &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;scripts&amp;quot;: {
+  &amp;quot;re:build&amp;quot;: &amp;quot;bsb -make-world -clean-world&amp;quot;,
+  &amp;quot;re:watch&amp;quot;: &amp;quot;bsb -make-world -clean-world -w&amp;quot;,
+  &amp;quot;build&amp;quot;: &amp;quot;webpack&amp;quot;,
+  &amp;quot;start&amp;quot;: &amp;quot;webpack-dev-server&amp;quot;
+},&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Add a &lt;code&gt;bsconfig.json&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;hello-client&amp;quot;,
+  &amp;quot;reason&amp;quot;: { &amp;quot;react-jsx&amp;quot;: 3 },
+  &amp;quot;bsc-flags&amp;quot;: [&amp;quot;-bs-super-errors&amp;quot;],
+  &amp;quot;sources&amp;quot;: [
+    {
+      &amp;quot;dir&amp;quot;: &amp;quot;src&amp;quot;,
+      &amp;quot;subdirs&amp;quot;: true
+    }
+  ],
+  &amp;quot;package-specs&amp;quot;: [
+    {
+      &amp;quot;module&amp;quot;: &amp;quot;es6&amp;quot;,
+      &amp;quot;in-source&amp;quot;: true
+    }
+  ],
+  &amp;quot;suffix&amp;quot;: &amp;quot;.bs.js&amp;quot;,
+  &amp;quot;namespace&amp;quot;: true,
+  &amp;quot;bs-dependencies&amp;quot;: [&amp;quot;reason-react&amp;quot;, &amp;quot;reason-apollo&amp;quot;],
+  &amp;quot;ppx-flags&amp;quot;: [&amp;quot;graphql_ppx/ppx&amp;quot;],
+  &amp;quot;refmt&amp;quot;: 3
+}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Generate a GraphQL schema file for the client. This will generate a &lt;code&gt;graphql_schema.json&lt;/code&gt; file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn send-introspection-query http://localhost:4000/graphql&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;graphql_schema.json&lt;/code&gt; file contains the types for the queries that the server is handling. The reason-apollo package uses these types to ensure that our handling of the responses is type safe.&lt;/p&gt;
+&lt;p&gt;Add a &lt;code&gt;webpack.config.js&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; HtmlWebpackPlugin = &lt;span class=&quot;built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;html-webpack-plugin&quot;&lt;/span&gt;);
+&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; path = &lt;span class=&quot;built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;path&quot;&lt;/span&gt;);
+&lt;span class=&quot;built_in&quot;&gt;module&lt;/span&gt;.exports = {
+  &lt;span class=&quot;attr&quot;&gt;entry&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;./src/Index.bs.js&quot;&lt;/span&gt;,
+  &lt;span class=&quot;attr&quot;&gt;mode&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;development&quot;&lt;/span&gt;,
+  &lt;span class=&quot;attr&quot;&gt;plugins&lt;/span&gt;: [&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HtmlWebpackPlugin({ &lt;span class=&quot;attr&quot;&gt;template&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;templates/index.html&quot;&lt;/span&gt; })],
+  &lt;span class=&quot;attr&quot;&gt;devServer&lt;/span&gt;: {
+    &lt;span class=&quot;attr&quot;&gt;contentBase&lt;/span&gt;: path.join(__dirname, &lt;span class=&quot;string&quot;&gt;&quot;build&quot;&lt;/span&gt;),
+    &lt;span class=&quot;attr&quot;&gt;port&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;9000&lt;/span&gt;
+  }
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Add a template for the application in &lt;code&gt;templates/index.html&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;!DOCTYPE &lt;span class=&quot;meta-keyword&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;charset&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;Hello Client&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;root&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Create a &lt;code&gt;src/Index.re&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;ReactDOMRe.renderToElementWithId(
+  &amp;lt;ReasonApollo.Provider client=Client.instance&amp;gt;
+    &amp;lt;App /&amp;gt;
+  &amp;lt;/ReasonApollo.Provider&amp;gt;,
+  &quot;root&quot;,
+);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Create a &lt;code&gt;src/Client.re&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; inMemoryCache = &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ApolloInMemoryCache&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;create&lt;span class=&quot;constructor&quot;&gt;InMemoryCache()&lt;/span&gt;;
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; httpLink =
+  &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ApolloLinks&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;create&lt;span class=&quot;constructor&quot;&gt;HttpLink(~&lt;span class=&quot;params&quot;&gt;uri&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;http://localhost:4000/graphql&quot;&lt;/span&gt;, ()&lt;/span&gt;);
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; instance =
+  &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ReasonApollo&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;create&lt;span class=&quot;constructor&quot;&gt;ApolloClient(~&lt;span class=&quot;params&quot;&gt;link&lt;/span&gt;=&lt;span class=&quot;params&quot;&gt;httpLink&lt;/span&gt;, ~&lt;span class=&quot;params&quot;&gt;cache&lt;/span&gt;=&lt;span class=&quot;params&quot;&gt;inMemoryCache&lt;/span&gt;, ()&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Create a &lt;code&gt;src/App.re&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;comment&quot;&gt;/* Create a GraphQL Query by using the graphql_ppx */&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;module&lt;/span&gt; GetHello = &lt;span class=&quot;literal&quot;&gt;[%&lt;span class=&quot;identifier&quot;&gt;graphql&lt;/span&gt; {|
+  &lt;span class=&quot;identifier&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;identifier&quot;&gt;getHello&lt;/span&gt; {
+    &lt;span class=&quot;identifier&quot;&gt;hello&lt;/span&gt;
+  }
+|}]&lt;/span&gt;;
+
+&lt;span class=&quot;keyword&quot;&gt;module&lt;/span&gt; GetHelloQuery = ReasonApollo.&lt;span class=&quot;constructor&quot;&gt;CreateQuery(GetHello)&lt;/span&gt;;
+
+&lt;span class=&quot;literal&quot;&gt;[@&lt;span class=&quot;identifier&quot;&gt;react&lt;/span&gt;.&lt;span class=&quot;identifier&quot;&gt;component&lt;/span&gt;]&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; make =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt; {
+  &amp;lt;GetHelloQuery&amp;gt;
+    ...{({result}) =&amp;gt;
+      switch (result) {
+      &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Loading&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+        &amp;lt;div&amp;gt; {&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ReasonReact&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;Loading&quot;&lt;/span&gt;)} &amp;lt;/div&amp;gt;
+      &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Error(&lt;span class=&quot;params&quot;&gt;error&lt;/span&gt;)&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+        &amp;lt;div&amp;gt; {&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ReasonReact&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;(error##message)} &amp;lt;/div&amp;gt;
+      &lt;span class=&quot;pattern-match&quot;&gt;| &lt;span class=&quot;constructor&quot;&gt;Data(&lt;span class=&quot;params&quot;&gt;response&lt;/span&gt;)&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+        &amp;lt;div&amp;gt;
+          {&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ReasonReact&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;)}
+          {&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;ReasonReact&lt;/span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;(response##hello)}
+        &amp;lt;/div&amp;gt;
+      }
+    }
+  &amp;lt;/GetHelloQuery&amp;gt;;
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Start the client application&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yarn start&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You should then be able to browse to &lt;a href=&quot;http://localhost:9000&quot;&gt;http://localhost:9000&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;In the browser see:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;HelloWorld&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;ReasonApollo installation&lt;br&gt;&lt;a href=&quot;https://github.com/apollographql/reason-apollo&quot;&gt;https://github.com/apollographql/reason-apollo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ReasonReact installation&lt;br&gt;&lt;a href=&quot;https://reasonml.github.io/reason-react/docs/en/installation.html&quot;&gt;https://reasonml.github.io/reason-react/docs/en/installation.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>How to fetch JSON data with ReasonML?</title>
+      <link>http://localhost:8080/articles/fetch-json/</link>
+      <pubDate>Sun, 24 Nov 2019 09:00:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/fetch-json/</guid>
+      <author>Kevan Stannard</author>
+      <description>&lt;h2 id=&quot;install-dependencies&quot;&gt;Install dependencies&lt;/h2&gt;
+&lt;p&gt;You will need to install two dependencies:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/reasonml-community/bs-fetch&quot;&gt;bs-fetch&lt;/a&gt; provides a wrapper around your browser’s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API&quot;&gt;Fetch API&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/glennsl/bs-json&quot;&gt;bs-json&lt;/a&gt; provides JSON decoding functions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;preparing-your-data-source&quot;&gt;Preparing your data source&lt;/h2&gt;
+&lt;p&gt;You may already have an API available, but if you are just experimenting you may like to use an API from public-apis.
+We’ll be using one of the public APIs that provides random pictures of cats.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://aws.random.cat/meow&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This has a JSON response that looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  file: &amp;quot;https://purr.objects-us-east-1.dream.io/i/w8V75.jpg&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;fetching-the-data&quot;&gt;Fetching the data&lt;/h2&gt;
+&lt;p&gt;We can do a simple JSON fetch using the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Promise&lt;/span&gt;.&lt;/span&gt;(
+  Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+  &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(Fetch.Response.json)
+  &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(json =&amp;gt; Js.log(json) &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; resolve)&lt;/span&gt;
+);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, let’s convert this to a function that returns the cat data.&lt;/p&gt;
+&lt;h2 id=&quot;declaring-your-api-response-type&quot;&gt;Declaring your API response type&lt;/h2&gt;
+&lt;p&gt;In this case the response type is very simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; catData = {file: &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;};&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;converting-your-api-response&quot;&gt;Converting your API response&lt;/h2&gt;
+&lt;p&gt;Let’s declare a Decode module with a catData function that converts the generic &lt;code&gt;Js.Json.t&lt;/code&gt; type into a proper &lt;code&gt;catData&lt;/code&gt; type.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;module&lt;/span&gt; Decode = {
+  &lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; catData =&lt;span class=&quot;function&quot;&gt; (&lt;span class=&quot;params&quot;&gt;data&lt;/span&gt;: J&lt;span class=&quot;params&quot;&gt;s&lt;/span&gt;.J&lt;span class=&quot;params&quot;&gt;son&lt;/span&gt;.&lt;span class=&quot;params&quot;&gt;t&lt;/span&gt;) =&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Json&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Decode&lt;/span&gt;.&lt;/span&gt;{file: field(&lt;span class=&quot;string&quot;&gt;&quot;file&quot;&lt;/span&gt;, &lt;span class=&quot;built_in&quot;&gt;string&lt;/span&gt;, data)}&lt;/span&gt;;
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next we’ll create a fetchCat function to perform the fetch and convert the response.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; fetchCat =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Promise&lt;/span&gt;.&lt;/span&gt;(
+    Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+    &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(Fetch.Response.json)
+    &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(obj =&amp;gt; obj |&amp;gt; Decode.catData |&amp;gt; resolve)
+  )&lt;/span&gt;;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Promise&lt;/span&gt;.&lt;/span&gt;(
+  fetchCat()
+  &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(data =&amp;gt; data.file |&amp;gt; Js.log |&amp;gt; resolve)
+)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;making-the-fetch-function-more-generic&quot;&gt;Making the fetch function more generic&lt;/h2&gt;
+&lt;p&gt;Next let’s convert the fetch function into something more re-usable.&lt;/p&gt;
+&lt;p&gt;For this we can abstract out the url and the decoder.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; fetchJson =&lt;span class=&quot;function&quot;&gt; (&lt;span class=&quot;params&quot;&gt;url&lt;/span&gt;, &lt;span class=&quot;params&quot;&gt;decoder&lt;/span&gt;) =&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Promise&lt;/span&gt;.&lt;/span&gt;(
+    Fetch.fetch(url)
+    &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(Fetch.Response.json)
+    &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(obj =&amp;gt; obj |&amp;gt; decoder |&amp;gt; resolve)
+  )&lt;/span&gt;;
+
+&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; fetchCat =&lt;span class=&quot;function&quot;&gt; &lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; =&amp;gt;&lt;/span&gt;
+  fetch&lt;span class=&quot;constructor&quot;&gt;Json(&lt;span class=&quot;string&quot;&gt;&quot;https://aws.random.cat/meow&quot;&lt;/span&gt;, Decode.&lt;span class=&quot;params&quot;&gt;catData&lt;/span&gt;)&lt;/span&gt;;
+
+&lt;span class=&quot;module-access&quot;&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Js&lt;/span&gt;.&lt;/span&gt;&lt;span class=&quot;module&quot;&gt;&lt;span class=&quot;identifier&quot;&gt;Promise&lt;/span&gt;.&lt;/span&gt;(
+  fetchCat()
+  &lt;span class=&quot;operator&quot;&gt;|&amp;gt;&lt;/span&gt; then_(data =&amp;gt; data.file |&amp;gt; Js.log |&amp;gt; resolve)
+)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;converting-from-a-promise-to-an-option&quot;&gt;Converting from a promise to an option&lt;/h2&gt;
+&lt;p&gt;You may like to work with &lt;code&gt;option&lt;/code&gt; values &lt;code&gt;Some&lt;/code&gt; or &lt;code&gt;None&lt;/code&gt; rather than promises.&lt;/p&gt;
+&lt;p&gt;Let’s convert the above code to use a callback that provides an &lt;code&gt;option&lt;/code&gt; value.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-reasonml&quot;&gt;let fetchJsonWithCallback = (url, decoder, callback) =&amp;gt;
+  Js.Promise.(
+    fetchJson(url, decoder)
+    |&amp;gt; then_(result =&amp;gt; callback(Some(result)) |&amp;gt; resolve)
+    |&amp;gt; catch(_err =&amp;gt; callback(None) |&amp;gt; resolve)
+    |&amp;gt; ignore
+  );
+
+let fetchCatWithCallback = callback =&amp;gt;
+  fetchJsonWithCallback(
+    &quot;https://aws.random.cat/meow&quot;,
+    Decode.catData,
+    callback,
+  );
+
+fetchCatWithCallback(result =&amp;gt;
+  switch (result) {
+  | None =&amp;gt; Js.log(&quot;Fetch failed&quot;)
+  | Some(catData) =&amp;gt; Js.log(catData.file)
+  }
+);&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;Fetching Data in ReasonML Pt. 1&lt;br&gt;&lt;a href=&quot;https://medium.com/@sharifsbeat/fetching-data-in-reasonml-pt-1-c06f3cc6b250&quot;&gt;https://medium.com/@sharifsbeat/fetching-data-in-reasonml-pt-1-c06f3cc6b250&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ReasonML Promise&lt;br&gt;&lt;a href=&quot;https://reasonml.github.io/docs/en/promise&quot;&gt;https://reasonml.github.io/docs/en/promise&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ReasonReact Hacker News&lt;br&gt;&lt;a href=&quot;https://github.com/reasonml-community/reason-react-hacker-news&quot;&gt;https://github.com/reasonml-community/reason-react-hacker-news&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>

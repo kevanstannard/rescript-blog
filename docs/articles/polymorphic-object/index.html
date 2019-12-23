@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Simple example of a polymorphic object in ReasonML - Hello
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="ReasonML and Bucklescript">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Simple example of a polymorphic object in ReasonML</h1>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><p>The <code>..</code> notation declares an open object<span class="widont">&nbsp;</span>type:</p>
+<pre><code class="language-reasonml"><span class="keyword">let</span> logName =<span class="function"> (<span class="params">o</span>: {.. "<span class="params">name</span>": <span class="params">string</span>}) =&gt;</span> <span class="module-access"><span class="module"><span class="identifier">Js</span>.</span></span>log(o##name);
+<span class="keyword">let</span> a = {<span class="string">"name"</span>: <span class="string">"Hello"</span>, <span class="string">"age"</span>: <span class="number">20</span>};
+<span class="keyword">let</span> b = {<span class="string">"name"</span>: <span class="string">"Cybertruck"</span>, <span class="string">"make"</span>: <span class="string">"Tesla"</span>};
+log<span class="constructor">Name(<span class="params">a</span>)</span>;
+log<span class="constructor">Name(<span class="params">b</span>)</span>;</code></pre>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">&laquo; Full blog</a></div>
+        <section class="copy">
+          <p>&copy; 2019 Kevan Stannard &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a></p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>How to define errors in ReasonML - Hello
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="ReasonML and Bucklescript">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>How to define errors in ReasonML</h1>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><p>Errors in ReasonML belong to the <code>exn</code> type.</p>
+<p>We can extend this type with our own<span class="widont">&nbsp;</span>exceptions:</p>
+<pre><code class="language-reasonml">type exn +=
+  | MyError
+  | MyOtherError(string);</code></pre>
+<p>However ReasonML provides some syntactic sugar to make this more<span class="widont">&nbsp;</span>readable:</p>
+<pre><code class="language-reasonml"><span class="keyword">exception</span> MyError;
+<span class="keyword">exception</span> <span class="constructor">MyOtherError(<span class="params">string</span>)</span>;</code></pre>
+<h2 id="references">References</h2>
+<p>ReasonML Exception Handling
+<a href="https://medium.com/w3reality/reasonml-exception-handling-c2ea747f71df">https://medium.com/w3reality/reasonml-exception-handling-c2ea747f71df</a></p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">&laquo; Full blog</a></div>
+        <section class="copy">
+          <p>&copy; 2019 Kevan Stannard &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a></p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>
