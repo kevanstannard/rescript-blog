@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - Comparing ReasonML object and record data structures</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Comparing ReasonML object and record data structures</h1>
+        <p class="date">2019-12-20</p>
+        <h2>Record</h2>
+<pre><code class="language-reasonml">type personRec = {
+  name: string,
+  age: int,
+};
+
+let pRec: personRec = {name: &quot;Hello&quot;, age: 21};
+
+Js.log(pRec);
+Js.log(pRec.name);
+Js.log(pRec.age);
+
+// [ 'Hello', 21 ]
+// Hello
+// 21
+</code></pre>
+<h2>Abstract Record</h2>
+<p>An abstract record is useful when you want to work with a native JavaScript object.</p>
+<pre><code class="language-reasonml">[@bs.deriving abstract]
+type personAbs = {
+  name: string,
+  age: int,
+};
+
+let pAbs: personAbs = personAbs(~name=&quot;Hello&quot;, ~age=21);
+
+Js.log(pAbs);
+Js.log(pAbs-&gt;nameGet);
+Js.log(pAbs-&gt;ageGet);
+
+// { name: 'Hello', age: 21 }
+// Hello
+// 21
+</code></pre>
+<h2>Reason Object</h2>
+<pre><code class="language-reasonml">type personObj = {
+  .
+  name: string,
+  age: int,
+};
+
+let pObj: personObj = {
+  as _; /* Suppress &quot;unused variable this&quot; warning */
+  pub name = &quot;Hello&quot;;
+  pub age = 21
+};
+
+Js.log(pObj);
+Js.log(pObj#name);
+Js.log(pObj#age);
+
+// [[2,7,[Function],-922783157,[Function],4846783],3,tag:248]
+// Hello
+// 21
+</code></pre>
+<h2>JavaScript Object</h2>
+<pre><code class="language-reasonml">type personJsObj = {
+  .
+  &quot;name&quot;: string,
+  &quot;age&quot;: int,
+};
+
+let pJsObj: personJsObj = {&quot;name&quot;: &quot;Hello&quot;, &quot;age&quot;: 21};
+
+Js.log(pJsObj);
+Js.log(pJsObj##name);
+Js.log(pJsObj##age);
+
+// { name: 'Hello', age: 21 }
+// Hello
+// 21
+</code></pre>
+<h2>Dictionary</h2>
+<pre><code class="language-reasonml">let pDict: Js.Dict.t(string) = Js.Dict.empty();
+
+Js.Dict.set(pDict, &quot;name&quot;, &quot;Hello&quot;);
+Js.Dict.set(pDict, &quot;age&quot;, &quot;21&quot;);
+
+Js.log(pDict);
+Js.log(Js.Dict.get(pDict, &quot;name&quot;));
+Js.log(Js.Dict.get(pDict, &quot;age&quot;));
+
+// { name: 'Hello', age: '21' }
+// Hello
+// 21
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

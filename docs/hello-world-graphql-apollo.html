@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - Minimal Hello World using Apollo GraphQL and ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Minimal Hello World using Apollo GraphQL and ReasonML</h1>
+        <p class="date">2019-12-08</p>
+        <h2>Overview</h2>
+<p>This is an absolutely bare-bones, minimal example application to demonstrate:</p>
+<ul>
+<li>Apollo GraphQL on the server.</li>
+<li>ReasonML on the client.</li>
+</ul>
+<h2>Server code</h2>
+<p>Our server code does the following:</p>
+<ol>
+<li>Accepts a GraphQL query “hello”, and</li>
+<li>Responds with the text “World”.</li>
+</ol>
+<p>Create a <code>package.json</code> file.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-server&quot;,
+  &quot;private&quot;: true
+}
+</code></pre>
+<p>Install our dependencies:</p>
+<pre><code>yarn add express
+yarn add graphql
+yarn add apollo-server
+yarn add apollo-server-express
+</code></pre>
+<p>Create <code>src/index.js</code> for the server application.</p>
+<pre><code class="language-js">const express = require(&quot;express&quot;);
+const { ApolloServer, gql } = require(&quot;apollo-server-express&quot;);
+
+// Declare the GraphQL types.
+// Here, we support a query &quot;hello&quot; that returns a string.
+const typeDefs = gql`
+  type Query {
+    hello: String!
+  }
+`;
+
+// Declare a function to execute when we send the &quot;hello&quot; query.
+// Here, we wait a couple of seconds and return the string &quot;World&quot;.
+const helloQuery = () =&gt;
+  new Promise(resolve =&gt; {
+    setTimeout(() =&gt; {
+      resolve(&quot;World&quot;);
+    }, 2000);
+  });
+
+// Declare the GraphQL resolvers.
+// These map queries to implementations.
+const resolvers = {
+  Query: {
+    hello: helloQuery
+  }
+};
+
+// Create and start the server
+const server = new ApolloServer({ typeDefs, resolvers });
+const app = express();
+server.applyMiddleware({ app });
+
+const port = 4000;
+app.listen({ port }, () =&gt;
+  console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
+);
+</code></pre>
+<p>Add a script to <code>package.json</code> that starts the server.</p>
+<pre><code>&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;node src/index&quot;
+},
+</code></pre>
+<p>Start the server:</p>
+<pre><code>yarn start
+</code></pre>
+<p>Test that the server is working, by browsing to http://localhost:4000/graphql</p>
+<p>Enter the following GraphQL query:</p>
+<pre><code class="language-graphql">query {
+  hello
+}
+</code></pre>
+<p>You should see the response:</p>
+<pre><code class="language-graphql">{
+  &quot;data&quot;: {
+    &quot;hello&quot;: &quot;World&quot;
+  }
+}
+</code></pre>
+<h2>Client</h2>
+<p>Create a minimal package.json:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-client&quot;,
+  &quot;private&quot;: true
+}
+</code></pre>
+<p>Install our application dependencies:</p>
+<pre><code>yarn add --exact react
+yarn add --exact react-dom
+yarn add --exact reason-apollo
+yarn add --exact reason-react
+</code></pre>
+<p>Install our development dependencies:</p>
+<pre><code>yarn add --exact bs-platform@5.2.1
+yarn add --exact graphql_ppx
+yarn add --exact html-webpack-plugin
+yarn add --exact webpack
+yarn add --exact webpack-cli
+yarn add --exact webpack-dev-server
+</code></pre>
+<p><strong>Important: At the time of writing (December 2019) you must install bs-platform@5.2.1. <a href="https://github.com/apollographql/reason-apollo/issues/215">Later versions are not yet compatible with reason-apollo.</a></strong></p>
+<p>Add some useful scripts to <code>package.json</code>:</p>
+<pre><code>&quot;scripts&quot;: {
+  &quot;re:build&quot;: &quot;bsb -make-world -clean-world&quot;,
+  &quot;re:watch&quot;: &quot;bsb -make-world -clean-world -w&quot;,
+  &quot;build&quot;: &quot;webpack&quot;,
+  &quot;start&quot;: &quot;webpack-dev-server&quot;
+},
+</code></pre>
+<p>Add a <code>bsconfig.json</code> file:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;hello-client&quot;,
+  &quot;reason&quot;: { &quot;react-jsx&quot;: 3 },
+  &quot;bsc-flags&quot;: [&quot;-bs-super-errors&quot;],
+  &quot;sources&quot;: [
+    {
+      &quot;dir&quot;: &quot;src&quot;,
+      &quot;subdirs&quot;: true
+    }
+  ],
+  &quot;package-specs&quot;: [
+    {
+      &quot;module&quot;: &quot;es6&quot;,
+      &quot;in-source&quot;: true
+    }
+  ],
+  &quot;suffix&quot;: &quot;.bs.js&quot;,
+  &quot;namespace&quot;: true,
+  &quot;bs-dependencies&quot;: [&quot;reason-react&quot;, &quot;reason-apollo&quot;],
+  &quot;ppx-flags&quot;: [&quot;graphql_ppx/ppx&quot;],
+  &quot;refmt&quot;: 3
+}
+</code></pre>
+<p>Generate a GraphQL schema file for the client. This will generate a <code>graphql_schema.json</code> file.</p>
+<pre><code>yarn send-introspection-query http://localhost:4000/graphql
+</code></pre>
+<p>The <code>graphql_schema.json</code> file contains the types for the queries that the server is handling. The reason-apollo package uses these types to ensure that our handling of the responses is type safe.</p>
+<p>Add a <code>webpack.config.js</code> file:</p>
+<pre><code class="language-js">const HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;);
+const path = require(&quot;path&quot;);
+module.exports = {
+  entry: &quot;./src/Index.bs.js&quot;,
+  mode: &quot;development&quot;,
+  plugins: [new HtmlWebpackPlugin({ template: &quot;templates/index.html&quot; })],
+  devServer: {
+    contentBase: path.join(__dirname, &quot;build&quot;),
+    port: 9000
+  }
+};
+</code></pre>
+<p>Add a template for the application in <code>templates/index.html</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;title&gt;Hello Client&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create a <code>src/Index.re</code> file:</p>
+<pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(
+  &lt;ReasonApollo.Provider client=Client.instance&gt;
+    &lt;App /&gt;
+  &lt;/ReasonApollo.Provider&gt;,
+  &quot;root&quot;,
+);
+</code></pre>
+<p>Create a <code>src/Client.re</code> file:</p>
+<pre><code class="language-reasonml">let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+
+let httpLink =
+  ApolloLinks.createHttpLink(~uri=&quot;http://localhost:4000/graphql&quot;, ());
+
+let instance =
+  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+</code></pre>
+<p>Create a <code>src/App.re</code> file:</p>
+<pre><code class="language-reasonml">/* Create a GraphQL Query by using the graphql_ppx */
+module GetHello = [%graphql {|
+  query getHello {
+    hello
+  }
+|}];
+
+module GetHelloQuery = ReasonApollo.CreateQuery(GetHello);
+
+[@react.component]
+let make = () =&gt; {
+  &lt;GetHelloQuery&gt;
+    ...{({result}) =&gt;
+      switch (result) {
+      | Loading =&gt;
+        &lt;div&gt; {ReasonReact.string(&quot;Loading&quot;)} &lt;/div&gt;
+      | Error(error) =&gt;
+        &lt;div&gt; {ReasonReact.string(error##message)} &lt;/div&gt;
+      | Data(response) =&gt;
+        &lt;div&gt;
+          {ReasonReact.string(&quot;Hello&quot;)}
+          {ReasonReact.string(response##hello)}
+        &lt;/div&gt;
+      }
+    }
+  &lt;/GetHelloQuery&gt;;
+};
+</code></pre>
+<p>Start the client application</p>
+<pre><code>yarn start
+</code></pre>
+<p>You should then be able to browse to http://localhost:9000</p>
+<p>In the browser see:</p>
+<pre><code>HelloWorld
+</code></pre>
+<h2>References</h2>
+<p>ReasonApollo installation<br>
+https://github.com/apollographql/reason-apollo</p>
+<p>ReasonReact installation<br>
+https://reasonml.github.io/reason-react/docs/en/installation.html</p>
+
+      </article>
+    </div>
+  </body>
+</html>

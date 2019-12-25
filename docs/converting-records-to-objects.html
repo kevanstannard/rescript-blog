@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - Converting between ReasonML records and JavaScript objects</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Converting between ReasonML records and JavaScript objects</h1>
+        <p class="date">2019-12-11</p>
+        <blockquote>
+<p><strong>Update Dec 2019</strong>: In BuckleScript &gt;= v7 records are already compiled to JS objects. jsConverter is therefore obsolete and will generate a no-op function for compatibility instead.</p>
+</blockquote>
+<p>BuckleScript provides a <a href="https://bucklescript.github.io/docs/en/generate-converters-accessors">convenience decorator</a> to convert between ReasonML records and JavaScript objects.</p>
+<p>The <code>[@bs.deriving jsConverter]</code> decorator declared above a record type causes two functions to become available:</p>
+<ul>
+<li><code>&lt;typename&gt;ToJs</code></li>
+<li><code>&lt;typename&gt;FromJs</code></li>
+</ul>
+<p>Suppose you have a person type, when you add the decorator:</p>
+<pre><code class="language-reasonml">[@bs.deriving jsConverter]
+type person = {
+  id: int,
+  name: string,
+};
+</code></pre>
+<p>It causes the following two functions to become available:</p>
+<pre><code class="language-reasonml">let personToJs: person =&gt; {. &quot;id&quot;: int, &quot;name&quot;: string};
+
+let personFromJs: {.. &quot;id&quot;: int, &quot;name&quot;: string} =&gt; person;
+</code></pre>
+<p>Example usage:</p>
+<pre><code class="language-reasonml">[@bs.deriving jsConverter]
+type person = {
+  id: int,
+  name: string,
+};
+
+let sherlock = {id: 1, name: &quot;Holmes&quot;};
+Js.log2(&quot;sherlock&quot;, sherlock);
+// &gt; sherlock [ 1, 'Holmes' ]
+
+let sherlockJs = personToJs(sherlock);
+Js.log2(&quot;sherlockJs&quot;, sherlockJs);
+// &gt; sherlockJs { id: 1, name: 'Holmes' }
+
+let sherlockRe = personFromJs(sherlockJs);
+Js.log2(&quot;sherlockRs&quot;, sherlockRe);
+// &gt; sherlockRs [ 1, 'Holmes' ]
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - De-structuring ReasonML type data (using pattern matching)</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">De-structuring ReasonML type data (using pattern matching)</h1>
+        <p class="date">2019-12-12</p>
+        <p>Suppose we have the following type:</p>
+<pre><code class="language-reasonml">type person = Person(string, int);
+</code></pre>
+<p>We can use this type as follows:</p>
+<pre><code class="language-reasonml">let joe = Person(&quot;Joe&quot;, 23);
+let jim = Person(&quot;Jim&quot;, 31);
+</code></pre>
+<p>When we have variables like this, we can use pattern matching to extract the values:</p>
+<pre><code class="language-reasonml">let Person(name1, age1) = joe;
+let Person(name2, age2) = jim;
+
+Js.log2(name1, age1);
+Js.log2(name2, age2);
+
+// &quot;Joe&quot; 23
+// &quot;Jim&quot; 31
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

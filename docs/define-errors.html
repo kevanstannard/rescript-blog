@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - How to define errors in ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to define errors in ReasonML</h1>
+        <p class="date">2019-12-16</p>
+        <p>Errors in ReasonML belong to the <code>exn</code> type.</p>
+<p>We can extend this type with our own exceptions:</p>
+<pre><code class="language-reasonml">type exn +=
+  | MyError
+  | MyOtherError(string);
+</code></pre>
+<p>However ReasonML provides some syntactic sugar to make this more readable:</p>
+<pre><code class="language-reasonml">exception MyError;
+exception MyOtherError(string);
+</code></pre>
+<h2>References</h2>
+<p>ReasonML Exception Handling
+https://medium.com/w3reality/reasonml-exception-handling-c2ea747f71df</p>
+
+      </article>
+    </div>
+  </body>
+</html>

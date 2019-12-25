@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - “Unused variable this” with ReasonML objects</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">“Unused variable this” with ReasonML objects</h1>
+        <p class="date">2019-12-20</p>
+        <p>If you declare a simple ReasonML object such as:</p>
+<pre><code class="language-reasonml">type person = {. name: string};
+let p1 = {
+  pub name = &quot;Hello&quot;
+};
+</code></pre>
+<p>You may see a compiler warning:</p>
+<pre><code>Unused variable this
+</code></pre>
+<p>To hide this warning, add <code>as _;</code> at the beginning of your object:</p>
+<pre><code class="language-reasonml">let p = {
+  as _;
+  pub name = &quot;Hello&quot;
+};
+</code></pre>
+<p>These object types have an implicit this available, and if you don’t use it, then you will receive the warning.</p>
+<p>Here’s an example that uses the <code>this</code> reference:</p>
+<pre><code class="language-reasonml">type person = {
+  .
+  name: string,
+  greet: unit =&gt; string,
+};
+
+let p: person = {
+  pub name = &quot;Joe&quot;;
+  pub greet = () =&gt; &quot;Hello &quot; ++ this#name;
+};
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

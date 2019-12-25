@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - How to fetch JSON data with ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to fetch JSON data with ReasonML?</h1>
+        <p class="date">2019-11-24</p>
+        <h2>Install dependencies</h2>
+<p>You will need to install two dependencies:</p>
+<ul>
+<li><a href="https://github.com/reasonml-community/bs-fetch">bs-fetch</a> provides a wrapper around your browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>.</li>
+<li><a href="https://github.com/glennsl/bs-json">bs-json</a> provides JSON decoding functions.</li>
+</ul>
+<h2>Preparing your data source</h2>
+<p>You may already have an API available, but if you are just experimenting you may like to use an API from public-apis.
+We’ll be using one of the public APIs that provides random pictures of cats.</p>
+<pre><code>https://aws.random.cat/meow
+</code></pre>
+<p>This has a JSON response that looks like:</p>
+<pre><code>{
+  file: &quot;https://purr.objects-us-east-1.dream.io/i/w8V75.jpg&quot;
+}
+</code></pre>
+<h2>Fetching the data</h2>
+<p>We can do a simple JSON fetch using the following:</p>
+<pre><code class="language-reasonml">Js.Promise.(
+  Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+  |&gt; then_(Fetch.Response.json)
+  |&gt; then_(json =&gt; Js.log(json) |&gt; resolve)
+);
+</code></pre>
+<p>Next, let’s convert this to a function that returns the cat data.</p>
+<h2>Declaring your API response type</h2>
+<p>In this case the response type is very simple:</p>
+<pre><code class="language-reasonml">type catData = {file: string};
+</code></pre>
+<h2>Converting your API response</h2>
+<p>Let’s declare a Decode module with a catData function that converts the generic <code>Js.Json.t</code> type into a proper <code>catData</code> type.</p>
+<pre><code class="language-reasonml">module Decode = {
+  let catData = (data: Js.Json.t) =&gt;
+    Json.Decode.{file: field(&quot;file&quot;, string, data)};
+};
+</code></pre>
+<p>Next we’ll create a fetchCat function to perform the fetch and convert the response.</p>
+<pre><code class="language-reasonml">let fetchCat = () =&gt;
+  Js.Promise.(
+    Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+    |&gt; then_(Fetch.Response.json)
+    |&gt; then_(obj =&gt; obj |&gt; Decode.catData |&gt; resolve)
+  );
+
+Js.Promise.(
+  fetchCat()
+  |&gt; then_(data =&gt; data.file |&gt; Js.log |&gt; resolve)
+);
+</code></pre>
+<h2>Making the fetch function more generic</h2>
+<p>Next let’s convert the fetch function into something more re-usable.</p>
+<p>For this we can abstract out the url and the decoder.</p>
+<pre><code class="language-reasonml">let fetchJson = (url, decoder) =&gt;
+  Js.Promise.(
+    Fetch.fetch(url)
+    |&gt; then_(Fetch.Response.json)
+    |&gt; then_(obj =&gt; obj |&gt; decoder |&gt; resolve)
+  );
+
+let fetchCat = () =&gt;
+  fetchJson(&quot;https://aws.random.cat/meow&quot;, Decode.catData);
+
+Js.Promise.(
+  fetchCat()
+  |&gt; then_(data =&gt; data.file |&gt; Js.log |&gt; resolve)
+);
+</code></pre>
+<h2>Converting from a promise to an option</h2>
+<p>You may like to work with <code>option</code> values <code>Some</code> or <code>None</code> rather than promises.</p>
+<p>Let’s convert the above code to use a callback that provides an <code>option</code> value.</p>
+<pre><code class="language-reasonml">let fetchJsonWithCallback = (url, decoder, callback) =&gt;
+  Js.Promise.(
+    fetchJson(url, decoder)
+    |&gt; then_(result =&gt; callback(Some(result)) |&gt; resolve)
+    |&gt; catch(_err =&gt; callback(None) |&gt; resolve)
+    |&gt; ignore
+  );
+
+let fetchCatWithCallback = callback =&gt;
+  fetchJsonWithCallback(
+    &quot;https://aws.random.cat/meow&quot;,
+    Decode.catData,
+    callback,
+  );
+
+fetchCatWithCallback(result =&gt;
+  switch (result) {
+  | None =&gt; Js.log(&quot;Fetch failed&quot;)
+  | Some(catData) =&gt; Js.log(catData.file)
+  }
+);
+</code></pre>
+<h2>References</h2>
+<p>Fetching Data in ReasonML Pt. 1<br>
+https://medium.com/@sharifsbeat/fetching-data-in-reasonml-pt-1-c06f3cc6b250</p>
+<p>ReasonML Promise<br>
+https://reasonml.github.io/docs/en/promise</p>
+<p>ReasonReact Hacker News<br>
+https://github.com/reasonml-community/reason-react-hacker-news</p>
+
+      </article>
+    </div>
+  </body>
+</html>

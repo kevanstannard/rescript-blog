@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - What is the type of a node callback in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">What is the type of a node callback in ReasonML?</h1>
+        <p class="date">2019-12-26</p>
+        <p>Node callbacks are typically of the form:</p>
+<pre><code class="language-js">function callback(error, items) {
+  if (error) {
+    // handle error
+  } else {
+    // handle items
+  }
+}
+</code></pre>
+<p>Let's break this down into smaller parts to convert to Reason.</p>
+<h2>The error argument</h2>
+<p>The <code>error</code> argument may be null, or an error object. JavaScript errors in Reason are typed as <code>Js.Exn.t</code>, so the error argument becomes:</p>
+<pre><code>type nodeError = Js.nullable(Js.Exn.t)
+</code></pre>
+<h2>The items argument</h2>
+<p>The <code>items</code> argument may be null, or provide a value. We can use a generic type here for the value.</p>
+<pre><code>type nodeValue = Js.nullable('a)
+</code></pre>
+<h2>The return value</h2>
+<p>This function returns undefined in JavaScript, so the return value in Reason will be <code>unit</code>;</p>
+<h2>The node callback function</h2>
+<p>Now let's define a <code>nodeCallback</code> function type.</p>
+<p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
+<pre><code class="language-reasonml">type nodeError = Js.nullable(Js.Exn.t);
+type nodeValue = Js.nullable('a);
+type nodeCallback('a) = (. nodeError, nodeValue('a)) =&gt; unit;
+</code></pre>
+<h2>Reference</h2>
+<p>All of this content came from a <a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">post on the ReasonML forums</a>. Copying here for reference:</p>
+<blockquote>
+<p><a href="https://reasonml.chat/u/yawaramin">yawaramin</a></p>
+<p>I’d model the callback type as:</p>
+<p><code>type nodeCallback('a) = (. Js.nullable(Js.Exn.t), Js.nullable('a)) =&gt; unit;</code></p>
+<p>Few things to note:</p>
+<ul>
+<li>Callbacks need to be uncurried: https://bucklescript.github.io/docs/en/function#curry-uncurry , hence using the dot-syntax (details on that page)</li>
+<li>BuckleScript models JavaScript exceptions as type Js.Exn.t. The API is here: https://bucklescript.github.io/bucklescript/api/Js.Exn.html
+There’s some magic going on in the transformation from OCaml exceptions (which can be extremely lightweight, essentially just tags) and JavaScript exceptions (which have stack traces, messages, etc.)</li>
+</ul>
+<p>In general to handle JavaScript exceptions in a safe way use the Js.Exn module, it provides useful functions to work with them. You can use <code>Belt.Result.t('a, Js.Exn.t)</code>.</p>
+</blockquote>
+
+      </article>
+    </div>
+  </body>
+</html>

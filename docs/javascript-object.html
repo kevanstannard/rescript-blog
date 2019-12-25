@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello ReasonML - How to create a JavaScript object in ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to create a JavaScript object in ReasonML</h1>
+        <p class="date">2019-12-21</p>
+        <p>&lt;span class=&quot;more&quot;&gt;&lt;/span&gt;</p>
+<h2>Bucklescript &lt; 7</h2>
+<pre><code class="language-reasonml">[@bs.deriving abstract]
+type payload = {
+  name: string,
+  age: int
+};
+let obj: payload = payload(~name=&quot;John&quot;, ~age=30);
+</code></pre>
+<h2>Bucklescript ≥ v7</h2>
+<p>From <a href="https://bucklescript.github.io/docs/en/object">the docs</a>:</p>
+<blockquote>
+<p>In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).</p>
+</blockquote>
+<pre><code class="language-reasonml">type payload = {
+  name: string,
+  age: int
+};
+let obj: payload = {name: &quot;John&quot;, age: 30};
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>
