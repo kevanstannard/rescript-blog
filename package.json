@@ -13,6 +13,7 @@
     "front-matter": "^3.0.2",
     "glob": "^7.1.6",
     "markdown-it": "^10.0.0",
-    "mustache": "^3.2.0"
+    "mustache": "^3.2.0",
+    "rimraf": "^3.0.0"
   }
 }

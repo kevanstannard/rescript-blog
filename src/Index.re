@@ -30,10 +30,28 @@ let readFile = path => {
   });
 };
 
-let ensureDocsDir = () =>
+let createDocsDir = () =>
   if (!Fs.existsSync(docsDir)) {
     Fs.mkdirSync(docsDir) |> ignore;
   };
+
+let cleanDocsDir = () =>
+  Js.Promise.make((~resolve, ~reject) => {
+    Js.log("Cleanig ...");
+    Rimraf.rimraf(.
+      docsDir,
+      error => {
+        let errorOpt = Js.Nullable.toOption(error);
+        switch (errorOpt) {
+        | Some(_error) =>
+          reject(. NodeError("Error deleting the docs directory"))
+        | None =>
+          createDocsDir();
+          resolve(. ignore);
+        };
+      },
+    );
+  });
 
 let pathToKey = path => Path.basename(~path, ~ext=".md", ());
 
@@ -181,8 +199,10 @@ let writeIndex = (posts: array(post)) => {
 readPostPaths()
 |> Js.Promise.then_(readPosts)
 |> Js.Promise.then_(posts => {
-     ensureDocsDir();
-     Js.Promise.all([|writeIndex(posts), writePosts(posts)|]);
+     cleanDocsDir()
+     |> Js.Promise.then_(_ => {
+          Js.Promise.all([|writeIndex(posts), writePosts(posts)|])
+        })
    })
 |> Js.Promise.catch(error => {
      Js.log(error);

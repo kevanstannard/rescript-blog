@@ -11,6 +11,7 @@ var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var Mustache = require("mustache");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
+var Rimraf$ReasonBlog = require("./bindings/Rimraf.bs.js");
 var DateFns$ReasonBlog = require("./bindings/DateFns.bs.js");
 var Markdown$ReasonBlog = require("./bindings/Markdown.bs.js");
 var FrontMatter$ReasonBlog = require("./bindings/FrontMatter.bs.js");
@@ -49,13 +50,32 @@ function readFile(path) {
               }));
 }
 
-function ensureDocsDir(param) {
+function createDocsDir(param) {
   if (Fs.existsSync(docsDir)) {
     return 0;
   } else {
     Fs.mkdirSync(docsDir);
     return /* () */0;
   }
+}
+
+function cleanDocsDir(param) {
+  return new Promise((function (resolve, reject) {
+                console.log("Cleanig ...");
+                return Rimraf$ReasonBlog.rimraf(docsDir, (function (error) {
+                              if (error == null) {
+                                createDocsDir(/* () */0);
+                                return resolve((function (prim) {
+                                              return /* () */0;
+                                            }));
+                              } else {
+                                return reject([
+                                            NodeError,
+                                            "Error deleting the docs directory"
+                                          ]);
+                              }
+                            }));
+              }));
 }
 
 function pathToKey(path) {
@@ -214,11 +234,12 @@ function writeIndex(posts) {
 }
 
 readPostPaths(/* () */0).then(readPosts).then((function (posts) {
-          ensureDocsDir(/* () */0);
-          return Promise.all(/* array */[
-                      writeIndex(posts),
-                      writePosts(posts)
-                    ]);
+          return cleanDocsDir(/* () */0).then((function (param) {
+                        return Promise.all(/* array */[
+                                    writeIndex(posts),
+                                    writePosts(posts)
+                                  ]);
+                      }));
         })).catch((function (error) {
         console.log(error);
         return Promise.resolve(/* array */[]);
@@ -230,7 +251,8 @@ exports.postsDir = postsDir;
 exports.templatesDir = templatesDir;
 exports.docsDir = docsDir;
 exports.readFile = readFile;
-exports.ensureDocsDir = ensureDocsDir;
+exports.createDocsDir = createDocsDir;
+exports.cleanDocsDir = cleanDocsDir;
 exports.pathToKey = pathToKey;
 exports.formatDate = formatDate;
 exports.writePost = writePost;
