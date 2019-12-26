@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to select a DOM element by id in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to select a DOM element by id in ReasonML?</h1>
+        <p class="date">2019-12-27</p>
+        <pre><code class="language-reasonml">type element;
+
+[@bs.scope &quot;document&quot;] [@bs.val] [@bs.return nullable]
+external getElementById: string =&gt; option(element) = &quot;getElementById&quot;;
+</code></pre>
+<h2>About @bs.val</h2>
+<p>Use <code>@bs.val</code> to bind a value to an external global.</p>
+<p>Example from <a href="https://bucklescript.github.io/docs/en/bind-to-global-values">the docs</a>:</p>
+<pre><code class="language-reasonml">[@bs.val] external setTimeout : (unit =&gt; unit, int) =&gt; float = &quot;setTimeout&quot;;
+[@bs.val] external clearTimeout : float =&gt; unit = &quot;clearTimeout&quot;;
+</code></pre>
+<h2>About @bs.scope</h2>
+<p>From <a href="https://bucklescript.github.io/docs/en/bind-to-global-values#global-modules">the docs</a>.</p>
+<blockquote>
+<p>If you want to bind to a value inside a global module, e.g. Math.random, attach a <code>bs.scope</code> to your <code>bs.val</code> external.</p>
+</blockquote>
+<h2>About @bs.return nullable</h2>
+<p>From <a href="https://bucklescript.github.io/docs/en/return-value-wrapping">the docs</a>:</p>
+<blockquote>
+<p>The return nullable attribute will automatically convert null and undefined to <code>option</code>.</p>
+</blockquote>
+<p>:heart:</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://reasonml.chat/t/how-to-select-a-dom-with-a-particular-id/503">How to select a dom with a particular id?</a></li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>
