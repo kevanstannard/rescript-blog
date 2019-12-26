@@ -33,8 +33,6 @@ From [the docs](https://bucklescript.github.io/docs/en/return-value-wrapping):
 
 > The return nullable attribute will automatically convert null and undefined to `option`.
 
-:heart:
-
 ## References
 
 - [How to select a dom with a particular id?](https://reasonml.chat/t/how-to-select-a-dom-with-a-particular-id/503)
