@@ -1,5 +1,5 @@
 ---
-title: Simple ReasonML and GraphQL Apollo Client
+title: Minimal ReasonML and GraphQL Apollo Client
 date: 2019-12-27 17:41:36
 ---
 
@@ -11,7 +11,7 @@ For this example we will use a public [Star Wars GraphQL API](http://apis.guru/g
 
 Or, you may like to browse other [public GraphQL APIs](http://apis.guru/graphql-apis/).
 
-## Version used in this example
+## Versions used in this example
 
 | Package                 | Version |
 | ----------------------- | ------- |
@@ -184,6 +184,8 @@ module GetMovies = [%graphql
 module GetMoviesQuery = ReasonApollo.CreateQuery(GetMovies);
 ```
 
+## Add a type
+
 Let's also add a type for the film titles we will be displaying:
 
 ```reasonml
@@ -192,6 +194,8 @@ type film = {
   title: string,
 };
 ```
+
+## Handle the API response
 
 Next add a function for handling the API response.
 The response `option` values, so parsing it is a bit involved:
@@ -217,6 +221,8 @@ let responseToFilms = response =>
        [||],
      );
 ```
+
+## Add the component
 
 Lastly, now we can add the component to the same file:
 

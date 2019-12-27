@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Simple ReasonML and GraphQL Apollo Client</title>
+    <title>Minimal ReasonML and GraphQL Apollo Client</title>
     <link rel="stylesheet" href="https://unpkg.com/picnic">
     <style>
       .container {
@@ -29,13 +29,13 @@
         </h1>
       </header>
       <article>
-        <h1 class="title">Simple ReasonML and GraphQL Apollo Client</h1>
+        <h1 class="title">Minimal ReasonML and GraphQL Apollo Client</h1>
         <p class="date">2019-12-28</p>
         <h2>Prerequisites</h2>
 <p>You will need a working GraphQL server.</p>
 <p>For this example we will use a public <a href="http://apis.guru/graphql-apis/">Star Wars GraphQL API</a>.</p>
 <p>Or, you may like to browse other <a href="http://apis.guru/graphql-apis/">public GraphQL APIs</a>.</p>
-<h2>Version used in this example</h2>
+<h2>Versions used in this example</h2>
 <table>
 <thead>
 <tr>
@@ -176,12 +176,14 @@ let instance =
 
 module GetMoviesQuery = ReasonApollo.CreateQuery(GetMovies);
 </code></pre>
+<h2>Add a type</h2>
 <p>Let's also add a type for the film titles we will be displaying:</p>
 <pre><code class="language-reasonml">type film = {
   id: string,
   title: string,
 };
 </code></pre>
+<h2>Handle the API response</h2>
 <p>Next add a function for handling the API response.
 The response <code>option</code> values, so parsing it is a bit involved:</p>
 <pre><code class="language-reasonml">let responseToFilms = response =&gt;
@@ -204,6 +206,7 @@ The response <code>option</code> values, so parsing it is a bit involved:</p>
        [||],
      );
 </code></pre>
+<h2>Add the component</h2>
 <p>Lastly, now we can add the component to the same file:</p>
 <pre><code class="language-reasonml">[@react.component]
 let make = () =&gt; {
