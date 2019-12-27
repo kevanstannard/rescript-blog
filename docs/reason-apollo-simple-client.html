@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Simple ReasonML and GraphQL Apollo Client</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Simple ReasonML and GraphQL Apollo Client</h1>
+        <p class="date">2019-12-28</p>
+        <h2>Prerequisites</h2>
+<p>You will need a working GraphQL server.</p>
+<p>For this example we will use a public <a href="http://apis.guru/graphql-apis/">Star Wars GraphQL API</a>.</p>
+<p>Or, you may like to browse other <a href="http://apis.guru/graphql-apis/">public GraphQL APIs</a>.</p>
+<h2>Version used in this example</h2>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bs-platform</td>
+<td>7.0.1</td>
+</tr>
+<tr>
+<td>reason-apollo</td>
+<td>0.18.0</td>
+</tr>
+<tr>
+<td>@baransu/graphql_ppx_re</td>
+<td>0.4.6</td>
+</tr>
+<tr>
+<td>graphql</td>
+<td>14.5.8</td>
+</tr>
+</tbody>
+</table>
+<h2>Install BuckleScript globally</h2>
+<pre><code>yarn global add bs-platform
+</code></pre>
+<h2>Create the project</h2>
+<pre><code class="language-bash">bsb -init reason-apollo-simple -theme react-starter
+cd ./reason-apollo-simple
+yarn
+</code></pre>
+<h2>Test the project is working</h2>
+<pre><code class="language-bash">yarn build
+yarn server
+</code></pre>
+<p>Then browse to http://localhost:8000/</p>
+<h2>Install Apollo GraphQL dependencies</h2>
+<pre><code class="language-bash">yarn add reason-apollo
+yarn add --dev @baransu/graphql_ppx_re
+</code></pre>
+<h2>Update bsconfig.json</h2>
+<p>Add <code>reason-apollo</code> to the <code>bs-dependencies</code> and add <code>ppx-flags</code> for <code>graphql_ppx_re</code>:</p>
+<pre><code class="language-json">&quot;bs-dependencies&quot;: [
+  &quot;reason-react&quot;,
+  &quot;reason-apollo&quot;
+],
+&quot;ppx-flags&quot;: [&quot;@baransu/graphql_ppx_re/ppx6&quot;],
+</code></pre>
+<h2>Write code for sending an introspection query</h2>
+<p>I couldn't figure out a nice way to do this.</p>
+<p>This is a slightly modified version of <a href="https://github.com/mhallin/graphql_ppx/blob/master/sendIntrospectionQuery.js">sendIntrospectionQuery.js</a> from the <a href="https://github.com/mhallin/graphql_ppx">graphql_ppx</a> package.</p>
+<p>Install dependencies.</p>
+<pre><code class="language-bash">yarn add --dev yargs
+yarn add --dev request
+</code></pre>
+<p>Create a new file <code>./tools/send-introspection-query.js</code>.</p>
+<p>Add the content:</p>
+<pre><code class="language-js">const argv = require(&quot;yargs&quot;).argv;
+const request = require(&quot;request&quot;);
+const fs = require(&quot;fs&quot;);
+const { getIntrospectionQuery } = require(&quot;graphql&quot;);
+
+const requestOptions = {
+  json: true,
+  body: { query: getIntrospectionQuery() },
+  headers: { &quot;user-agent&quot;: &quot;node.js&quot;, ...argv.headers }
+};
+
+request.post(argv._[0], requestOptions, function(error, response, body) {
+  if (error) {
+    console.error(&quot;Could not send introspection query: &quot;, error);
+    process.exit(1);
+  }
+
+  if (response.statusCode !== 200) {
+    console.error(
+      &quot;Non-ok status code from API: &quot;,
+      response.statusCode,
+      response.statusMessage
+    );
+    process.exit(1);
+  }
+
+  var result = JSON.stringify(body, null, 2);
+
+  fs.writeFileSync(&quot;graphql_schema.json&quot;, result, { encoding: &quot;utf-8&quot; });
+});
+</code></pre>
+<p>Then add a new script to your <code>package.json</code> file:</p>
+<pre><code>&quot;send-introspection-query&quot;: &quot;node ./tools/send-introspection-query&quot;
+</code></pre>
+<h2>Run the introspection query</h2>
+<pre><code class="language-bash">yarn send-introspection-query https://swapi-graphql.netlify.com/.netlify/functions/index
+</code></pre>
+<p>If successful, this will generate a <code>graphql_schema.json</code> file in the root of your project.</p>
+<h2>Create the Apollo Client</h2>
+<p>Now we can start following the instructions on the <a href="https://github.com/apollographql/reason-apollo">reason-apollo</a> site.</p>
+<p>Create the file <code>src/Client.re</code></p>
+<pre><code class="language-reasonml">/* Create an InMemoryCache */
+let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+
+/* Create an HTTP Link */
+let httpLink =
+  ApolloLinks.createHttpLink(~uri=&quot;https://swapi-graphql.netlify.com/.netlify/functions/index&quot;, ());
+
+let instance =
+  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+</code></pre>
+<h2>Add the provider</h2>
+<p>Change the render code in <code>src/Index.re</code> from this:</p>
+<pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(&lt;App /&gt;, &quot;root&quot;);
+</code></pre>
+<p>to this:</p>
+<pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(
+  &lt;ReasonApollo.Provider client=Client.instance&gt;
+    &lt;App /&gt;
+  &lt;/ReasonApollo.Provider&gt;,
+  &quot;root&quot;,
+);
+</code></pre>
+<h2>Add the query</h2>
+<p>Next add a file <code>src/Movies.re</code> and add the GraphQL query:</p>
+<pre><code class="language-reasonml">module GetMovies = [%graphql
+  {|
+    query {
+      allFilms {
+        films {
+          id
+          title
+        }
+      }
+    }
+  |}
+];
+
+module GetMoviesQuery = ReasonApollo.CreateQuery(GetMovies);
+</code></pre>
+<p>Let's also add a type for the film titles we will be displaying:</p>
+<pre><code class="language-reasonml">type film = {
+  id: string,
+  title: string,
+};
+</code></pre>
+<p>Next add a function for handling the API response.
+The response <code>option</code> values, so parsing it is a bit involved:</p>
+<pre><code class="language-reasonml">let responseToFilms = response =&gt;
+  response##allFilms
+  -&gt;Belt.Option.flatMap(allFilms =&gt; allFilms##films)
+  -&gt;Belt.Option.mapWithDefault([||], film =&gt; film)
+  |&gt; Array.fold_left(
+       (acc, filmOpt) =&gt; {
+         switch (filmOpt) {
+         | Some(film) =&gt;
+           let id = film##id;
+           let titleOpt = film##title;
+           switch (titleOpt) {
+           | Some(title) =&gt; Array.append(acc, [|{id, title}|])
+           | None =&gt; acc
+           };
+         | None =&gt; acc
+         }
+       },
+       [||],
+     );
+</code></pre>
+<p>Lastly, now we can add the component to the same file:</p>
+<pre><code class="language-reasonml">[@react.component]
+let make = () =&gt; {
+  let getMoviesQuery = GetMovies.make();
+  &lt;GetMoviesQuery variables=getMoviesQuery##variables&gt;
+    ...{({result}) =&gt;
+      switch (result) {
+      | Loading =&gt; &lt;div&gt; {React.string(&quot;Loading&quot;)} &lt;/div&gt;
+      | Error(error) =&gt; &lt;div&gt; {React.string(error##message)} &lt;/div&gt;
+      | Data(response) =&gt;
+        let films = responseToFilms(response);
+        &lt;ul&gt;
+          {films
+           |&gt; Array.map(film =&gt;
+                &lt;li key={film.id}&gt; {React.string(film.title)} &lt;/li&gt;
+              )
+           |&gt; React.array}
+        &lt;/ul&gt;;
+      }
+    }
+  &lt;/GetMoviesQuery&gt;;
+};
+</code></pre>
+<h2>Updating the App component</h2>
+<p>Lastly, let's update the <code>App</code> component in <code>src/App.re</code>. Replace the file with the following content:</p>
+<pre><code class="language-reasonml">[@react.component]
+let make = () =&gt; {
+  &lt;Movies /&gt;;
+};
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>
