@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to access global modules and values in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to access global modules and values in ReasonML?</h1>
+        <p class="date">2019-12-29</p>
+        <p>These notes are an exploration of the examples from <a href="https://bucklescript.github.io/docs/en/interop-cheatsheet#global-module">the docs</a>.</p>
+<p>Use the <code>[@bs.scope &quot;YourModuleName&quot;]</code> annotation.</p>
+<h2>Simple global module value</h2>
+<pre><code class="language-re">[@bs.val] [@bs.scope &quot;Math&quot;] external random : unit =&gt; float = &quot;random&quot;;
+let someNumber = random();
+</code></pre>
+<p>Which generates:</p>
+<pre><code>var someNumber = Math.random();
+</code></pre>
+<h2>Nested global module value</h2>
+<pre><code class="language-re">[@bs.val] [@bs.scope (&quot;window&quot;, &quot;location&quot;, &quot;ancestorOrigins&quot;)] external length : int = &quot;length&quot;;
+Js.log(length);
+</code></pre>
+<p>Generates:</p>
+<pre><code>console.log(window.location.ancestorOrigins.length);
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

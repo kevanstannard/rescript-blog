@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to determine if a global value exists in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to determine if a global value exists in ReasonML?</h1>
+        <p class="date">2019-12-29</p>
+        <p>Use the <code>[%external your_identified_name]</code> annotation.</p>
+<p>This returns an <code>option</code> value.</p>
+<pre><code class="language-reasonml">let devOpt = [%external __DEV__];
+switch (devOpt) {
+| Some(_) =&gt; Js.log(&quot;development mode&quot;)
+| None =&gt; Js.log(&quot;production mode&quot;)
+};
+</code></pre>
+<p>This generates:</p>
+<pre><code>var devOpt = typeof __DEV__ === &quot;undefined&quot; ? undefined : __DEV__;
+
+if (devOpt !== undefined) {
+  console.log(&quot;development mode&quot;);
+} else {
+  console.log(&quot;production mode&quot;);
+}
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

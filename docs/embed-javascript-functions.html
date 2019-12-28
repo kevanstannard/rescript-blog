@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How write embed JavaScript functions ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How write embed JavaScript functions ReasonML?</h1>
+        <p class="date">2019-12-29</p>
+        <p>Use the <code>[@bs.raw]</code> annotation.</p>
+<h2>Embed the whole function</h2>
+<p>The simplest version directly embeds the whole function:</p>
+<pre><code class="language-reasonml">let add1 = [%raw &quot;(a, b) =&gt; return a + b&quot;];
+</code></pre>
+<p>This generates:</p>
+<pre><code>var add1 = ((a, b) =&gt; return a + b);
+</code></pre>
+<h2>Hint that it's a function</h2>
+<p>BuckleScript supports a syntax that allows you to indicate that the raw code is a function.</p>
+<pre><code class="language-reasonml">let add2 = [%raw (a, b) =&gt; &quot;return a + b&quot;];
+</code></pre>
+<p>From <a href="https://bucklescript.github.io/docs/en/embed-raw-javascript">the docs</a>:</p>
+<blockquote>
+<p>This allows the compiler to understand that it's a function, to see the number of arguments it has, to detect some side-effects and to generate better JS code.</p>
+</blockquote>
+<p>This generates:</p>
+<pre><code>function add2 (a,b){return a + b};
+</code></pre>
+<h2>Specify the argument and return types</h2>
+<pre><code class="language-reasonml">let add3 (int, int) =&gt; int = [%raw (a, b) =&gt; &quot;return a + b&quot;];
+</code></pre>
+<p>This generates the same code as the previous version, but provides precise type hints to ReasonML:</p>
+<pre><code>function add3 (a,b){return a + b};
+</code></pre>
+<h2>Embedding longer more complicated functions</h2>
+<p>You can use a multiline string:</p>
+<pre><code class="language-reasonml">let jsCalculate: (array(int), int) =&gt; int = [%bs.raw
+  {|
+  function (numbers, scaleFactor) {
+    var result = 0;
+    numbers.forEach(number =&gt; {
+      result += number;
+    });
+    return result * scaleFactor;
+  }
+|}
+];
+</code></pre>
+<p>Which generates:</p>
+<pre><code>var jsCalculate = (
+  function (numbers, scaleFactor) {
+    var result = 0;
+    numbers.forEach(number =&gt; {
+      result += number;
+    });
+    return result * scaleFactor;
+  }
+);
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>
