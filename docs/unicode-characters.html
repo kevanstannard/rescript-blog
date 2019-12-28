@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to use unicode characters in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">Hello ReasonML</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to use unicode characters in ReasonML?</h1>
+        <p class="date">2019-12-29</p>
+        <p>We can use BuckleScript's string interpolation <code>{js|</code> and <code>|js}</code> for unicode characters:</p>
+<pre><code class="language-reasonml">let smile: string = {js|😀|js};
+print_endline(smile);
+</code></pre>
+<p>Note that we can also access variables by prefixing with a <code>$</code>:</p>
+<pre><code class="language-reasonml">let world = &quot;world&quot;;
+let helloWorld = {j|hello, $world|j};
+</code></pre>
+<p>Which also works with numbers:</p>
+<pre><code class="language-reasonml">let num = 123;
+let hello123 = {j|hello, $num|j};
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>
