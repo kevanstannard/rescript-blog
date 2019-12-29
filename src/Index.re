@@ -7,7 +7,7 @@ type post = {
 
 exception NodeError(string);
 
-let blogTitle = "Hello ReasonML";
+let blogTitle = "ReasonML Notes";
 let postsDir = "./content/posts";
 let templatesDir = "./content/templates";
 let docsDir = "./docs";

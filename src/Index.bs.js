@@ -18,7 +18,7 @@ var FrontMatter$ReasonBlog = require("./bindings/FrontMatter.bs.js");
 
 var NodeError = Caml_exceptions.create("Index-ReasonBlog.NodeError");
 
-var blogTitle = "Hello ReasonML";
+var blogTitle = "ReasonML Notes";
 
 var postsDir = "./content/posts";
 

@@ -25,31 +25,35 @@
     <div class="container">
       <header>
         <h1>
-          <a href="index.html">Hello ReasonML</a>
+          <a href="index.html">ReasonML Notes</a>
         </h1>
       </header>
       <article>
         <h1 class="title">How to create a JavaScript object in ReasonML</h1>
-        <p class="date">2019-12-21</p>
-        <p>&lt;span class=&quot;more&quot;&gt;&lt;/span&gt;</p>
-<h2>Bucklescript &lt; 7</h2>
-<pre><code class="language-reasonml">[@bs.deriving abstract]
+        <p class="date">2019-12-30</p>
+        <h2>Hashmap object</h2>
+<p>These are JavaScript objects where the keys are always strings, but the values are of a different kind.</p>
+<pre><code class="language-re">let myMap: Js.Dict.t(int) = Js.Dict.empty();
+Js.Dict.set(myMap, &quot;Allison&quot;, 10);
+</code></pre>
+<h2>Object with named fields (Bucklescript ≥ v7)</h2>
+<p>From <a href="https://bucklescript.github.io/docs/en/object">the docs</a>:</p>
+<blockquote>
+<p>In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).</p>
+</blockquote>
+<pre><code class="language-re">type payload = {
+  name: string,
+  age: int
+};
+let obj: payload = {name: &quot;John&quot;, age: 30};
+</code></pre>
+<h2>Object with named fields (Bucklescript &lt; 7)</h2>
+<pre><code class="language-re">[@bs.deriving abstract]
 type payload = {
   name: string,
   age: int
 };
 let obj: payload = payload(~name=&quot;John&quot;, ~age=30);
-</code></pre>
-<h2>Bucklescript ≥ v7</h2>
-<p>From <a href="https://bucklescript.github.io/docs/en/object">the docs</a>:</p>
-<blockquote>
-<p>In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).</p>
-</blockquote>
-<pre><code class="language-reasonml">type payload = {
-  name: string,
-  age: int
-};
-let obj: payload = {name: &quot;John&quot;, age: 30};
 </code></pre>
 
       </article>

@@ -49,6 +49,12 @@ type nodeValue = Js.nullable('a);
 type nodeCallback('a) = (. nodeError, nodeValue('a)) => unit;
 ```
 
+If your callback only supplies an error, then you can use a similar type:
+
+```re
+type nodeErrorCallback('a) = (. nodeError) => unit;
+```
+
 ## Reference
 
 All of this content came from a [post on the ReasonML forums][1]. Copying here for reference:

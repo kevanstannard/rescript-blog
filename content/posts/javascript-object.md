@@ -1,28 +1,24 @@
 ---
 title: How to create a JavaScript object in ReasonML
-date: 2019-12-21
+date: 2019-12-30 06:53:14
 ---
 
-<span class="more"></span>
+## Hashmap object
 
-## Bucklescript < 7
+These are JavaScript objects where the keys are always strings, but the values are of a different kind.
 
-```reasonml
-[@bs.deriving abstract]
-type payload = {
-  name: string,
-  age: int
-};
-let obj: payload = payload(~name="John", ~age=30);
+```re
+let myMap: Js.Dict.t(int) = Js.Dict.empty();
+Js.Dict.set(myMap, "Allison", 10);
 ```
 
-## Bucklescript ≥ v7
+## Object with named fields (Bucklescript ≥ v7)
 
-From [the docs][1]:
+From [the docs](https://bucklescript.github.io/docs/en/object):
 
 > In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).
 
-```reasonml
+```re
 type payload = {
   name: string,
   age: int
@@ -30,4 +26,13 @@ type payload = {
 let obj: payload = {name: "John", age: 30};
 ```
 
-[1]: https://bucklescript.github.io/docs/en/object
+## Object with named fields (Bucklescript < 7)
+
+```re
+[@bs.deriving abstract]
+type payload = {
+  name: string,
+  age: int
+};
+let obj: payload = payload(~name="John", ~age=30);
+```

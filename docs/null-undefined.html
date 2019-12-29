@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to use null and undefined in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to use null and undefined in ReasonML?</h1>
+        <p class="date">2019-12-30</p>
+        <p><code>None</code> of an <code>option</code> type compiles to <code>undefined</code>:</p>
+<pre><code class="language-re">let a = Some(5);
+let b = None;
+</code></pre>
+<p>Compiles to:</p>
+<pre><code>var a = 5;
+var b = undefined;
+</code></pre>
+<p>If you need an explicit <code>null</code> or <code>undefined</code> you can use:</p>
+<pre><code class="language-re">let jsNull = Js.Nullable.null;
+let jsUndefined = Js.Nullable.undefined;
+</code></pre>
+<p>Which compiles to:</p>
+<pre><code>var jsNull = null;
+var jsUndefined = undefined;
+</code></pre>
+<p>Values that may be <code>null</code> or <code>undefined</code> have a type <code>Js.Nullable.t</code>.</p>
+<ul>
+<li>Nullable values my be created using <code>Js.Nullable.return(value)</code></li>
+<li>Nullable values may be converted <strong>to</strong> an <code>option</code> using <code>Js.Nullable.toOption(value)</code></li>
+<li>Nullable values may be converted <strong>from</strong> an <code>option</code> using <code>Js.Nullable.fromOption(value)</code></li>
+</ul>
+<pre><code class="language-re">let result1: Js.Nullable.t(string) = Js.Nullable.return(&quot;hello&quot;);
+let result2: Js.Nullable.t(int) = Js.Nullable.fromOption(Some(10));
+let result3: option(int) = Js.Nullable.toOption(Js.Nullable.return(10));
+</code></pre>
+<h2>References</h2>
+<ul>
+<li>Null, Undefined &amp; Option<br>
+https://bucklescript.github.io/docs/en/null-undefined-option#docsNav</li>
+<li>Nullable<br>
+https://bucklescript.github.io/docs/en/interop-cheatsheet#nullable</li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>

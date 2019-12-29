@@ -25,7 +25,7 @@
     <div class="container">
       <header>
         <h1>
-          <a href="index.html">Hello ReasonML</a>
+          <a href="index.html">ReasonML Notes</a>
         </h1>
       </header>
       <article>
@@ -57,6 +57,9 @@
 <pre><code class="language-reasonml">type nodeError = Js.nullable(Js.Exn.t);
 type nodeValue = Js.nullable('a);
 type nodeCallback('a) = (. nodeError, nodeValue('a)) =&gt; unit;
+</code></pre>
+<p>If your callback only supplies an error, then you can use a similar type:</p>
+<pre><code class="language-re">type nodeErrorCallback('a) = (. nodeError) =&gt; unit;
 </code></pre>
 <h2>Reference</h2>
 <p>All of this content came from a <a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">post on the ReasonML forums</a>. Copying here for reference:</p>

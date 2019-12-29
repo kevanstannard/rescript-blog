@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Abstract records in ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Abstract records in ReasonML</h1>
+        <p class="date">2019-12-30</p>
+        <h2>Simple abstract record</h2>
+<pre><code class="language-re">[@bs.deriving abstract]
+type personA = {
+  name: string,
+  age: int,
+  job: string,
+};
+
+let joe = personA(~name=&quot;Joe&quot;, ~age=22, ~job=&quot;Teacher&quot;);
+
+print_endline(joe-&gt;nameGet);
+print_endline(joe-&gt;ageGet-&gt;string_of_int);
+print_endline(joe-&gt;jobGet);
+</code></pre>
+<h2>Abstract record optional field</h2>
+<pre><code class="language-re">[@bs.deriving abstract]
+type personB = {
+  [@bs.optional]
+  name: string,
+  age: int,
+  job: string,
+};
+
+// Notice the `()`
+let anon = personB(~age=23, ~job=&quot;Developer&quot;, ());
+
+let anonName =
+  switch (anon-&gt;nameGet) {
+  | None =&gt; &quot;Anonymous&quot;
+  | Some(name) =&gt; name
+  };
+print_endline(anonName);
+</code></pre>
+<h2>Abstract record mutable field</h2>
+<pre><code class="language-re">[@bs.deriving abstract]
+type personC = {
+  name: string,
+  age: int,
+  mutable job: string,
+};
+
+let jill = personC(~name=&quot;Jill&quot;, ~age=28, ~job=&quot;Politician&quot;);
+jill-&gt;jobSet(&quot;Psychologist&quot;);
+
+print_endline(jill-&gt;jobGet);
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

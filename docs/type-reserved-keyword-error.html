@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>How to handle &quot;type is a reserved keyword&quot; error in ReasonML?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">How to handle &quot;type is a reserved keyword&quot; error in ReasonML?</h1>
+        <p class="date">2019-12-30</p>
+        <p>If you define a record type such as</p>
+<pre><code class="language-re">type action = {
+  type: string,
+  username: string,
+};
+</code></pre>
+<pre><code>Error: type is a reserved keyword, it cannot be used as an identifier. Try `type_` or `_type` instead
+</code></pre>
+<p>To fix this, as the error suggests, just add an <code>_</code> prefix or suffix.</p>
+<p>However, this results in a JavaScript object with this same shape:</p>
+<pre><code class="language-re">let action = {type_: &quot;One&quot;, value: &quot;Smith&quot;};
+Js.log(action);
+
+// Prints { type_: 'One', value: 'Smith' }
+</code></pre>
+<p>You can convert the name of the field using the BuckleScript annotation <code>[@bs.as &quot;your_new_name&quot;]</code>:</p>
+<pre><code class="language-re">type action = {
+  [@bs.as &quot;type&quot;]
+  type_: string,
+  value: string,
+};
+
+let action = {type_: &quot;One&quot;, value: &quot;Smith&quot;};
+Js.log(action);
+
+// Prints { type: 'One', value: 'Smith' }
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>
