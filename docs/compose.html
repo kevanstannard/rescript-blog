@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Writing a compose function in ReasonML.</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Writing a compose function in ReasonML.</h1>
+        <p class="date">2020-01-05</p>
+        <p>A simple compose function has the form:</p>
+<pre><code class="language-js">compose(f, g, x) = f(g(x));
+</code></pre>
+<p>Where <code>f</code> and <code>g</code> are functions.</p>
+<p>This may also be read as <code>f</code> after <code>g</code>. I.e. we execute <code>g</code> first, and then execute <code>f</code> after <code>g</code>.</p>
+<p>The type of compose could be written as:</p>
+<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c) =&gt; ('a =&gt; 'b) =&gt; 'a =&gt; 'c;
+</code></pre>
+<p>Which in Reason would typically be written as:</p>
+<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c, 'a =&gt; 'b, 'a) =&gt; 'c;
+</code></pre>
+<p>We can then write our compose function as:</p>
+<pre><code class="language-re">let compose: compose('a, 'b, 'c) = (f, g, x) =&gt; f(g(x));
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let f = x =&gt; x + 1;
+let g = x =&gt; x * 2;
+let fn = compose(f, g);
+
+let result = fn(1);
+Js.log(result);
+// 4
+</code></pre>
+<p>In Haskell, this function has the name <code>.</code> which allows you to write function composition such as <code>f . g</code>.</p>
+<p>We can't use <code>.</code> as an identifier in ReasonML, but we can invent our own such as <code>&lt;.&gt;</code>.</p>
+<p>So rewriting our compose, we get:</p>
+<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c, 'a =&gt; 'b, 'a) =&gt; 'c;
+let (&lt;.&gt;): compose('a, 'b, 'c) = (f, g, x) =&gt; f(g(x));
+
+let f = x =&gt; x + 1;
+let g = x =&gt; x * 2;
+let fn = times2 &lt;.&gt; add1;
+
+let result = fn(1);
+Js.log(result);
+// 4
+</code></pre>
+
+      </article>
+    </div>
+  </body>
+</html>

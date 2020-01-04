@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Using special characters in identifier names in ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Using special characters in identifier names in ReasonML</h1>
+        <p class="date">2020-01-04</p>
+        <p>The following characters can be used as identifiers:</p>
+<pre><code class="language-re">let (!) = 0;
+let (@) = 0;
+let ($) = 0;
+let (%) = 0;
+let (^) = 0;
+let (&amp;) = 0;
+let (-) = 0;
+let (+) = 0;
+let (&lt;) = 0;
+let (&gt;) = 0;
+let (/) = 0;
+let ( * ) = 0;
+</code></pre>
+<p>Which generates:</p>
+<pre><code class="language-js">var not = 0;
+var $at = 0;
+var $ = 0;
+var $percent = 0;
+var $bang = 0;
+var $amp = 0;
+var $neg = 0;
+var $plus = 0;
+var $less = 0;
+var $great = 0;
+var $slash = 0;
+var $star = 0;
+</code></pre>
+<p>However code like this will overwite existing operators. For example:</p>
+<pre><code class="language-re">let (!) = 0;
+let x = !true;
+// Error: This expression has type int
+</code></pre>
+<p>So instead we can use these identifiers combined together.</p>
+<p>For example:</p>
+<pre><code class="language-re">let (&gt;&gt;&lt;&lt;) = List.append;
+
+let x = [1, 2, 3] &gt;&gt;&lt;&lt; [4, 5, 6];
+</code></pre>
+<h2>Related</h2>
+<ul>
+<li>OCaml Prefix and infix symbols
+<a href="https://caml.inria.fr/pub/docs/manual-ocaml/lex.html#infix-symbol">https://caml.inria.fr/pub/docs/manual-ocaml/lex.html#infix-symbol</a></li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>
