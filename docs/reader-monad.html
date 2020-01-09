@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Creating a Reader Monad in ReasonML</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Creating a Reader Monad in ReasonML</h1>
+        <p class="date">2019-12-21</p>
+        <h2>Reader type</h2>
+<p>A Reader is a function that takes an &quot;environment&quot; variable, that can be any data, and performs some operation on it.</p>
+<pre><code class="language-re">type t('e, 'a) =
+  | Reader('e =&gt; 'a);
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r = Reader(e =&gt; e + 1);
+</code></pre>
+<h2>run()</h2>
+<p>The <code>run()</code> function takes a reader and an environment passes the environment to the reader function.</p>
+<pre><code class="language-re">type run('e, 'a) = (t('e, 'a), 'e) =&gt; 'a;
+let run: run('e, 'a) = (Reader(r), env) =&gt; r(env);
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r1 = Reader(e =&gt; e + 1);
+run(r1, 1);
+// 2
+</code></pre>
+<h2>return()</h2>
+<p>The <code>return()</code> function creates a reader that always returns the same value, ignoring the environment.</p>
+<pre><code class="language-re">type return('e, 'a) = 'a =&gt; t('e, 'a);
+let return: return('e, 'a) = a =&gt; Reader(_env =&gt; a);
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r2 = return(99);
+run(r2, 1);
+// 99
+</code></pre>
+<h2>ask()</h2>
+<p>The <code>ask()</code> function creates a reader that returns the environment variable.</p>
+<pre><code class="language-re">type ask('e) = unit =&gt; t('e, 'e);
+let ask = () =&gt; Reader(env =&gt; env);
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r3 = ask();
+run(r3, 123);
+// 123
+</code></pre>
+<h2>local()</h2>
+<p>The <code>local()</code> function creates a reader that allows you to transform the environment value before passing it to a subsequent reader.</p>
+<pre><code class="language-re">type local('e, 'a) = ('e =&gt; 'e, t('e, 'a)) =&gt; t('e, 'a);
+let local: local('e, 'a) = (f, m) =&gt; Reader(env =&gt; run(m, f(env)));
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r4 = Reader(e =&gt; e + 1);
+let r5 = local(e =&gt; - e, r4);
+run(r5, 1);
+// 0
+</code></pre>
+<h2>map()</h2>
+<p>The <code>map()</code> function creates a reader that applies a function to the result provided by the reader.</p>
+<pre><code class="language-re">type map('e, 'a, 'b) = ('a =&gt; 'b, t('e, 'a)) =&gt; t('e, 'b);
+let map: map('e, 'a, 'b) = (f, m) =&gt; Reader(env =&gt; f(run(m, env)));
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r6 = Reader(e =&gt; e + 1);
+let r7 = map(x =&gt; x * 10, r6);
+run(r7, 1);
+// 20
+</code></pre>
+<h2>bind()</h2>
+<p>The <code>bind()</code> function is similar to map, except that the applied function must return a reader rather than a value. This allows two readers to be bound together.</p>
+<pre><code class="language-re">type bind('e, 'a, 'b) = ('a =&gt; t('e, 'b), t('e, 'a)) =&gt; t('e, 'b);
+let bind: bind('e, 'a, 'b) =
+  (f, m) =&gt; Reader(env =&gt; run(f(run(m, env)), env));
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let r8 = Reader(e =&gt; e + 1);
+let r9 = bind(x =&gt; Reader(_ =&gt; x * 2), r8);
+run(r9, 1);
+// 4
+</code></pre>
+<p>For this example, we could also use the <code>return()</code> function:</p>
+<pre><code class="language-re">let r10 = Reader(e =&gt; e + 1);
+let r11 = bind(x =&gt; return(x * 2), r10);
+run(r11, 1);
+// 4
+</code></pre>
+<h2>bind operator</h2>
+<p>We can also define a bind operator that allows us to pass the <strong>same</strong> environment value to multiple readers.</p>
+<pre><code class="language-re">type bindFlip('a, 'e, 'b) = (t('e, 'a), 'a =&gt; t('e, 'b)) =&gt; t('e, 'b);
+let (&gt;&gt;=): bindFlip('a, 'e, 'b) = (m, f) =&gt; bind(f, m);
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-re">let ra = Reader(x =&gt; x + 1);
+let rb = Reader(x =&gt; x + 2);
+let rc = Reader(x =&gt; x + 3);
+let r = ra &gt;&gt;= (a =&gt; rb &gt;&gt;= (b =&gt; rc &gt;&gt;= (c =&gt; return(a + b + c))));
+Js.log(run(r, 1));
+// 9
+</code></pre>
+<p>Another example, with strings:</p>
+<pre><code class="language-re">let greet = (name, greeting) =&gt; greeting ++ &quot;: &quot; ++ name;
+let lines = List.map(print_endline);
+let ra = Reader(greet(&quot;One&quot;));
+let rb = Reader(greet(&quot;Two&quot;));
+let rc = Reader(greet(&quot;Three&quot;));
+let r = ra &gt;&gt;= (a =&gt; rb &gt;&gt;= (b =&gt; rc &gt;&gt;= (c =&gt; return(lines([a, b, c])))));
+run(r, &quot;Hello&quot;);
+// Hello: One
+// Hello: Two
+// Hello: Three
+</code></pre>
+<h2>References</h2>
+<ul>
+<li>
+<p>Reader monad in reasonml<br>
+https://sketch.sh/s/NUtDN1ArEiJ1FIEfG6ZRoj/</p>
+</li>
+<li>
+<p>A simple reader monad example<br>
+https://blog.ssanj.net/posts/2014-09-23-A-Simple-Reader-Monad-Example.html</p>
+</li>
+<li>
+<p>Rationale Reader<br>
+https://github.com/jonlaing/rationale/blob/9e206959b7d4de5ed96ef90ce71a268ccf624124/src/Reader.re</p>
+</li>
+<li>
+<p>A Layman's Guide to Functors in ReasonML<br>
+https://andywhite.xyz/posts/2019-11-01-a-laymans-guide-to-functors-in-reasonml/</p>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>
