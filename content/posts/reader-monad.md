@@ -1,6 +1,6 @@
 ---
 title: Creating a Reader Monad in ReasonML
-date: 2019-12-21
+date: 2020-01-12 06:10:59
 ---
 
 ## Reader type
@@ -58,7 +58,7 @@ The `ask()` function creates a reader that returns the environment variable.
 
 ```re
 type ask('e) = unit => t('e, 'e);
-let ask = () => Reader(env => env);
+let ask: ask('e) = () => Reader(env => env);
 ```
 
 Example:
@@ -143,17 +143,6 @@ let (>>=): bindFlip('a, 'e, 'b) = (m, f) => bind(f, m);
 ```
 
 Example:
-
-```re
-let ra = Reader(x => x + 1);
-let rb = Reader(x => x + 2);
-let rc = Reader(x => x + 3);
-let r = ra >>= (a => rb >>= (b => rc >>= (c => return(a + b + c))));
-Js.log(run(r, 1));
-// 9
-```
-
-Another example, with strings:
 
 ```re
 let greet = (name, greeting) => greeting ++ ": " ++ name;

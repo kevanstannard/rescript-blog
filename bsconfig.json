@@ -1,10 +1,16 @@
 {
   "name": "reason-blog",
   "version": "0.1.0",
-  "sources": {
-    "dir": "src",
-    "subdirs": true
-  },
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "temp",
+      "subdirs": true
+    }
+  ],
   "package-specs": {
     "module": "commonjs",
     "in-source": true
