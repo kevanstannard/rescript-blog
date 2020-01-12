@@ -30,7 +30,7 @@
       </header>
       <article>
         <h1 class="title">Creating a Reader Monad in ReasonML</h1>
-        <p class="date">2019-12-21</p>
+        <p class="date">2020-01-12</p>
         <h2>Reader type</h2>
 <p>A Reader is a function that takes an &quot;environment&quot; variable, that can be any data, and performs some operation on it.</p>
 <pre><code class="language-re">type t('e, 'a) =
@@ -62,7 +62,7 @@ run(r2, 1);
 <h2>ask()</h2>
 <p>The <code>ask()</code> function creates a reader that returns the environment variable.</p>
 <pre><code class="language-re">type ask('e) = unit =&gt; t('e, 'e);
-let ask = () =&gt; Reader(env =&gt; env);
+let ask: ask('e) = () =&gt; Reader(env =&gt; env);
 </code></pre>
 <p>Example:</p>
 <pre><code class="language-re">let r3 = ask();
@@ -115,14 +115,6 @@ run(r11, 1);
 let (&gt;&gt;=): bindFlip('a, 'e, 'b) = (m, f) =&gt; bind(f, m);
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re">let ra = Reader(x =&gt; x + 1);
-let rb = Reader(x =&gt; x + 2);
-let rc = Reader(x =&gt; x + 3);
-let r = ra &gt;&gt;= (a =&gt; rb &gt;&gt;= (b =&gt; rc &gt;&gt;= (c =&gt; return(a + b + c))));
-Js.log(run(r, 1));
-// 9
-</code></pre>
-<p>Another example, with strings:</p>
 <pre><code class="language-re">let greet = (name, greeting) =&gt; greeting ++ &quot;: &quot; ++ name;
 let lines = List.map(print_endline);
 let ra = Reader(greet(&quot;One&quot;));

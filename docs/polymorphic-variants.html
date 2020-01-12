@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>ReasonML Polymorphic Variants</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">ReasonML Polymorphic Variants</h1>
+        <p class="date">2020-01-13</p>
+        <p>Polymorphic variants are distinguished from ordinary variants by the leading backtick.</p>
+<p>Unlike ordinary variants, polymorphic variants can be used without an explicit type declaration.</p>
+<p>Example 1:</p>
+<pre><code class="language-re">let three = `Int(3);
+let four = `Float(4.);
+let nan = `Not_a_number;
+</code></pre>
+<p>Notice that multiple polymorophic variant values may be present together in an array.</p>
+<p>Example 2:</p>
+<pre><code class="language-re">let is_positive =
+  fun
+  | `Int(x) =&gt; x &gt; 0
+  | `Float(x) =&gt; x &gt; 0.;
+
+List.filter(is_positive, [three, four]);
+</code></pre>
+<p>Example 3:</p>
+<pre><code class="language-re">let is_positive_result =
+  fun
+  | `Int(x) =&gt; Ok(x &gt; 0)
+  | `Float(x) =&gt; Ok(x &gt; 0.)
+  | `Not_a_number =&gt; Error(&quot;not a number&quot;);
+
+let result_to_bool =
+  fun
+  | Error(_) =&gt; false
+  | Ok(b) =&gt; b;
+
+List.filter(
+  value =&gt; result_to_bool(is_positive_result(value)),
+  [three, four, nan],
+);
+</code></pre>
+<h2>References</h2>
+<ul>
+<li>Real World OCaml - Variants<br>
+https://v1.realworldocaml.org/v1/en/html/variants.html</li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>
