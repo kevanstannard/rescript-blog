@@ -170,3 +170,9 @@ run(r, "Hello");
 
 - A Layman's Guide to Functors in ReasonML  
   https://andywhite.xyz/posts/2019-11-01-a-laymans-guide-to-functors-in-reasonml/
+
+- reader.hs
+  https://gist.github.com/egonSchiele/5752172
+
+- Simple Reader monad in OCaml
+  https://gist.github.com/VincentCordobes/fff2356972a88756bd985e86cce03023
