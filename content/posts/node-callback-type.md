@@ -45,7 +45,7 @@ Note that node callbacks must be uncurried, so we use the `(. )` function argume
 
 ```reasonml
 type nodeError = Js.nullable(Js.Exn.t);
-type nodeValue = Js.nullable('a);
+type nodeValue('a) = Js.nullable('a);
 type nodeCallback('a) = (. nodeError, nodeValue('a)) => unit;
 ```
 
@@ -55,9 +55,27 @@ If your callback only supplies an error, then you can use a similar type:
 type nodeErrorCallback('a) = (. nodeError) => unit;
 ```
 
+## Utility function
+
+A useful utility function for handling node callbacks.
+
+```reasonml
+let nodeCallback = (f) =>
+  (. error, result) => {
+    let errorOpt = Js.Nullable.toOption(error);
+    let resultOpt = Js.Nullable.toOption(result);
+    switch (errorOpt, resultOpt) {
+    | (Some(error), None) => f(Belt.Result.Error(error))
+    | (None, Some(result)) => f(Belt.Result.Ok(result))
+    // Throw if APIs break nodeback 'guarantee':
+    | _ => invalid_arg("nodeCallback arguments invalid")
+    };
+  };
+```
+
 ## Reference
 
-All of this content came from a [post on the ReasonML forums][1]. Copying here for reference:
+This content came from a [post on the ReasonML forums][1]. Copying here for reference:
 
 > [yawaramin][2]
 >
@@ -73,5 +91,11 @@ All of this content came from a [post on the ReasonML forums][1]. Copying here f
 >
 > In general to handle JavaScript exceptions in a safe way use the Js.Exn module, it provides useful functions to work with them. You can use `Belt.Result.t('a, Js.Exn.t)`.
 
+## References
+
+- [What is the proper type for a node callback][1]
+- [How to handle a node callback in ReasonML][3]
+
 [1]: https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326
 [2]: https://reasonml.chat/u/yawaramin
+[3]: https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7
