@@ -55,14 +55,28 @@
 <p>Now let's define a <code>nodeCallback</code> function type.</p>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
 <pre><code class="language-reasonml">type nodeError = Js.nullable(Js.Exn.t);
-type nodeValue = Js.nullable('a);
+type nodeValue('a) = Js.nullable('a);
 type nodeCallback('a) = (. nodeError, nodeValue('a)) =&gt; unit;
 </code></pre>
 <p>If your callback only supplies an error, then you can use a similar type:</p>
 <pre><code class="language-re">type nodeErrorCallback('a) = (. nodeError) =&gt; unit;
 </code></pre>
+<h2>Utility function</h2>
+<p>A useful utility function for handling node callbacks.</p>
+<pre><code class="language-reasonml">let nodeCallback = (f) =&gt;
+  (. error, result) =&gt; {
+    let errorOpt = Js.Nullable.toOption(error);
+    let resultOpt = Js.Nullable.toOption(result);
+    switch (errorOpt, resultOpt) {
+    | (Some(error), None) =&gt; f(Belt.Result.Error(error))
+    | (None, Some(result)) =&gt; f(Belt.Result.Ok(result))
+    // Throw if APIs break nodeback 'guarantee':
+    | _ =&gt; invalid_arg(&quot;nodeCallback arguments invalid&quot;)
+    };
+  };
+</code></pre>
 <h2>Reference</h2>
-<p>All of this content came from a <a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">post on the ReasonML forums</a>. Copying here for reference:</p>
+<p>This content came from a <a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">post on the ReasonML forums</a>. Copying here for reference:</p>
 <blockquote>
 <p><a href="https://reasonml.chat/u/yawaramin">yawaramin</a></p>
 <p>I’d model the callback type as:</p>
@@ -75,6 +89,11 @@ There’s some magic going on in the transformation from OCaml exceptions (which
 </ul>
 <p>In general to handle JavaScript exceptions in a safe way use the Js.Exn module, it provides useful functions to work with them. You can use <code>Belt.Result.t('a, Js.Exn.t)</code>.</p>
 </blockquote>
+<h2>References</h2>
+<ul>
+<li><a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">What is the proper type for a node callback</a></li>
+<li><a href="https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7">How to handle a node callback in ReasonML</a></li>
+</ul>
 
       </article>
     </div>

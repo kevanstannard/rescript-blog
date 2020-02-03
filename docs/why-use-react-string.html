@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Why use React.string() in ReasonReact?</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic">
+    <style>
+      .container {
+        padding: 1em 2em 4em 2em;
+      }
+      header h1 a {
+        padding: 8px;
+        color: #ffffff;
+        background-color: #db4d3f;
+      }
+      .title {
+        padding-bottom: 0;
+      }
+      .date {
+        margin-top: 0;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="index.html">ReasonML Notes</a>
+        </h1>
+      </header>
+      <article>
+        <h1 class="title">Why use React.string() in ReasonReact?</h1>
+        <p class="date">2020-02-04</p>
+        <p>When writing JSX in Reason, you will need to use the <code>React.string()</code> function when rendering string values.</p>
+<p>For example:</p>
+<pre><code class="language-reasonml">&lt;h1&gt;{React.string(&quot;Hello&quot;)}&lt;/h1&gt;
+</code></pre>
+<p>So why do we need to do this?</p>
+<p>The <code>string()</code> function in Reason React is implemented as:</p>
+<pre><code class="language-reasonml">external string: string =&gt; element = &quot;%identity&quot;;
+</code></pre>
+<p>Firstly, a quick reminder about <code>%identity</code>. This is special Bucklescript instruction that does nothing but convert from the type <code>string</code> to <code>element</code>.</p>
+<p>So when we write <code>React.string(&quot;Hello&quot;)</code> we are not doing anything with the value, but we are just changing it's type to <code>element</code>, which allows it to be a compatible child of an HTML tag.</p>
+<h2>References</h2>
+<ul>
+<li>Special Identity External<br>
+https://bucklescript.github.io/docs/en/intro-to-external#special-identity-external</li>
+</ul>
+
+      </article>
+    </div>
+  </body>
+</html>
