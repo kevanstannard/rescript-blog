@@ -1,12 +1,12 @@
 type attributes = {
   title: string,
   date: Js.Date.t,
-};
+}
 
 type fm = {
   frontmatter: string,
   body: string,
-  attributes,
-};
+  attributes: attributes,
+}
 
-let fm: string => fm = [%bs.raw {| require("front-matter") |}];
+@bs.module external fm: string => fm = "front-matter"

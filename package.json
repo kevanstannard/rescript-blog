@@ -1,5 +1,5 @@
 {
-  "name": "reason-blog",
+  "name": "rescript-blog",
   "private": true,
   "scripts": {
     "re:build": "bsb -make-world -clean-world",
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "bs-glob": "reasonml-community/bs-glob",
-    "bs-platform": "^7.0.1",
+    "bs-platform": "8.3.3",
     "date-fns": "^2.8.1",
     "front-matter": "^3.0.2",
     "glob": "^7.1.6",
