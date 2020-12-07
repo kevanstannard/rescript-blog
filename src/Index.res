@@ -33,7 +33,6 @@ let createDocsDir = () =>
   }
 
 let cleanDocsDir = () => Js.Promise.make((~resolve, ~reject) => {
-    Js.log("Cleanig ...")
     Rimraf.rimraf(.docsDir, error => {
       let errorOpt = Js.Nullable.toOption(error)
       switch errorOpt {
@@ -89,15 +88,24 @@ let getValue = (attributes, key) => {
   }
 }
 
+type attributes = {
+  title: option<string>,
+  date: option<Js.Date.t>,
+}
+
 let readPost = path => {
   readFile(path) |> Js.Promise.then_((data: string) => {
     let key = pathToKey(path)
     let fmData = FrontMatter.fm(data)
-    let title = fmData.attributes.title
-    let date = fmData.attributes.date
+    let attributes: attributes = fmData.attributes
     let body = Markdown.markdownIt.render(. fmData.body)
-    let post = {key: key, date: date, title: title, body: body}
-    Js.Promise.resolve(post)
+    switch (attributes.title, attributes.date) {
+    | (Some(title), Some(date)) => {
+        let post = {key: key, date: date, title: title, body: body}
+        Js.Promise.resolve(post)
+      }
+    | _ => Js.Promise.reject(Failure("Invalid post attributes: " ++ path))
+    }
   })
 }
 

@@ -59,7 +59,6 @@ function createDocsDir(param) {
 
 function cleanDocsDir(param) {
   return new Promise((function (resolve, reject) {
-                console.log("Cleanig ...");
                 return Rimraf(docsDir, (function (error) {
                               if (error == null) {
                                 createDocsDir(undefined);
@@ -142,15 +141,30 @@ function readPost(path) {
   return readFile(path).then(function (data) {
               var key = Path.basename(path, ".md");
               var fmData = FrontMatter(data);
-              var title = fmData.attributes.title;
-              var date = fmData.attributes.date;
+              var attributes = fmData.attributes;
               var body = Markdown$ReasonBlog.markdownIt.render(fmData.body);
-              return Promise.resolve({
-                          key: key,
-                          date: date,
-                          title: title,
-                          body: body
-                        });
+              var match = attributes.title;
+              var match$1 = attributes.date;
+              if (match !== undefined) {
+                if (match$1 !== undefined) {
+                  return Promise.resolve({
+                              key: key,
+                              date: Caml_option.valFromOption(match$1),
+                              title: match,
+                              body: body
+                            });
+                } else {
+                  return Promise.reject({
+                              RE_EXN_ID: "Failure",
+                              _1: "Invalid post attributes: " + path
+                            });
+                }
+              } else {
+                return Promise.reject({
+                            RE_EXN_ID: "Failure",
+                            _1: "Invalid post attributes: " + path
+                          });
+              }
             });
 }
 

@@ -1,12 +1,7 @@
-type attributes = {
-  title: string,
-  date: Js.Date.t,
-}
-
-type fm = {
+type fm<'a> = {
   frontmatter: string,
   body: string,
-  attributes: attributes,
+  attributes: 'a,
 }
 
-@bs.module external fm: string => fm = "front-matter"
+@bs.module external fm: string => fm<'a> = "front-matter"
