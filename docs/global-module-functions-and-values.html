@@ -1,17 +1,20 @@
-<!doctype html><html data-reactroot=""><head><title>How to access global modules and values in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to access global modules and values in ReasonML?</h1><p>Sun Dec 29 2019</p><div><p>These notes are an exploration of the examples from <a href="https://bucklescript.github.io/docs/en/interop-cheatsheet#global-module">the docs</a>.</p>
-<p>Use the <code>[@bs.scope &quot;YourModuleName&quot;]</code> annotation.</p>
+<!doctype html><html data-reactroot=""><head><title>How to access global modules and values in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to access global modules and values in ReScript?</h1><p>Sun Dec 29 2019</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>Use the <code>@bs.scope()</code> annotation.</p>
 <h2>Simple global module value</h2>
-<pre><code class="language-re"><span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">val</span>]</span> <span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">scope</span> &quot;M<span class="hljs-identifier">ath</span>&quot;]</span> <span class="hljs-keyword">external</span> random :<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> <span class="hljs-built_in">float</span> = <span class="hljs-string">&quot;random&quot;</span>;
+<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> @bs.scope(<span class="hljs-string">&quot;Math&quot;</span>) <span class="hljs-keyword">external</span> random :<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> <span class="hljs-built_in">float</span> = <span class="hljs-string">&quot;random&quot;</span>;
 <span class="hljs-keyword">let</span> someNumber = random<span class="hljs-literal">()</span>;
 </code></pre>
 <p>Which generates:</p>
-<pre><code>var someNumber = Math.random();
+<pre><code class="language-js"><span class="hljs-keyword">var</span> someNumber = <span class="hljs-built_in">Math</span>.random();
 </code></pre>
 <h2>Nested global module value</h2>
-<pre><code class="language-re"><span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">val</span>]</span> <span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">scope</span> (&quot;<span class="hljs-identifier">window</span>&quot;, &quot;<span class="hljs-identifier">location</span>&quot;, &quot;<span class="hljs-identifier">ancestorOrigins</span>&quot;)]</span> <span class="hljs-keyword">external</span> length : <span class="hljs-built_in">int</span> = <span class="hljs-string">&quot;length&quot;</span>;
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(length);
+<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> @bs.scope((<span class="hljs-string">&quot;window&quot;</span>, <span class="hljs-string">&quot;location&quot;</span>, <span class="hljs-string">&quot;ancestorOrigins&quot;</span>))
+<span class="hljs-keyword">external</span> length: <span class="hljs-built_in">int</span> = <span class="hljs-string">&quot;length&quot;</span>
+
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(length)
 </code></pre>
 <p>Generates:</p>
-<pre><code>console.log(window.location.ancestorOrigins.length);
+<pre><code class="language-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">window</span>.location.ancestorOrigins.length);
 </code></pre>
 </div></div></body></html>

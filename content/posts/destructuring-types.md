@@ -3,6 +3,10 @@ title: De-structuring ReScript type data (using pattern matching)
 date: 2020-12-12 05:40:09
 ---
 
+```
+ReScript version: bs-platform@8.4.2
+```
+
 Suppose we have the following type:
 
 ```re

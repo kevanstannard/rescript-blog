@@ -3,7 +3,9 @@ title: Writing a compose function in ReScript.
 date: 2020-12-11 20:07:46
 ---
 
-ReScript version: `bs-platform@8.4.2`
+```
+ReScript version: bs-platform@8.4.2
+```
 
 A simple compose function has the form:
 

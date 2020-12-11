@@ -3,7 +3,9 @@ title: How to access the window document object in ReScript?
 date: 2020-12-11 19:58:32
 ---
 
-ReScript version: `bs-platform@8.3.3`
+```
+ReScript version: bs-platform@8.3.3
+```
 
 As of this writing, there is an [experimental DOM binding](https://github.com/reasonml-community/bs-webapi-incubator) being developed.
 

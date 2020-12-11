@@ -3,6 +3,10 @@ title: How to fetch JSON data with ReScript?
 date: 2020-12-12 05:55:14
 ---
 
+```
+ReScript version: bs-platform@8.4.2
+```
+
 ## Install dependencies
 
 You will need to install two dependencies:

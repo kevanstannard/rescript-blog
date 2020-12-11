@@ -1,34 +1,38 @@
 ---
-title: How to access global modules and values in ReasonML?
+title: How to access global modules and values in ReScript?
 date: 2019-12-29 06:57:19
 ---
 
-These notes are an exploration of the examples from [the docs](https://bucklescript.github.io/docs/en/interop-cheatsheet#global-module).
+```
+ReScript version: bs-platform@8.4.2
+```
 
-Use the `[@bs.scope "YourModuleName"]` annotation.
+Use the `@bs.scope()` annotation.
 
 ## Simple global module value
 
 ```re
-[@bs.val] [@bs.scope "Math"] external random : unit => float = "random";
+@bs.val @bs.scope("Math") external random : unit => float = "random";
 let someNumber = random();
 ```
 
 Which generates:
 
-```
+```js
 var someNumber = Math.random();
 ```
 
 ## Nested global module value
 
 ```re
-[@bs.val] [@bs.scope ("window", "location", "ancestorOrigins")] external length : int = "length";
-Js.log(length);
+@bs.val @bs.scope(("window", "location", "ancestorOrigins"))
+external length: int = "length"
+
+Js.log(length)
 ```
 
 Generates:
 
-```
+```js
 console.log(window.location.ancestorOrigins.length);
 ```

@@ -1,10 +1,18 @@
 ---
-title: How to access global functions in ReasonML?
-date: 2019-12-28 22:59:49
+title: How to access global functions in ReScript?
+date: 2020-12-12 06:19:47
 ---
 
-Use the `[@bs.val]` annotation:
+```
+ReScript version: bs-platform@8.4.2
+```
 
-```reasonml
-[@bs.val] external setTimeout : (unit => unit, int) => float = "setTimeout";
+Use the `@bs.val` annotation:
+
+```re
+@bs.val external setTimeout : (unit => unit, int) => float = "setTimeout";
+
+let _ = setTimeout(() => {
+  Js.log("Hello")
+}, 2000)
 ```
