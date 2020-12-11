@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Writing a simple stateful Redux store in ReasonML (without React)</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">Writing a simple stateful Redux store in ReasonML (without React)</h1>
-        <p class="date">2019-12-12</p>
-        <h2>Creating our store</h2>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>Writing a simple stateful Redux store in ReasonML (without React)</title></head><body><h1>Writing a simple stateful Redux store in ReasonML (without React)</h1><p>Thu Dec 12 2019</p><div><h2>Creating our store</h2>
 <p>Firstly, we need to create a stateful store that can be mutated by actions.</p>
 <p>Let’s create a <code>Store.re</code> module and add a type for the store.</p>
 <pre><code class="language-reasonml">type t('action, 'state) = {
@@ -106,8 +73,4 @@ Js.log(CounterStore.getState());
 <h2>References</h2>
 <p>Redux in Reason<br>
 https://github.com/reasonml-community/reductive</p>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

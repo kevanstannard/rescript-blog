@@ -1,5 +1,6 @@
 {
   "name": "reason-blog",
+  "reason": { "react-jsx": 3 },
   "version": "0.1.0",
   "sources": [
     {
@@ -16,10 +17,11 @@
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": ["bs-glob"],
+  "bs-dependencies": ["bs-glob", "reason-react"],
   "warnings": {
     "error": "+101"
   },
   "namespace": true,
+  "ppx-flags": [],
   "refmt": 3
 }

@@ -1,45 +1,8 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Simple example of a polymorphic object in ReasonML</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">Simple example of a polymorphic object in ReasonML</h1>
-        <p class="date">2019-12-21</p>
-        <p>The <code>..</code> notation declares an open object type:</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>Simple example of a polymorphic object in ReasonML</title></head><body><h1>Simple example of a polymorphic object in ReasonML</h1><p>Sat Dec 21 2019</p><div><p>The <code>..</code> notation declares an open object type:</p>
 <pre><code class="language-reasonml">let logName = (o: {.. &quot;name&quot;: string}) =&gt; Js.log(o##name);
 let a = {&quot;name&quot;: &quot;Hello&quot;, &quot;age&quot;: 20};
 let b = {&quot;name&quot;: &quot;Cybertruck&quot;, &quot;make&quot;: &quot;Tesla&quot;};
 logName(a);
 logName(b);
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

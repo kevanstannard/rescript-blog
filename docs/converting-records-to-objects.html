@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Converting between ReasonML records and JavaScript objects</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">Converting between ReasonML records and JavaScript objects</h1>
-        <p class="date">2019-12-11</p>
-        <blockquote>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>Converting between ReasonML records and JavaScript objects</title></head><body><h1>Converting between ReasonML records and JavaScript objects</h1><p>Wed Dec 11 2019</p><div><blockquote>
 <p><strong>Update Dec 2019</strong>: In BuckleScript &gt;= v7 records are already compiled to JS objects. jsConverter is therefore obsolete and will generate a no-op function for compatibility instead.</p>
 </blockquote>
 <p>BuckleScript provides a <a href="https://bucklescript.github.io/docs/en/generate-converters-accessors">convenience decorator</a> to convert between ReasonML records and JavaScript objects.</p>
@@ -71,8 +38,4 @@ let sherlockRe = personFromJs(sherlockJs);
 Js.log2(&quot;sherlockRs&quot;, sherlockRe);
 // &gt; sherlockRs [ 1, 'Holmes' ]
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

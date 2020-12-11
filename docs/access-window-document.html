@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How to access the window document object in ReasonML?</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How to access the window document object in ReasonML?</h1>
-        <p class="date">2019-12-28</p>
-        <p>You can access it with the following binding code:</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How to access the window document object in ReasonML?</title></head><body><h1>How to access the window document object in ReasonML?</h1><p>Sat Dec 28 2019</p><div><p>You can access it with the following binding code:</p>
 <pre><code class="language-reasonml">[@bs.val] external document: Js.t({..}) = &quot;document&quot;;
 </code></pre>
 <p><em>Note that this provides raw access to the document object with no type safety for it's properties.</em></p>
@@ -51,8 +18,4 @@ root.innerText = &quot;Hello&quot;;
 <li><code>Js.t({..})</code> is the type of the ReasonML variable. In this case this is the type of a &quot;open&quot; JavaScript object where the properties are not declared. Properties are accessed using <code>##</code>.</li>
 <li><code>&quot;document&quot;</code> is the external value to bind to.</li>
 </ul>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

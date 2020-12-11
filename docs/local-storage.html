@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How to use local storage in ReasonML</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How to use local storage in ReasonML</h1>
-        <p class="date">2020-01-02</p>
-        <p>Bucklescript provides a <a href="https://bucklescript.github.io/bucklescript/api/Dom.Storage.html">Dom.Storage</a> module for accessing local storage (and session storage).</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How to use local storage in ReasonML</title></head><body><h1>How to use local storage in ReasonML</h1><p>Thu Jan 02 2020</p><div><p>Bucklescript provides a <a href="https://bucklescript.github.io/bucklescript/api/Dom.Storage.html">Dom.Storage</a> module for accessing local storage (and session storage).</p>
 <p>Example:</p>
 <pre><code class="language-re">Dom.Storage.setItem(&quot;message&quot;, &quot;hello&quot;, Dom.Storage.localStorage);
 
@@ -42,8 +9,4 @@ switch (messageOpt) {
 | Some(value) =&gt; print_endline(value)
 };
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How to import a JavaScript module in ReasonML?</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How to import a JavaScript module in ReasonML?</h1>
-        <p class="date">2019-12-27</p>
-        <h2>Importing a default module</h2>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How to import a JavaScript module in ReasonML?</title></head><body><h1>How to import a JavaScript module in ReasonML?</h1><p>Fri Dec 27 2019</p><div><h2>Importing a default module</h2>
 <p>Suppose you want to achieve this:</p>
 <pre><code class="language-js">const foo = require(&quot;foo&quot;);
 const result = foo();
@@ -59,8 +26,4 @@ const result = foo();
 <pre><code class="language-reasonml">let foo: unit =&gt; string = [%bs.raw {| require(&quot;foo&quot;)() |}];
 let result = foo();
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

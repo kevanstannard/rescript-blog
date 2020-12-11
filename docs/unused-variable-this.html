@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>“Unused variable this” with ReasonML objects</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">“Unused variable this” with ReasonML objects</h1>
-        <p class="date">2019-12-20</p>
-        <p>If you declare a simple ReasonML object such as:</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>“Unused variable this” with ReasonML objects</title></head><body><h1>“Unused variable this” with ReasonML objects</h1><p>Fri Dec 20 2019</p><div><p>If you declare a simple ReasonML object such as:</p>
 <pre><code class="language-reasonml">type person = {. name: string};
 let p1 = {
   pub name = &quot;Hello&quot;
@@ -59,8 +26,4 @@ let p: person = {
   pub greet = () =&gt; &quot;Hello &quot; ++ this#name;
 };
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

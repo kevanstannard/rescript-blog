@@ -4,16 +4,31 @@
   "scripts": {
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w",
-    "build": "node src/Index.bs.js"
+    "blog:watch": "npm-watch",
+    "blog:build": "node scripts/build",
+    "blog:serve": "node scripts/serve",
+    "blog:dev": "npm run blog:serve & npm run blog:watch"
   },
   "dependencies": {
-    "bs-glob": "reasonml-community/bs-glob",
-    "bs-platform": "8.3.3",
-    "date-fns": "^2.8.1",
+    "autoprefixer": "^10.1.0",
+    "bs-glob": "github:reasonml-community/bs-glob",
+    "bs-platform": "^8.3.3",
+    "connect": "^3.7.0",
     "front-matter": "^3.0.2",
     "glob": "^7.1.6",
     "markdown-it": "^10.0.0",
-    "mustache": "^3.2.0",
-    "rimraf": "^3.0.0"
+    "npm-watch": "^0.7.0",
+    "postcss": "^8.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "reason-react": "^0.9.1",
+    "rimraf": "^3.0.0",
+    "superstatic": "^7.1.0"
+  },
+  "watch": {
+    "blog:build": [
+      "./src/**/*.js",
+      "./content/**/*.md"
+    ]
   }
 }

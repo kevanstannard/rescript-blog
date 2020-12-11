@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How write embed JavaScript functions ReasonML?</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How write embed JavaScript functions ReasonML?</h1>
-        <p class="date">2019-12-29</p>
-        <p>Use the <code>[@bs.raw]</code> annotation.</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How write embed JavaScript functions ReasonML?</title></head><body><h1>How write embed JavaScript functions ReasonML?</h1><p>Sun Dec 29 2019</p><div><p>Use the <code>[@bs.raw]</code> annotation.</p>
 <h2>Embed the whole function</h2>
 <p>The simplest version directly embeds the whole function:</p>
 <pre><code class="language-reasonml">let add1 = [%raw &quot;(a, b) =&gt; return a + b&quot;];
@@ -81,8 +48,4 @@
   }
 );
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

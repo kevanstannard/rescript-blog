@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How to create a JavaScript object in ReasonML</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How to create a JavaScript object in ReasonML</h1>
-        <p class="date">2019-12-30</p>
-        <h2>Hashmap object</h2>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How to create a JavaScript object in ReasonML</title></head><body><h1>How to create a JavaScript object in ReasonML</h1><p>Mon Dec 30 2019</p><div><h2>Hashmap object</h2>
 <p>These are JavaScript objects where the keys are always strings, but the values are of a different kind.</p>
 <pre><code class="language-re">let myMap: Js.Dict.t(int) = Js.Dict.empty();
 Js.Dict.set(myMap, &quot;Allison&quot;, 10);
@@ -55,8 +22,4 @@ type payload = {
 };
 let obj: payload = payload(~name=&quot;John&quot;, ~age=30);
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>

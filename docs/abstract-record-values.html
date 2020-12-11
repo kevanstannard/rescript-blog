@@ -1,37 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>How to access values in a ReasonML Abstract Record?</title>
-    <link rel="stylesheet" href="https://unpkg.com/picnic">
-    <style>
-      .container {
-        padding: 1em 2em 4em 2em;
-      }
-      header h1 a {
-        padding: 8px;
-        color: #ffffff;
-        background-color: #db4d3f;
-      }
-      .title {
-        padding-bottom: 0;
-      }
-      .date {
-        margin-top: 0;
-        color: #888888;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>
-          <a href="index.html">ReasonML Notes</a>
-        </h1>
-      </header>
-      <article>
-        <h1 class="title">How to access values in a ReasonML Abstract Record?</h1>
-        <p class="date">2019-12-16</p>
-        <p>An abstract record type is declared as follows:</p>
+<!DOCTYPE HTML><html data-reactroot=""><head><title>How to access values in a ReasonML Abstract Record?</title></head><body><h1>How to access values in a ReasonML Abstract Record?</h1><p>Mon Dec 16 2019</p><div><p>An abstract record type is declared as follows:</p>
 <pre><code class="language-reasonml">[@bs.deriving abstract]
 type person = {
   name: string,
@@ -75,8 +42,4 @@ Js.log(joe);
 <p>Suppose you have a object named <code>joe</code> in JavaScript with the fields <code>name</code> and <code>age</code>, we can access this object in ReasonML using:</p>
 <pre><code class="language-reasonml">[@bs.val] external john : person = &quot;john&quot;;
 </code></pre>
-
-      </article>
-    </div>
-  </body>
-</html>
+</div></body></html>
