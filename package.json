@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "bs-glob": "github:reasonml-community/bs-glob",
-    "bs-platform": "^8.3.3",
+    "bs-platform": "^8.4.2",
     "connect": "^3.7.0",
     "copyfiles": "^2.4.1",
     "front-matter": "^3.0.2",
