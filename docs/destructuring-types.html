@@ -1,12 +1,12 @@
-<!doctype html><html data-reactroot=""><head><title>De-structuring ReasonML type data (using pattern matching)</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>De-structuring ReasonML type data (using pattern matching)</h1><p>Thu Dec 12 2019</p><div><p>Suppose we have the following type:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> person = <span class="hljs-constructor">Person(<span class="hljs-params">string</span>, <span class="hljs-params">int</span>)</span>;
+<!doctype html><html data-reactroot=""><head><title>De-structuring ReScript type data (using pattern matching)</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>De-structuring ReScript type data (using pattern matching)</h1><p>Sat Dec 12 2020</p><div><p>Suppose we have the following type:</p>
+<pre><code class="language-re"><span class="hljs-keyword">type</span> person = <span class="hljs-constructor">Person(<span class="hljs-params">string</span>, <span class="hljs-params">int</span>)</span>;
 </code></pre>
 <p>We can use this type as follows:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> joe = <span class="hljs-constructor">Person(<span class="hljs-string">&quot;Joe&quot;</span>, 23)</span>;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> joe = <span class="hljs-constructor">Person(<span class="hljs-string">&quot;Joe&quot;</span>, 23)</span>;
 <span class="hljs-keyword">let</span> jim = <span class="hljs-constructor">Person(<span class="hljs-string">&quot;Jim&quot;</span>, 31)</span>;
 </code></pre>
 <p>When we have variables like this, we can use pattern matching to extract the values:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> <span class="hljs-constructor">Person(<span class="hljs-params">name1</span>, <span class="hljs-params">age1</span>)</span> = joe;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> <span class="hljs-constructor">Person(<span class="hljs-params">name1</span>, <span class="hljs-params">age1</span>)</span> = joe;
 <span class="hljs-keyword">let</span> <span class="hljs-constructor">Person(<span class="hljs-params">name2</span>, <span class="hljs-params">age2</span>)</span> = jim;
 
 <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log2(name1, age1);

@@ -1,7 +1,7 @@
-<!doctype html><html data-reactroot=""><head><title>How to fetch JSON data with ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to fetch JSON data with ReasonML?</h1><p>Sun Nov 24 2019</p><div><h2>Install dependencies</h2>
+<!doctype html><html data-reactroot=""><head><title>How to fetch JSON data with ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to fetch JSON data with ReScript?</h1><p>Sat Dec 12 2020</p><div><h2>Install dependencies</h2>
 <p>You will need to install two dependencies:</p>
 <ul>
-<li><a href="https://github.com/reasonml-community/bs-fetch">bs-fetch</a> provides a wrapper around your browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>.</li>
+<li><a href="https://github.com/reasonml-community/bs-fetch">bs-fetch</a> provides a wrapper around your browser's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>.</li>
 <li><a href="https://github.com/glennsl/bs-json">bs-json</a> provides JSON decoding functions.</li>
 </ul>
 <h2>Preparing your data source</h2>
@@ -16,85 +16,43 @@ We’ll be using one of the public APIs that provides random pictures of cats.</
 </code></pre>
 <h2>Fetching the data</h2>
 <p>We can do a simple JSON fetch using the following:</p>
-<pre><code class="language-reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>(
-  Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
-  <span class="hljs-operator">|&gt;</span> then_(Fetch.Response.json)
-  <span class="hljs-operator">|&gt;</span> then_(json =&gt; Js.log(json) <span class="hljs-operator">|&gt;</span> resolve)</span>
-);
+<pre><code class="language-re"><span class="hljs-keyword">let</span> _ =
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>)
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">json</span> =&gt; Js.<span class="hljs-params">log</span>(<span class="hljs-params">json</span>)</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve, _)
 </code></pre>
 <p>Next, let’s convert this to a function that returns the cat data.</p>
 <h2>Declaring your API response type</h2>
 <p>In this case the response type is very simple:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> catData = {file: <span class="hljs-built_in">string</span>};
+<pre><code class="language-re"><span class="hljs-keyword">type</span> catData = {file: <span class="hljs-built_in">string</span>};
 </code></pre>
 <h2>Converting your API response</h2>
-<p>Let’s declare a Decode module with a catData function that converts the generic <code>Js.Json.t</code> type into a proper <code>catData</code> type.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">module</span> Decode = {
-  <span class="hljs-keyword">let</span> catData =<span class="hljs-function"> (<span class="hljs-params">data</span>: J<span class="hljs-params">s</span>.J<span class="hljs-params">son</span>.<span class="hljs-params">t</span>) =&gt;</span>
-    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Json</span>.</span><span class="hljs-module"><span class="hljs-identifier">Decode</span>.</span>{file: field(<span class="hljs-string">&quot;file&quot;</span>, <span class="hljs-built_in">string</span>, data)}</span>;
-};
+<p>Let's declare a Decode module with a catData function that converts the generic <code>Js.Json.t</code> type into a proper <code>catData</code> type.</p>
+<pre><code class="language-re"><span class="hljs-keyword">module</span> Decode = {
+  <span class="hljs-keyword">open</span> Json.Decode
+  <span class="hljs-keyword">let</span> catData =<span class="hljs-function"> (<span class="hljs-params">data</span>: J<span class="hljs-params">s</span>.J<span class="hljs-params">son</span>.<span class="hljs-params">t</span>) =&gt;</span> {
+    file: field(<span class="hljs-string">&quot;file&quot;</span>, <span class="hljs-built_in">string</span>, data),
+  }
+}
 </code></pre>
 <p>Next we’ll create a fetchCat function to perform the fetch and convert the response.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span>
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>(
-    Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
-    <span class="hljs-operator">|&gt;</span> then_(Fetch.Response.json)
-    <span class="hljs-operator">|&gt;</span> then_(obj =&gt; obj |&gt; Decode.catData |&gt; resolve)
-  )</span>;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span>
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>)
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">obj</span> =&gt; <span class="hljs-params">obj</span>-&gt;Decode.<span class="hljs-params">catData</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>(
-  fetchCat()
-  <span class="hljs-operator">|&gt;</span> then_(data =&gt; data.file |&gt; Js.log |&gt; resolve)
-)</span>;
+<span class="hljs-keyword">let</span> _ = fetch<span class="hljs-constructor">Cat()</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">data</span> =&gt; <span class="hljs-params">data</span>.<span class="hljs-params">file</span>-&gt;Js.<span class="hljs-params">log</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
 </code></pre>
 <h2>Making the fetch function more generic</h2>
 <p>Next let’s convert the fetch function into something more re-usable.</p>
 <p>For this we can abstract out the url and the decoder.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> fetchJson =<span class="hljs-function"> (<span class="hljs-params">url</span>, <span class="hljs-params">decoder</span>) =&gt;</span>
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>(
-    Fetch.fetch(url)
-    <span class="hljs-operator">|&gt;</span> then_(Fetch.Response.json)
-    <span class="hljs-operator">|&gt;</span> then_(obj =&gt; obj |&gt; decoder |&gt; resolve)
-  )</span>;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> fetchJson =<span class="hljs-function"> (<span class="hljs-params">url</span>, <span class="hljs-params">decoder</span>) =&gt;</span>
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(url)
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
+  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">obj</span> =&gt; <span class="hljs-params">obj</span>-&gt;<span class="hljs-params">decoder</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
 
-<span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span>
-  fetch<span class="hljs-constructor">Json(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>, Decode.<span class="hljs-params">catData</span>)</span>;
+<span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> fetch<span class="hljs-constructor">Json(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>, Decode.<span class="hljs-params">catData</span>)</span>
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>(
-  fetchCat()
-  <span class="hljs-operator">|&gt;</span> then_(data =&gt; data.file |&gt; Js.log |&gt; resolve)
-)</span>;
+<span class="hljs-keyword">let</span> _ = fetch<span class="hljs-constructor">Cat()</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">data</span> =&gt; <span class="hljs-params">data</span>.<span class="hljs-params">file</span>-&gt;Js.<span class="hljs-params">log</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
 </code></pre>
-<h2>Converting from a promise to an option</h2>
-<p>You may like to work with <code>option</code> values <code>Some</code> or <code>None</code> rather than promises.</p>
-<p>Let’s convert the above code to use a callback that provides an <code>option</code> value.</p>
-<pre><code class="language-reasonml">let fetchJsonWithCallback = (url, decoder, callback) =&gt;
-  Js.Promise.(
-    fetchJson(url, decoder)
-    |&gt; then_(result =&gt; callback(Some(result)) |&gt; resolve)
-    |&gt; catch(_err =&gt; callback(None) |&gt; resolve)
-    |&gt; ignore
-  );
-
-let fetchCatWithCallback = callback =&gt;
-  fetchJsonWithCallback(
-    &quot;https://aws.random.cat/meow&quot;,
-    Decode.catData,
-    callback,
-  );
-
-fetchCatWithCallback(result =&gt;
-  switch (result) {
-  | None =&gt; Js.log(&quot;Fetch failed&quot;)
-  | Some(catData) =&gt; Js.log(catData.file)
-  }
-);
-</code></pre>
-<h2>References</h2>
-<p>Fetching Data in ReasonML Pt. 1<br>
-<a href="https://medium.com/@sharifsbeat/fetching-data-in-reasonml-pt-1-c06f3cc6b250">https://medium.com/@sharifsbeat/fetching-data-in-reasonml-pt-1-c06f3cc6b250</a></p>
-<p>ReasonML Promise<br>
-<a href="https://reasonml.github.io/docs/en/promise">https://reasonml.github.io/docs/en/promise</a></p>
-<p>ReasonReact Hacker News<br>
-<a href="https://github.com/reasonml-community/reason-react-hacker-news">https://github.com/reasonml-community/reason-react-hacker-news</a></p>
 </div></div></body></html>

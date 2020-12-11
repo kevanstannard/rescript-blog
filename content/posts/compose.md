@@ -42,5 +42,5 @@ let fn = compose(f, g)
 
 let result = fn(1)
 Js.log(result)
-// 4
+// 3
 ```
