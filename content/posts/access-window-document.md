@@ -1,34 +1,47 @@
 ---
-title: How to access the window document object in ReasonML?
-date: 2019-12-27 16:13:48
+title: How to access the window document object in ReScript?
+date: 2020-12-11 19:58:32
 ---
 
-You can access it with the following binding code:
+ReScript version: `bs-platform@8.3.3`
 
-```reasonml
-[@bs.val] external document: Js.t({..}) = "document";
+As of this writing, there is an [experimental DOM binding](https://github.com/reasonml-community/bs-webapi-incubator) being developed.
+
+However if your needs are simple you may like to create your own simple bindings.
+
+## Bindings
+
+```re
+module Element = {
+  type t
+  @bs.send external innerText: (t, string) => unit = "innerText"
+}
+
+module Document = {
+  type t
+  @bs.send external getElementById: (t, string) => option<Element.t> = "getElementById"
+}
+
+module Window = {
+  type t
+  @bs.val external document: Document.t = "document"
+}
 ```
 
-_Note that this provides raw access to the document object with no type safety for it's properties._
+## Example usage
 
-## Example
-
-```reasonml
-[@bs.val] external document: Js.t({..}) = "document";
-let root = document##getElementById("root");
-root##innerText #= "Hello";
+```re
+Window.document
+->Document.getElementById("my-element")
+->Belt.Option.map((el: Element.t) => el->Element.innerText("Hello"))
 ```
 
-This generates the JsvsScript code:
+Here, we're using `Belt.Option.map()` to get access to the element value, but this could also be a `switch` statement.
+
+This generates the JavaScript code:
 
 ```js
-var root = document.getElementById("root");
-root.innerText = "Hello";
+Belt_Option.map(document.getElementById("my-element"), function (el) {
+  el.innerText("Hello");
+});
 ```
-
-## Notes about the binding
-
-- `[@bs.val] external` enables binding to an existing external value.
-- `document` is the ReasonML variable name to create.
-- `Js.t({..})` is the type of the ReasonML variable. In this case this is the type of a "open" JavaScript object where the properties are not declared. Properties are accessed using `##`.
-- `"document"` is the external value to bind to.

@@ -1,21 +1,31 @@
-<!doctype html><html data-reactroot=""><head><title>How to access the window document object in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to access the window document object in ReasonML?</h1><p>Sat Dec 28 2019</p><div><p>You can access it with the following binding code:</p>
-<pre><code class="language-reasonml"><span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">val</span>]</span> <span class="hljs-keyword">external</span> document: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>t({..}) = <span class="hljs-string">&quot;document&quot;</span>;
+<!doctype html><html data-reactroot=""><head><title>How to access the window document object in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to access the window document object in ReScript?</h1><p>Sat Dec 12 2020</p><div><p>ReScript version: <code>bs-platform@8.3.3</code></p>
+<p>As of this writing, there is an <a href="https://github.com/reasonml-community/bs-webapi-incubator">experimental DOM binding</a> being developed.</p>
+<p>However if your needs are simple you may like to create your own simple bindings.</p>
+<h2>Bindings</h2>
+<pre><code class="language-re"><span class="hljs-keyword">module</span> Element = {
+  <span class="hljs-keyword">type</span> t
+  @bs.send <span class="hljs-keyword">external</span> innerText:<span class="hljs-function"> (<span class="hljs-params">t</span>, <span class="hljs-params">string</span>) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;innerText&quot;</span>
+}
+
+<span class="hljs-keyword">module</span> Document = {
+  <span class="hljs-keyword">type</span> t
+  @bs.send <span class="hljs-keyword">external</span> getElementById:<span class="hljs-function"> (<span class="hljs-params">t</span>, <span class="hljs-params">string</span>) =&gt;</span> option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>t&gt; = <span class="hljs-string">&quot;getElementById&quot;</span>
+}
+
+<span class="hljs-keyword">module</span> Window = {
+  <span class="hljs-keyword">type</span> t
+  @bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> document: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Document</span>.</span></span>t = <span class="hljs-string">&quot;document&quot;</span>
+}
 </code></pre>
-<p><em>Note that this provides raw access to the document object with no type safety for it's properties.</em></p>
-<h2>Example</h2>
-<pre><code class="language-reasonml"><span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">val</span>]</span> <span class="hljs-keyword">external</span> document: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>t({..}) = <span class="hljs-string">&quot;document&quot;</span>;
-<span class="hljs-keyword">let</span> root = document##get<span class="hljs-constructor">ElementById(<span class="hljs-string">&quot;root&quot;</span>)</span>;
-root##innerText #= <span class="hljs-string">&quot;Hello&quot;</span>;
+<h2>Example usage</h2>
+<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Window</span>.</span></span>document
+-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Document</span>.</span></span>get<span class="hljs-constructor">ElementById(<span class="hljs-string">&quot;my-element&quot;</span>)</span>
+-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>map((el: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>t) =&gt; el-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>inner<span class="hljs-constructor">Text(<span class="hljs-string">&quot;Hello&quot;</span>)</span>)
 </code></pre>
-<p>This generates the JsvsScript code:</p>
-<pre><code class="language-js"><span class="hljs-keyword">var</span> root = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;root&quot;</span>);
-root.innerText = <span class="hljs-string">&quot;Hello&quot;</span>;
+<p>Here, we're using <code>Belt.Option.map()</code> to get access to the element value, but this could also be a <code>switch</code> statement.</p>
+<p>This generates the JavaScript code:</p>
+<pre><code class="language-js">Belt_Option.map(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;my-element&quot;</span>), <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el</span>) </span>{
+  el.innerText(<span class="hljs-string">&quot;Hello&quot;</span>);
+});
 </code></pre>
-<h2>Notes about the binding</h2>
-<ul>
-<li><code>[@bs.val] external</code> enables binding to an existing external value.</li>
-<li><code>document</code> is the ReasonML variable name to create.</li>
-<li><code>Js.t({..})</code> is the type of the ReasonML variable. In this case this is the type of a &quot;open&quot; JavaScript object where the properties are not declared. Properties are accessed using <code>##</code>.</li>
-<li><code>&quot;document&quot;</code> is the external value to bind to.</li>
-</ul>
 </div></div></body></html>
