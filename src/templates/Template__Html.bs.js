@@ -17,12 +17,18 @@ function Template__Html(Props) {
                     }), React.createElement("link", {
                       href: "//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css",
                       rel: "stylesheet"
+                    }), React.createElement("link", {
+                      href: "static/styles.css",
+                      rel: "stylesheet"
                     })), React.createElement("body", undefined, React.createElement("div", {
                       className: "p-10"
                     }, children)));
 }
 
+var rawCss = "\n  pre {\n    border: 1px solid black\n  }\n";
+
 var make = Template__Html;
 
+exports.rawCss = rawCss;
 exports.make = make;
 /* react Not a pure module */

@@ -8,6 +8,6 @@ let make = (~blogPost: Pages.blogPost) => {
     </p>
     <h1 className="text-5xl font-black mb-4"> {ReasonReact.string(blogPost.title)} </h1>
     <p className="mb-12"> {ReasonReact.string(Js.Date.toDateString(blogPost.date))} </p>
-    <div dangerouslySetInnerHTML={{"__html": blogPost.body}} />
+    <div className="blogPostBody" dangerouslySetInnerHTML={{"__html": blogPost.body}} />
   </Template__Html>
 }

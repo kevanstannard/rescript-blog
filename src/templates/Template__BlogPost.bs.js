@@ -19,6 +19,7 @@ function Template__BlogPost(Props) {
                 }, blogPost.title), React.createElement("p", {
                   className: "mb-12"
                 }, blogPost.date.toDateString()), React.createElement("div", {
+                  className: "blogPostBody",
                   dangerouslySetInnerHTML: {
                     __html: blogPost.body
                   }

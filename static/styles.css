@@ -1,0 +1,35 @@
+.blogPostBody p {
+  line-height: 2;
+  margin-bottom: 1em;
+}
+
+.blogPostBody pre {
+  background-color: #eee;
+  padding: 2em;
+  margin-bottom: 1em;
+}
+
+.blogPostBody code {
+  background-color: #eee;
+  padding: 0.1em 0.5em;
+}
+
+.blogPostBody h2 {
+  font-weight: bold;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  margin: 2em 0 1em 0;
+}
+
+.blogPostBody ul {
+  list-style-type: disc;
+  margin-left: 1em;
+}
+
+.blogPostBody a {
+  color: rgba(30, 58, 138);
+}
+
+.blogPostBody a:hover {
+  text-decoration: underline;
+}

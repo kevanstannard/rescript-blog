@@ -1,6 +1,7 @@
 const hljs = require("highlight.js");
 
 const md = require("markdown-it")({
+  linkify: true,
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -10,5 +11,7 @@ const md = require("markdown-it")({
     return "";
   },
 });
+
+md.linkify.set({ fuzzyEmail: false });
 
 module.exports = md;
