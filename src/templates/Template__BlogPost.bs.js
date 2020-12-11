@@ -9,17 +9,9 @@ function Template__BlogPost(Props) {
   return React.createElement(Template__Html$ReasonBlog.make, {
               title: blogPost.title,
               children: null
-            }, React.createElement("p", {
-                  className: "mb-4"
-                }, React.createElement("a", {
-                      className: "hover:underline",
+            }, React.createElement("p", undefined, React.createElement("a", {
                       href: "index.html"
-                    }, "← Back to index")), React.createElement("h1", {
-                  className: "text-5xl font-black mb-4"
-                }, blogPost.title), React.createElement("p", {
-                  className: "mb-12"
-                }, blogPost.date.toDateString()), React.createElement("div", {
-                  className: "blogPostBody",
+                    }, "← Back to index")), React.createElement("h1", undefined, blogPost.title), React.createElement("p", undefined, blogPost.date.toDateString()), React.createElement("div", {
                   dangerouslySetInnerHTML: {
                     __html: blogPost.body
                   }

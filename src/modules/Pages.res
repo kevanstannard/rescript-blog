@@ -70,7 +70,7 @@ let sortByDateDescending = (collection: pageCollection): pageCollection =>
   collection->Belt.SortArray.stableSortBy(compareDateDescending)
 
 let readPageCollection = (dirPath: string): Js.Promise.t<pageCollection> =>
-  File.readMarkdownFilePaths(dirPath)
+  File.glob(dirPath ++ "/*.md")
   ->Js.Promise.then_(readPages, _)
   ->Js.Promise.then_(collection => sortByDateDescending(collection)->Js.Promise.resolve, _)
 

@@ -1,35 +1,133 @@
-.blogPostBody p {
-  line-height: 2;
-  margin-bottom: 1em;
+pre,
+code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
 }
 
-.blogPostBody pre {
-  background-color: #eee;
-  padding: 2em;
-  margin-bottom: 1em;
+pre {
+  padding: 1rem;
+  line-height: 1.25;
+  overflow-x: auto;
+  margin-bottom: 1.3rem;
 }
 
-.blogPostBody code {
-  background-color: #eee;
-  padding: 0.1em 0.5em;
+a,
+a:visited {
+  color: #3498db;
 }
 
-.blogPostBody h2 {
-  font-weight: bold;
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-  margin: 2em 0 1em 0;
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
 }
 
-.blogPostBody ul {
-  list-style-type: disc;
-  margin-left: 1em;
+html {
+  font-size: 12px;
 }
 
-.blogPostBody a {
-  color: rgba(30, 58, 138);
+body {
+  line-height: 1.85;
 }
 
-.blogPostBody a:hover {
-  text-decoration: underline;
+p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 1.414rem 0 0.5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2 {
+  font-size: 2.827rem;
+}
+
+h3 {
+  font-size: 1.999rem;
+}
+
+h4 {
+  font-size: 1.414rem;
+}
+
+h5 {
+  font-size: 1.121rem;
+}
+
+h6 {
+  font-size: 0.88rem;
+}
+
+small {
+  font-size: 0.707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
+@import url(http://fonts.googleapis.com/css?family=Arimo:700,700italic);
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+}
+
+body {
+  color: #444;
+  font-family: "Open Sans Condensed", sans-serif;
+  font-weight: 300;
+  line-height: 1.45;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Arimo, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: 0.5rem;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #f0f0f0;
+}
+
+.container {
+  max-width: 48rem;
+  padding: 1rem 2rem;
 }

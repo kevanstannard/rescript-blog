@@ -26,12 +26,11 @@ let writeFile = (filePath: string, content: string): Js.Promise.t<unit> => {
   })
 }
 
-let readMarkdownFilePaths = (dirPath: string): Js.Promise.t<array<string>> =>
-  Js.Promise.make((~resolve, ~reject) => {
-    Glob.glob(dirPath ++ "/*.md", (error, paths) => {
+let glob = (glob: string): Js.Promise.t<array<string>> => Js.Promise.make((~resolve, ~reject) => {
+    Glob.glob(glob, (error, paths) => {
       let errorOpt = Js.Nullable.toOption(error)
       switch errorOpt {
-      | Some(_error) => reject(. Failure("Error reading directory: " ++ dirPath))
+      | Some(_error) => reject(. Failure("Error reading glob: " ++ glob))
       | None => resolve(. paths)
       }
     })

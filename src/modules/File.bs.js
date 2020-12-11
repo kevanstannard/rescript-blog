@@ -44,15 +44,15 @@ function writeFile(filePath, content) {
               }));
 }
 
-function readMarkdownFilePaths(dirPath) {
+function glob(glob$1) {
   return new Promise((function (resolve, reject) {
-                Glob(dirPath + "/*.md", (function (error, paths) {
+                Glob(glob$1, (function (error, paths) {
                         if (error == null) {
                           return resolve(paths);
                         } else {
                           return reject({
                                       RE_EXN_ID: "Failure",
-                                      _1: "Error reading directory: " + dirPath
+                                      _1: "Error reading glob: " + glob$1
                                     });
                         }
                       }));
@@ -62,5 +62,5 @@ function readMarkdownFilePaths(dirPath) {
 
 exports.readFile = readFile;
 exports.writeFile = writeFile;
-exports.readMarkdownFilePaths = readMarkdownFilePaths;
+exports.glob = glob;
 /* fs Not a pure module */

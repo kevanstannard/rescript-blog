@@ -12,16 +12,13 @@ function Template__Html(Props) {
                       content: "width=device-width, initial-scale=1.0",
                       name: "viewport"
                     }), React.createElement("link", {
-                      href: "https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css",
-                      rel: "stylesheet"
-                    }), React.createElement("link", {
                       href: "//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css",
                       rel: "stylesheet"
                     }), React.createElement("link", {
                       href: "static/styles.css",
                       rel: "stylesheet"
                     })), React.createElement("body", undefined, React.createElement("div", {
-                      className: "p-10"
+                      className: "container"
                     }, children)));
 }
 

@@ -60,7 +60,7 @@ function compareDateDescending(pageA, pageB) {
 }
 
 function readPageCollection(dirPath) {
-  var __x = File$ReasonBlog.readMarkdownFilePaths(dirPath);
+  var __x = File$ReasonBlog.glob(dirPath + "/*.md");
   var __x$1 = __x.then(readPages);
   return __x$1.then(function (collection) {
               return Promise.resolve(Belt_SortArray.stableSortBy(collection, compareDateDescending));
