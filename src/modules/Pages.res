@@ -28,7 +28,7 @@ let pathBaseName = (path: string) => Path.basename(~path, ~ext=".md", ())
 let parsePage = (data: string, filePath: string): page => {
   let fmData = FrontMatter.fm(data)
   let {id, title, date}: attributes = fmData.attributes
-  let body = Markdown.markdownIt.render(. fmData.body)
+  let body = Markdown.render(fmData.body)
   let pageId = {
     switch id {
     | Some(id) => id

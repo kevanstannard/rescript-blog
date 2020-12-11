@@ -1,38 +1,38 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>Writing a compose function in ReasonML.</title></head><body><h1>Writing a compose function in ReasonML.</h1><p>Sun Jan 05 2020</p><div><p>A simple compose function has the form:</p>
+<!doctype html><html data-reactroot=""><head><title>Writing a compose function in ReasonML.</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">Writing a compose function in ReasonML.</h1><p class="mb-12">Sun Jan 05 2020</p><div><p>A simple compose function has the form:</p>
 <pre><code class="language-js">compose(f, g, x) = f(g(x));
 </code></pre>
 <p>Where <code>f</code> and <code>g</code> are functions.</p>
 <p>This may also be read as <code>f</code> after <code>g</code>. I.e. we execute <code>g</code> first, and then execute <code>f</code> after <code>g</code>.</p>
 <p>The type of compose could be written as:</p>
-<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c) =&gt; ('a =&gt; 'b) =&gt; 'a =&gt; 'c;
+<pre><code class="language-re"><span class="hljs-keyword">type</span> compose(&#x27;a, &#x27;b, &#x27;c) =<span class="hljs-function"> (&#x27;<span class="hljs-params">b</span> =&gt;</span> &#x27;c) =&gt;<span class="hljs-function"> (&#x27;<span class="hljs-params">a</span> =&gt;</span> &#x27;b) =&gt; &#x27;a =&gt; &#x27;c;
 </code></pre>
 <p>Which in Reason would typically be written as:</p>
-<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c, 'a =&gt; 'b, 'a) =&gt; 'c;
+<pre><code class="language-re"><span class="hljs-keyword">type</span> compose(&#x27;a, &#x27;b, &#x27;c) =<span class="hljs-function"> (&#x27;<span class="hljs-params">b</span> =&gt;</span> &#x27;c, &#x27;a =&gt; &#x27;b, &#x27;a) =&gt; &#x27;c;
 </code></pre>
 <p>We can then write our compose function as:</p>
-<pre><code class="language-re">let compose: compose('a, 'b, 'c) = (f, g, x) =&gt; f(g(x));
+<pre><code class="language-re"><span class="hljs-keyword">let</span> compose: compose(&#x27;a, &#x27;b, &#x27;c) =<span class="hljs-function"> (<span class="hljs-params">f</span>, <span class="hljs-params">g</span>, <span class="hljs-params">x</span>) =&gt;</span> f(g(x));
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re">let f = x =&gt; x + 1;
-let g = x =&gt; x * 2;
-let fn = compose(f, g);
+<pre><code class="language-re"><span class="hljs-keyword">let</span> f =<span class="hljs-function"> <span class="hljs-params">x</span> =&gt;</span> x + <span class="hljs-number">1</span>;
+<span class="hljs-keyword">let</span> g =<span class="hljs-function"> <span class="hljs-params">x</span> =&gt;</span> x<span class="hljs-operator"> * </span><span class="hljs-number">2</span>;
+<span class="hljs-keyword">let</span> fn = compose(f, g);
 
-let result = fn(1);
-Js.log(result);
-// 4
+<span class="hljs-keyword">let</span> result = fn(<span class="hljs-number">1</span>);
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(result);
+<span class="hljs-comment">// 4</span>
 </code></pre>
 <p>In Haskell, this function has the name <code>.</code> which allows you to write function composition such as <code>f . g</code>.</p>
 <p>We can't use <code>.</code> as an identifier in ReasonML, but we can invent our own such as <code>&lt;.&gt;</code>.</p>
 <p>So rewriting our compose, we get:</p>
-<pre><code class="language-re">type compose('a, 'b, 'c) = ('b =&gt; 'c, 'a =&gt; 'b, 'a) =&gt; 'c;
-let (&lt;.&gt;): compose('a, 'b, 'c) = (f, g, x) =&gt; f(g(x));
+<pre><code class="language-re"><span class="hljs-keyword">type</span> compose(&#x27;a, &#x27;b, &#x27;c) =<span class="hljs-function"> (&#x27;<span class="hljs-params">b</span> =&gt;</span> &#x27;c, &#x27;a =&gt; &#x27;b, &#x27;a) =&gt; &#x27;c;
+<span class="hljs-keyword">let</span><span class="hljs-function"> (&lt;.&gt;): <span class="hljs-params">compose</span>(&#x27;<span class="hljs-params">a</span>, &#x27;<span class="hljs-params">b</span>, &#x27;<span class="hljs-params">c</span>) = (<span class="hljs-params">f</span>, <span class="hljs-params">g</span>, <span class="hljs-params">x</span>) =&gt;</span> f(g(x));
 
-let f = x =&gt; x + 1;
-let g = x =&gt; x * 2;
-let fn = times2 &lt;.&gt; add1;
+<span class="hljs-keyword">let</span> f =<span class="hljs-function"> <span class="hljs-params">x</span> =&gt;</span> x + <span class="hljs-number">1</span>;
+<span class="hljs-keyword">let</span> g =<span class="hljs-function"> <span class="hljs-params">x</span> =&gt;</span> x<span class="hljs-operator"> * </span><span class="hljs-number">2</span>;
+<span class="hljs-keyword">let</span> fn = times2 &lt;.&gt; add1;
 
-let result = fn(1);
-Js.log(result);
-// 4
+<span class="hljs-keyword">let</span> result = fn(<span class="hljs-number">1</span>);
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(result);
+<span class="hljs-comment">// 4</span>
 </code></pre>
-</div></body></html>
+</div></div></body></html>

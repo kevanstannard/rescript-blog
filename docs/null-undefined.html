@@ -1,14 +1,14 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>How to use null and undefined in ReasonML?</title></head><body><h1>How to use null and undefined in ReasonML?</h1><p>Mon Dec 30 2019</p><div><p><code>None</code> of an <code>option</code> type compiles to <code>undefined</code>:</p>
-<pre><code class="language-re">let a = Some(5);
-let b = None;
+<!doctype html><html data-reactroot=""><head><title>How to use null and undefined in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">How to use null and undefined in ReasonML?</h1><p class="mb-12">Mon Dec 30 2019</p><div><p><code>None</code> of an <code>option</code> type compiles to <code>undefined</code>:</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> a = <span class="hljs-constructor">Some(5)</span>;
+<span class="hljs-keyword">let</span> b = None;
 </code></pre>
 <p>Compiles to:</p>
 <pre><code>var a = 5;
 var b = undefined;
 </code></pre>
 <p>If you need an explicit <code>null</code> or <code>undefined</code> you can use:</p>
-<pre><code class="language-re">let jsNull = Js.Nullable.null;
-let jsUndefined = Js.Nullable.undefined;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> jsNull = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>null;
+<span class="hljs-keyword">let</span> jsUndefined = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>undefined;
 </code></pre>
 <p>Which compiles to:</p>
 <pre><code>var jsNull = null;
@@ -20,9 +20,9 @@ var jsUndefined = undefined;
 <li>Nullable values may be converted <strong>to</strong> an <code>option</code> using <code>Js.Nullable.toOption(value)</code></li>
 <li>Nullable values may be converted <strong>from</strong> an <code>option</code> using <code>Js.Nullable.fromOption(value)</code></li>
 </ul>
-<pre><code class="language-re">let result1: Js.Nullable.t(string) = Js.Nullable.return(&quot;hello&quot;);
-let result2: Js.Nullable.t(int) = Js.Nullable.fromOption(Some(10));
-let result3: option(int) = Js.Nullable.toOption(Js.Nullable.return(10));
+<pre><code class="language-re"><span class="hljs-keyword">let</span> result1: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>t(<span class="hljs-built_in">string</span>) = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>return(<span class="hljs-string">&quot;hello&quot;</span>);
+<span class="hljs-keyword">let</span> result2: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>t(<span class="hljs-built_in">int</span>) = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span>from<span class="hljs-constructor">Option(Some(10)</span>);
+<span class="hljs-keyword">let</span> result3: option(<span class="hljs-built_in">int</span>) = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(Js.Nullable.<span class="hljs-params">return</span>(10)</span>);
 </code></pre>
 <h2>References</h2>
 <ul>
@@ -31,4 +31,4 @@ https://bucklescript.github.io/docs/en/null-undefined-option#docsNav</li>
 <li>Nullable<br>
 https://bucklescript.github.io/docs/en/interop-cheatsheet#nullable</li>
 </ul>
-</div></body></html>
+</div></div></body></html>

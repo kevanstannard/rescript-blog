@@ -1,29 +1,29 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>“Unused variable this” with ReasonML objects</title></head><body><h1>“Unused variable this” with ReasonML objects</h1><p>Fri Dec 20 2019</p><div><p>If you declare a simple ReasonML object such as:</p>
-<pre><code class="language-reasonml">type person = {. name: string};
-let p1 = {
-  pub name = &quot;Hello&quot;
+<!doctype html><html data-reactroot=""><head><title>“Unused variable this” with ReasonML objects</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">“Unused variable this” with ReasonML objects</h1><p class="mb-12">Fri Dec 20 2019</p><div><p>If you declare a simple ReasonML object such as:</p>
+<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> person = {. name: <span class="hljs-built_in">string</span>};
+<span class="hljs-keyword">let</span> p1 = {
+  pub name = <span class="hljs-string">&quot;Hello&quot;</span>
 };
 </code></pre>
 <p>You may see a compiler warning:</p>
 <pre><code>Unused variable this
 </code></pre>
 <p>To hide this warning, add <code>as _;</code> at the beginning of your object:</p>
-<pre><code class="language-reasonml">let p = {
-  as _;
-  pub name = &quot;Hello&quot;
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> p = {
+  <span class="hljs-keyword">as</span> _;
+  pub name = <span class="hljs-string">&quot;Hello&quot;</span>
 };
 </code></pre>
 <p>These object types have an implicit this available, and if you don’t use it, then you will receive the warning.</p>
 <p>Here’s an example that uses the <code>this</code> reference:</p>
-<pre><code class="language-reasonml">type person = {
+<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> person = {
   .
-  name: string,
-  greet: unit =&gt; string,
+  name: <span class="hljs-built_in">string</span>,
+  greet:<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> <span class="hljs-built_in">string</span>,
 };
 
-let p: person = {
-  pub name = &quot;Joe&quot;;
-  pub greet = () =&gt; &quot;Hello &quot; ++ this#name;
+<span class="hljs-keyword">let</span> p: person = {
+  pub name = <span class="hljs-string">&quot;Joe&quot;</span>;
+  pub greet =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">&quot;Hello &quot;</span><span class="hljs-operator"> ++ </span>this#name;
 };
 </code></pre>
-</div></body></html>
+</div></div></body></html>

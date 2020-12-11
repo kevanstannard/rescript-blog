@@ -1,10 +1,10 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>Why use React.string() in ReasonReact?</title></head><body><h1>Why use React.string() in ReasonReact?</h1><p>Tue Feb 04 2020</p><div><p>When writing JSX in Reason, you will need to use the <code>React.string()</code> function when rendering string values.</p>
+<!doctype html><html data-reactroot=""><head><title>Why use React.string() in ReasonReact?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">Why use React.string() in ReasonReact?</h1><p class="mb-12">Tue Feb 04 2020</p><div><p>When writing JSX in Reason, you will need to use the <code>React.string()</code> function when rendering string values.</p>
 <p>For example:</p>
-<pre><code class="language-reasonml">&lt;h1&gt;{React.string(&quot;Hello&quot;)}&lt;/h1&gt;
+<pre><code class="language-reasonml">&lt;h1&gt;{<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello&quot;</span>)}&lt;/h1&gt;
 </code></pre>
 <p>So why do we need to do this?</p>
 <p>The <code>string()</code> function in Reason React is implemented as:</p>
-<pre><code class="language-reasonml">external string: string =&gt; element = &quot;%identity&quot;;
+<pre><code class="language-reasonml"><span class="hljs-keyword">external</span> <span class="hljs-built_in">string</span>:<span class="hljs-function"> <span class="hljs-params">string</span> =&gt;</span> element = <span class="hljs-string">&quot;%identity&quot;</span>;
 </code></pre>
 <p>Firstly, a quick reminder about <code>%identity</code>. This is special Bucklescript instruction that does nothing but convert from the type <code>string</code> to <code>element</code>.</p>
 <p>So when we write <code>React.string(&quot;Hello&quot;)</code> we are not doing anything with the value, but we are just changing it's type to <code>element</code>, which allows it to be a compatible child of an HTML tag.</p>
@@ -13,4 +13,4 @@
 <li>Special Identity External<br>
 https://bucklescript.github.io/docs/en/intro-to-external#special-identity-external</li>
 </ul>
-</div></body></html>
+</div></div></body></html>

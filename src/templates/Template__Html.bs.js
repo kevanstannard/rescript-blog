@@ -6,7 +6,20 @@ var React = require("react");
 function Template__Html(Props) {
   var title = Props.title;
   var children = Props.children;
-  return React.createElement("html", undefined, React.createElement("head", undefined, React.createElement("title", undefined, title)), React.createElement("body", undefined, children));
+  return React.createElement("html", undefined, React.createElement("head", undefined, React.createElement("title", undefined, title), React.createElement("meta", {
+                      charSet: "utf-8"
+                    }), React.createElement("meta", {
+                      content: "width=device-width, initial-scale=1.0",
+                      name: "viewport"
+                    }), React.createElement("link", {
+                      href: "https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css",
+                      rel: "stylesheet"
+                    }), React.createElement("link", {
+                      href: "//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css",
+                      rel: "stylesheet"
+                    })), React.createElement("body", undefined, React.createElement("div", {
+                      className: "p-10"
+                    }, children)));
 }
 
 var make = Template__Html;

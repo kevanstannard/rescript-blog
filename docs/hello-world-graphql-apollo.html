@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>Minimal Hello World using Apollo GraphQL and ReasonML</title></head><body><h1>Minimal Hello World using Apollo GraphQL and ReasonML</h1><p>Sun Dec 08 2019</p><div><h2>Overview</h2>
+<!doctype html><html data-reactroot=""><head><title>Minimal Hello World using Apollo GraphQL and ReasonML</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">Minimal Hello World using Apollo GraphQL and ReasonML</h1><p class="mb-12">Sun Dec 08 2019</p><div><h2>Overview</h2>
 <p>This is an absolutely bare-bones, minimal example application to demonstrate:</p>
 <ul>
 <li>Apollo GraphQL on the server.</li>
@@ -23,42 +23,42 @@ yarn add apollo-server
 yarn add apollo-server-express
 </code></pre>
 <p>Create <code>src/index.js</code> for the server application.</p>
-<pre><code class="language-js">const express = require(&quot;express&quot;);
-const { ApolloServer, gql } = require(&quot;apollo-server-express&quot;);
+<pre><code class="language-js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);
+<span class="hljs-keyword">const</span> { ApolloServer, gql } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;apollo-server-express&quot;</span>);
 
-// Declare the GraphQL types.
-// Here, we support a query &quot;hello&quot; that returns a string.
-const typeDefs = gql`
+<span class="hljs-comment">// Declare the GraphQL types.</span>
+<span class="hljs-comment">// Here, we support a query &quot;hello&quot; that returns a string.</span>
+<span class="hljs-keyword">const</span> typeDefs = gql<span class="hljs-string">`
   type Query {
     hello: String!
   }
-`;
+`</span>;
 
-// Declare a function to execute when we send the &quot;hello&quot; query.
-// Here, we wait a couple of seconds and return the string &quot;World&quot;.
-const helloQuery = () =&gt;
-  new Promise(resolve =&gt; {
-    setTimeout(() =&gt; {
-      resolve(&quot;World&quot;);
-    }, 2000);
+<span class="hljs-comment">// Declare a function to execute when we send the &quot;hello&quot; query.</span>
+<span class="hljs-comment">// Here, we wait a couple of seconds and return the string &quot;World&quot;.</span>
+<span class="hljs-keyword">const</span> helloQuery = <span class="hljs-function">() =&gt;</span>
+  <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      resolve(<span class="hljs-string">&quot;World&quot;</span>);
+    }, <span class="hljs-number">2000</span>);
   });
 
-// Declare the GraphQL resolvers.
-// These map queries to implementations.
-const resolvers = {
-  Query: {
-    hello: helloQuery
+<span class="hljs-comment">// Declare the GraphQL resolvers.</span>
+<span class="hljs-comment">// These map queries to implementations.</span>
+<span class="hljs-keyword">const</span> resolvers = {
+  <span class="hljs-attr">Query</span>: {
+    <span class="hljs-attr">hello</span>: helloQuery
   }
 };
 
-// Create and start the server
-const server = new ApolloServer({ typeDefs, resolvers });
-const app = express();
+<span class="hljs-comment">// Create and start the server</span>
+<span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> ApolloServer({ typeDefs, resolvers });
+<span class="hljs-keyword">const</span> app = express();
 server.applyMiddleware({ app });
 
-const port = 4000;
-app.listen({ port }, () =&gt;
-  console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
+<span class="hljs-keyword">const</span> port = <span class="hljs-number">4000</span>;
+app.listen({ port }, <span class="hljs-function">() =&gt;</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Server ready at http://localhost:<span class="hljs-subst">${port}</span><span class="hljs-subst">${server.graphqlPath}</span>`</span>)
 );
 </code></pre>
 <p>Add a script to <code>package.json</code> that starts the server.</p>
@@ -141,29 +141,29 @@ yarn add --exact webpack-dev-server
 </code></pre>
 <p>The <code>graphql_schema.json</code> file contains the types for the queries that the server is handling. The reason-apollo package uses these types to ensure that our handling of the responses is type safe.</p>
 <p>Add a <code>webpack.config.js</code> file:</p>
-<pre><code class="language-js">const HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;);
-const path = require(&quot;path&quot;);
-module.exports = {
-  entry: &quot;./src/Index.bs.js&quot;,
-  mode: &quot;development&quot;,
-  plugins: [new HtmlWebpackPlugin({ template: &quot;templates/index.html&quot; })],
-  devServer: {
-    contentBase: path.join(__dirname, &quot;build&quot;),
-    port: 9000
+<pre><code class="language-js"><span class="hljs-keyword">const</span> HtmlWebpackPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;html-webpack-plugin&quot;</span>);
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;path&quot;</span>);
+<span class="hljs-built_in">module</span>.exports = {
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;./src/Index.bs.js&quot;</span>,
+  <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;development&quot;</span>,
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-keyword">new</span> HtmlWebpackPlugin({ <span class="hljs-attr">template</span>: <span class="hljs-string">&quot;templates/index.html&quot;</span> })],
+  <span class="hljs-attr">devServer</span>: {
+    <span class="hljs-attr">contentBase</span>: path.join(__dirname, <span class="hljs-string">&quot;build&quot;</span>),
+    <span class="hljs-attr">port</span>: <span class="hljs-number">9000</span>
   }
 };
 </code></pre>
 <p>Add a template for the application in <code>templates/index.html</code>:</p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot; /&gt;
-    &lt;title&gt;Hello Client&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Hello Client<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;root&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
 </code></pre>
 <p>Create a <code>src/Index.re</code> file:</p>
 <pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(
@@ -174,37 +174,37 @@ module.exports = {
 );
 </code></pre>
 <p>Create a <code>src/Client.re</code> file:</p>
-<pre><code class="language-reasonml">let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> inMemoryCache = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ApolloInMemoryCache</span>.</span></span>create<span class="hljs-constructor">InMemoryCache()</span>;
 
-let httpLink =
-  ApolloLinks.createHttpLink(~uri=&quot;http://localhost:4000/graphql&quot;, ());
+<span class="hljs-keyword">let</span> httpLink =
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ApolloLinks</span>.</span></span>create<span class="hljs-constructor">HttpLink(~<span class="hljs-params">uri</span>=<span class="hljs-string">&quot;http://localhost:4000/graphql&quot;</span>, ()</span>);
 
-let instance =
-  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+<span class="hljs-keyword">let</span> instance =
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonApollo</span>.</span></span>create<span class="hljs-constructor">ApolloClient(~<span class="hljs-params">link</span>=<span class="hljs-params">httpLink</span>, ~<span class="hljs-params">cache</span>=<span class="hljs-params">inMemoryCache</span>, ()</span>);
 </code></pre>
 <p>Create a <code>src/App.re</code> file:</p>
-<pre><code class="language-reasonml">/* Create a GraphQL Query by using the graphql_ppx */
-module GetHello = [%graphql {|
-  query getHello {
-    hello
+<pre><code class="language-reasonml"><span class="hljs-comment">/* Create a GraphQL Query by using the graphql_ppx */</span>
+<span class="hljs-keyword">module</span> GetHello = <span class="hljs-literal">[%<span class="hljs-identifier">graphql</span> {|
+  <span class="hljs-identifier">query</span> <span class="hljs-identifier">getHello</span> {
+    <span class="hljs-identifier">hello</span>
   }
-|}];
+|}]</span>;
 
-module GetHelloQuery = ReasonApollo.CreateQuery(GetHello);
+<span class="hljs-keyword">module</span> GetHelloQuery = ReasonApollo.<span class="hljs-constructor">CreateQuery(GetHello)</span>;
 
-[@react.component]
-let make = () =&gt; {
+<span class="hljs-literal">[@<span class="hljs-identifier">react</span>.<span class="hljs-identifier">component</span>]</span>
+<span class="hljs-keyword">let</span> make =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> {
   &lt;GetHelloQuery&gt;
     ...{({result}) =&gt;
       switch (result) {
-      | Loading =&gt;
-        &lt;div&gt; {ReasonReact.string(&quot;Loading&quot;)} &lt;/div&gt;
-      | Error(error) =&gt;
-        &lt;div&gt; {ReasonReact.string(error##message)} &lt;/div&gt;
-      | Data(response) =&gt;
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Loading</span> =&gt;</span>
+        &lt;div&gt; {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonReact</span>.</span></span><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Loading&quot;</span>)} &lt;/div&gt;
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span> =&gt;</span>
+        &lt;div&gt; {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonReact</span>.</span></span><span class="hljs-built_in">string</span>(error##message)} &lt;/div&gt;
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Data(<span class="hljs-params">response</span>)</span> =&gt;</span>
         &lt;div&gt;
-          {ReasonReact.string(&quot;Hello&quot;)}
-          {ReasonReact.string(response##hello)}
+          {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonReact</span>.</span></span><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello&quot;</span>)}
+          {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonReact</span>.</span></span><span class="hljs-built_in">string</span>(response##hello)}
         &lt;/div&gt;
       }
     }
@@ -223,4 +223,4 @@ let make = () =&gt; {
 https://github.com/apollographql/reason-apollo</p>
 <p>ReasonReact installation<br>
 https://reasonml.github.io/reason-react/docs/en/installation.html</p>
-</div></body></html>
+</div></div></body></html>

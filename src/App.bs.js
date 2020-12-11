@@ -11,21 +11,22 @@ var postsDir = "./content/posts";
 
 var blogDir = "./docs";
 
+function prefixWithDocType(html) {
+  return "<!doctype html>" + html;
+}
+
 function renderBlogIndex(blogPosts) {
   var el = React.createElement(Template__BlogIndex$ReasonBlog.make, {
-        blogTitle: "ReScript Blog",
         blogPosts: blogPosts
       });
-  var html = Server.renderToString(el);
-  return "<!DOCTYPE HTML>" + html;
+  return "<!doctype html>" + Server.renderToString(el);
 }
 
 function renderBlogPost(blogPost) {
   var el = React.createElement(Template__BlogPost$ReasonBlog.make, {
         blogPost: blogPost
       });
-  var html = Server.renderToString(el);
-  return "<!DOCTYPE HTML>" + html;
+  return "<!doctype html>" + Server.renderToString(el);
 }
 
 function makeBlog(param) {
@@ -42,6 +43,7 @@ function make(param) {
 
 exports.postsDir = postsDir;
 exports.blogDir = blogDir;
+exports.prefixWithDocType = prefixWithDocType;
 exports.renderBlogIndex = renderBlogIndex;
 exports.renderBlogPost = renderBlogPost;
 exports.makeBlog = makeBlog;

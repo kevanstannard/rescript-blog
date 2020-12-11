@@ -1,14 +1,14 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>How write embed JavaScript functions ReasonML?</title></head><body><h1>How write embed JavaScript functions ReasonML?</h1><p>Sun Dec 29 2019</p><div><p>Use the <code>[@bs.raw]</code> annotation.</p>
+<!doctype html><html data-reactroot=""><head><title>How write embed JavaScript functions ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">How write embed JavaScript functions ReasonML?</h1><p class="mb-12">Sun Dec 29 2019</p><div><p>Use the <code>[@bs.raw]</code> annotation.</p>
 <h2>Embed the whole function</h2>
 <p>The simplest version directly embeds the whole function:</p>
-<pre><code class="language-reasonml">let add1 = [%raw &quot;(a, b) =&gt; return a + b&quot;];
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> add1 = <span class="hljs-literal">[%<span class="hljs-identifier">raw</span> &quot;(<span class="hljs-identifier">a</span>, <span class="hljs-identifier">b</span>) =&gt; <span class="hljs-identifier">return</span> <span class="hljs-identifier">a</span> + <span class="hljs-identifier">b</span>&quot;]</span>;
 </code></pre>
 <p>This generates:</p>
 <pre><code>var add1 = ((a, b) =&gt; return a + b);
 </code></pre>
 <h2>Hint that it's a function</h2>
 <p>BuckleScript supports a syntax that allows you to indicate that the raw code is a function.</p>
-<pre><code class="language-reasonml">let add2 = [%raw (a, b) =&gt; &quot;return a + b&quot;];
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> add2 = <span class="hljs-literal">[%<span class="hljs-identifier">raw</span> (<span class="hljs-identifier">a</span>, <span class="hljs-identifier">b</span>) =&gt; &quot;<span class="hljs-identifier">return</span> <span class="hljs-identifier">a</span> + <span class="hljs-identifier">b</span>&quot;]</span>;
 </code></pre>
 <p>From <a href="https://bucklescript.github.io/docs/en/embed-raw-javascript">the docs</a>:</p>
 <blockquote>
@@ -18,24 +18,24 @@
 <pre><code>function add2 (a,b){return a + b};
 </code></pre>
 <h2>Specify the argument and return types</h2>
-<pre><code class="language-reasonml">let add3 (int, int) =&gt; int = [%raw (a, b) =&gt; &quot;return a + b&quot;];
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> add3<span class="hljs-function"> (<span class="hljs-params">int</span>, <span class="hljs-params">int</span>) =&gt;</span> <span class="hljs-built_in">int</span> = <span class="hljs-literal">[%<span class="hljs-identifier">raw</span> (<span class="hljs-identifier">a</span>, <span class="hljs-identifier">b</span>) =&gt; &quot;<span class="hljs-identifier">return</span> <span class="hljs-identifier">a</span> + <span class="hljs-identifier">b</span>&quot;]</span>;
 </code></pre>
 <p>This generates the same code as the previous version, but provides precise type hints to ReasonML:</p>
 <pre><code>function add3 (a,b){return a + b};
 </code></pre>
 <h2>Embedding longer more complicated functions</h2>
 <p>You can use a multiline string:</p>
-<pre><code class="language-reasonml">let jsCalculate: (array(int), int) =&gt; int = [%bs.raw
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> jsCalculate:<span class="hljs-function"> (<span class="hljs-params">array</span>(<span class="hljs-params">int</span>), <span class="hljs-params">int</span>) =&gt;</span> <span class="hljs-built_in">int</span> = <span class="hljs-literal">[%<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">raw</span>
   {|
-  function (numbers, scaleFactor) {
-    var result = 0;
-    numbers.forEach(number =&gt; {
-      result += number;
+  <span class="hljs-identifier">function</span> (<span class="hljs-identifier">numbers</span>, <span class="hljs-identifier">scaleFactor</span>) {
+    <span class="hljs-identifier">var</span> <span class="hljs-identifier">result</span> = <span class="hljs-number">0</span>;
+    <span class="hljs-identifier">numbers</span>.<span class="hljs-identifier">forEach</span>(<span class="hljs-identifier">number</span> =&gt; {
+      <span class="hljs-identifier">result</span> += <span class="hljs-identifier">number</span>;
     });
-    return result * scaleFactor;
+    <span class="hljs-identifier">return</span> <span class="hljs-identifier">result</span> <span class="hljs-operator">*</span> <span class="hljs-identifier">scaleFactor</span>;
   }
 |}
-];
+]</span>;
 </code></pre>
 <p>Which generates:</p>
 <pre><code>var jsCalculate = (
@@ -48,4 +48,4 @@
   }
 );
 </code></pre>
-</div></body></html>
+</div></div></body></html>

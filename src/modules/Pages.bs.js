@@ -17,7 +17,7 @@ function parsePage(data, filePath) {
   var fmData = FrontMatter(data);
   var match = fmData.attributes;
   var id = match.id;
-  var body = Markdown$ReasonBlog.markdownIt.render(fmData.body);
+  var body = Markdown$ReasonBlog.render(fmData.body);
   var pageId = id !== undefined ? id : Path.basename(filePath, ".md");
   return {
           filePath: filePath,

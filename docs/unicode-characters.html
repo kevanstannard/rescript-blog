@@ -1,13 +1,13 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>How to use unicode characters in ReasonML?</title></head><body><h1>How to use unicode characters in ReasonML?</h1><p>Sun Dec 29 2019</p><div><p>We can use BuckleScript's string interpolation <code>{js|</code> and <code>|js}</code> for unicode characters:</p>
-<pre><code class="language-reasonml">let smile: string = {js|😀|js};
-print_endline(smile);
-</code></pre>
+<!doctype html><html data-reactroot=""><head><title>How to use unicode characters in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">How to use unicode characters in ReasonML?</h1><p class="mb-12">Sun Dec 29 2019</p><div><p>We can use BuckleScript's string interpolation <code>{js|</code> and <code>|js}</code> for unicode characters:</p>
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> smile: <span class="hljs-built_in">string</span> = {js<span class="hljs-pattern-match">|😀|js};
+print<span class="hljs-constructor">_endline(<span class="hljs-params">smile</span>)</span>;
+</span></code></pre>
 <p>Note that we can also access variables by prefixing with a <code>$</code>:</p>
-<pre><code class="language-reasonml">let world = &quot;world&quot;;
-let helloWorld = {j|hello, $world|j};
-</code></pre>
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> world = <span class="hljs-string">&quot;world&quot;</span>;
+<span class="hljs-keyword">let</span> helloWorld = {j<span class="hljs-pattern-match">|hello, <span class="hljs-constructor">$world</span>|j};
+</span></code></pre>
 <p>Which also works with numbers:</p>
-<pre><code class="language-reasonml">let num = 123;
-let hello123 = {j|hello, $num|j};
-</code></pre>
-</div></body></html>
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> num = <span class="hljs-number">123</span>;
+<span class="hljs-keyword">let</span> hello123 = {j<span class="hljs-pattern-match">|hello, <span class="hljs-constructor">$num</span>|j};
+</span></code></pre>
+</div></div></body></html>

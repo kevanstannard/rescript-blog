@@ -7,18 +7,22 @@ var Template__Html$ReasonBlog = require("./Template__Html.bs.js");
 function blogPostToListItem(blogPost) {
   return React.createElement("li", {
               key: blogPost.id
-            }, React.createElement("p", undefined, React.createElement("a", {
+            }, React.createElement("p", {
+                  className: "mb-8"
+                }, React.createElement("a", {
+                      className: "text-3xl font-bold hover:underline",
                       href: blogPost.id + ".html"
                     }, blogPost.title), React.createElement("br", undefined), React.createElement("span", undefined, blogPost.date.toDateString())));
 }
 
 function Template__BlogIndex(Props) {
-  var blogTitle = Props.blogTitle;
   var blogPosts = Props.blogPosts;
   return React.createElement(Template__Html$ReasonBlog.make, {
-              title: blogTitle,
+              title: "ReScript Blog",
               children: null
-            }, React.createElement("h1", undefined, blogTitle), React.createElement("ul", undefined, blogPosts.map(blogPostToListItem)));
+            }, React.createElement("h1", {
+                  className: "text-5xl font-black mb-12"
+                }, "ReScript Blog"), React.createElement("ul", undefined, blogPosts.map(blogPostToListItem)));
 }
 
 var make = Template__BlogIndex;

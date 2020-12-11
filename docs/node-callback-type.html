@@ -1,9 +1,9 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>What is the type of a node callback in ReasonML?</title></head><body><h1>What is the type of a node callback in ReasonML?</h1><p>Thu Dec 26 2019</p><div><p>Node callbacks are typically of the form:</p>
-<pre><code class="language-js">function callback(error, items) {
-  if (error) {
-    // handle error
-  } else {
-    // handle items
+<!doctype html><html data-reactroot=""><head><title>What is the type of a node callback in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">What is the type of a node callback in ReasonML?</h1><p class="mb-12">Thu Dec 26 2019</p><div><p>Node callbacks are typically of the form:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callback</span>(<span class="hljs-params">error, items</span>) </span>{
+  <span class="hljs-keyword">if</span> (error) {
+    <span class="hljs-comment">// handle error</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// handle items</span>
   }
 }
 </code></pre>
@@ -21,24 +21,24 @@
 <h2>The node callback function</h2>
 <p>Now let's define a <code>nodeCallback</code> function type.</p>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
-<pre><code class="language-reasonml">type nodeError = Js.nullable(Js.Exn.t);
-type nodeValue('a) = Js.nullable('a);
-type nodeCallback('a) = (. nodeError, nodeValue('a)) =&gt; unit;
+<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> nodeError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t);
+<span class="hljs-keyword">type</span> node<span class="hljs-constructor">Value(&#x27;<span class="hljs-params">a</span>)</span> = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(&#x27;a);
+<span class="hljs-keyword">type</span> node<span class="hljs-constructor">Callback(&#x27;<span class="hljs-params">a</span>)</span> =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>, <span class="hljs-params">nodeValue</span>(&#x27;<span class="hljs-params">a</span>)) =&gt;</span> <span class="hljs-built_in">unit</span>;
 </code></pre>
 <p>If your callback only supplies an error, then you can use a similar type:</p>
-<pre><code class="language-re">type nodeErrorCallback('a) = (. nodeError) =&gt; unit;
+<pre><code class="language-re"><span class="hljs-keyword">type</span> node<span class="hljs-constructor">ErrorCallback(&#x27;<span class="hljs-params">a</span>)</span> =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>;
 </code></pre>
 <h2>Utility function</h2>
 <p>A useful utility function for handling node callbacks.</p>
-<pre><code class="language-reasonml">let nodeCallback = (f) =&gt;
-  (. error, result) =&gt; {
-    let errorOpt = Js.Nullable.toOption(error);
-    let resultOpt = Js.Nullable.toOption(result);
+<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> nodeCallback =<span class="hljs-function"> (<span class="hljs-params">f</span>) =&gt;</span>
+ <span class="hljs-function"> (. <span class="hljs-params">error</span>, <span class="hljs-params">result</span>) =&gt;</span> {
+    <span class="hljs-keyword">let</span> errorOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>;
+    <span class="hljs-keyword">let</span> resultOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>;
     switch (errorOpt, resultOpt) {
-    | (Some(error), None) =&gt; f(Belt.Result.Error(error))
-    | (None, Some(result)) =&gt; f(Belt.Result.Ok(result))
-    // Throw if APIs break nodeback 'guarantee':
-    | _ =&gt; invalid_arg(&quot;nodeCallback arguments invalid&quot;)
+    <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">None</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>)
+    <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span>)
+    <span class="hljs-comment">// Throw if APIs break nodeback &#x27;guarantee&#x27;:</span>
+    <span class="hljs-pattern-match">| <span class="hljs-constructor">_</span> =&gt;</span> invalid<span class="hljs-constructor">_arg(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>
     };
   };
 </code></pre>
@@ -61,4 +61,4 @@ There’s some magic going on in the transformation from OCaml exceptions (which
 <li><a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">What is the proper type for a node callback</a></li>
 <li><a href="https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7">How to handle a node callback in ReasonML</a></li>
 </ul>
-</div></body></html>
+</div></div></body></html>

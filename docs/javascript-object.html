@@ -1,25 +1,25 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>How to create a JavaScript object in ReasonML</title></head><body><h1>How to create a JavaScript object in ReasonML</h1><p>Mon Dec 30 2019</p><div><h2>Hashmap object</h2>
+<!doctype html><html data-reactroot=""><head><title>How to create a JavaScript object in ReasonML</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">How to create a JavaScript object in ReasonML</h1><p class="mb-12">Mon Dec 30 2019</p><div><h2>Hashmap object</h2>
 <p>These are JavaScript objects where the keys are always strings, but the values are of a different kind.</p>
-<pre><code class="language-re">let myMap: Js.Dict.t(int) = Js.Dict.empty();
-Js.Dict.set(myMap, &quot;Allison&quot;, 10);
+<pre><code class="language-re"><span class="hljs-keyword">let</span> myMap: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>t(<span class="hljs-built_in">int</span>) = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>empty<span class="hljs-literal">()</span>;
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>set(myMap, <span class="hljs-string">&quot;Allison&quot;</span>, <span class="hljs-number">10</span>);
 </code></pre>
 <h2>Object with named fields (Bucklescript ≥ v7)</h2>
 <p>From <a href="https://bucklescript.github.io/docs/en/object">the docs</a>:</p>
 <blockquote>
 <p>In BuckleScript, records are directly compiled into JS objects with the same shape (same attribute names).</p>
 </blockquote>
-<pre><code class="language-re">type payload = {
-  name: string,
-  age: int
+<pre><code class="language-re"><span class="hljs-keyword">type</span> payload = {
+  name: <span class="hljs-built_in">string</span>,
+  age: <span class="hljs-built_in">int</span>
 };
-let obj: payload = {name: &quot;John&quot;, age: 30};
+<span class="hljs-keyword">let</span> obj: payload = {name: <span class="hljs-string">&quot;John&quot;</span>, age: <span class="hljs-number">30</span>};
 </code></pre>
 <h2>Object with named fields (Bucklescript &lt; 7)</h2>
-<pre><code class="language-re">[@bs.deriving abstract]
-type payload = {
-  name: string,
-  age: int
+<pre><code class="language-re"><span class="hljs-literal">[@<span class="hljs-identifier">bs</span>.<span class="hljs-identifier">deriving</span> <span class="hljs-identifier">abstract</span>]</span>
+<span class="hljs-keyword">type</span> payload = {
+  name: <span class="hljs-built_in">string</span>,
+  age: <span class="hljs-built_in">int</span>
 };
-let obj: payload = payload(~name=&quot;John&quot;, ~age=30);
+<span class="hljs-keyword">let</span> obj: payload = payload(~name=<span class="hljs-string">&quot;John&quot;</span>, ~age=<span class="hljs-number">30</span>);
 </code></pre>
-</div></body></html>
+</div></div></body></html>

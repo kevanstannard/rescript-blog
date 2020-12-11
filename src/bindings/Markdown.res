@@ -1,5 +1,5 @@
 type md = {render: (. string) => string}
 
-@bs.module external markdownIt_: unit => md = "markdown-it"
+@bs.module external markdown: md = "./Markdown.js"
 
-let markdownIt: md = markdownIt_()
+let render = (content: string) => markdown.render(. content)

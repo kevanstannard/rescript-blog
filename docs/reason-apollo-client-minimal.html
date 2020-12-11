@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html data-reactroot=""><head><title>Minimal ReasonML and GraphQL Apollo Client</title></head><body><h1>Minimal ReasonML and GraphQL Apollo Client</h1><p>Sat Dec 28 2019</p><div><h2>Prerequisites</h2>
+<!doctype html><html data-reactroot=""><head><title>Minimal ReasonML and GraphQL Apollo Client</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/></head><body><div class="p-10"><p class="mb-4"><a class="hover:underline" href="index.html">← Back to index</a></p><h1 class="text-5xl font-black mb-4">Minimal ReasonML and GraphQL Apollo Client</h1><p class="mb-12">Sat Dec 28 2019</p><div><h2>Prerequisites</h2>
 <p>You will need a working GraphQL server.</p>
 <p>For this example we will use a public <a href="http://apis.guru/graphql-apis/">Star Wars GraphQL API</a>.</p>
 <p>Or, you may like to browse other <a href="http://apis.guru/graphql-apis/">public GraphQL APIs</a>.</p>
@@ -34,7 +34,7 @@
 </code></pre>
 <h2>Create the project</h2>
 <pre><code class="language-bash">bsb -init reason-apollo-simple -theme react-starter
-cd ./reason-apollo-simple
+<span class="hljs-built_in">cd</span> ./reason-apollo-simple
 yarn
 </code></pre>
 <h2>Test the project is working</h2>
@@ -63,60 +63,60 @@ yarn add --dev request
 </code></pre>
 <p>Create a new file <code>./tools/send-introspection-query.js</code>.</p>
 <p>Add the content:</p>
-<pre><code class="language-js">const argv = require(&quot;yargs&quot;).argv;
-const request = require(&quot;request&quot;);
-const fs = require(&quot;fs&quot;);
-const { getIntrospectionQuery } = require(&quot;graphql&quot;);
+<pre><code class="language-js"><span class="hljs-keyword">const</span> argv = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;yargs&quot;</span>).argv;
+<span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;request&quot;</span>);
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>);
+<span class="hljs-keyword">const</span> { getIntrospectionQuery } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;graphql&quot;</span>);
 
-const requestOptions = {
-  json: true,
-  body: { query: getIntrospectionQuery() },
-  headers: { &quot;user-agent&quot;: &quot;node.js&quot;, ...argv.headers }
+<span class="hljs-keyword">const</span> requestOptions = {
+  <span class="hljs-attr">json</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">body</span>: { <span class="hljs-attr">query</span>: getIntrospectionQuery() },
+  <span class="hljs-attr">headers</span>: { <span class="hljs-string">&quot;user-agent&quot;</span>: <span class="hljs-string">&quot;node.js&quot;</span>, ...argv.headers }
 };
 
-request.post(argv._[0], requestOptions, function(error, response, body) {
-  if (error) {
-    console.error(&quot;Could not send introspection query: &quot;, error);
-    process.exit(1);
+request.post(argv._[<span class="hljs-number">0</span>], requestOptions, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, response, body</span>) </span>{
+  <span class="hljs-keyword">if</span> (error) {
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&quot;Could not send introspection query: &quot;</span>, error);
+    process.exit(<span class="hljs-number">1</span>);
   }
 
-  if (response.statusCode !== 200) {
-    console.error(
-      &quot;Non-ok status code from API: &quot;,
+  <span class="hljs-keyword">if</span> (response.statusCode !== <span class="hljs-number">200</span>) {
+    <span class="hljs-built_in">console</span>.error(
+      <span class="hljs-string">&quot;Non-ok status code from API: &quot;</span>,
       response.statusCode,
       response.statusMessage
     );
-    process.exit(1);
+    process.exit(<span class="hljs-number">1</span>);
   }
 
-  var result = JSON.stringify(body, null, 2);
+  <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.stringify(body, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>);
 
-  fs.writeFileSync(&quot;graphql_schema.json&quot;, result, { encoding: &quot;utf-8&quot; });
+  fs.writeFileSync(<span class="hljs-string">&quot;graphql_schema.json&quot;</span>, result, { <span class="hljs-attr">encoding</span>: <span class="hljs-string">&quot;utf-8&quot;</span> });
 });
 </code></pre>
 <p>Then add a new script to your <code>package.json</code> file:</p>
 <pre><code>&quot;send-introspection-query&quot;: &quot;node ./tools/send-introspection-query&quot;
 </code></pre>
 <h2>Run the introspection query</h2>
-<pre><code class="language-bash">yarn send-introspection-query https://swapi-graphql.netlify.com/.netlify/functions/index
+<pre><code class="language-bash">yarn send-introspection-query https://swapi-graphql.netlify.com/.netlify/<span class="hljs-built_in">functions</span>/index
 </code></pre>
 <p>If successful, this will generate a <code>graphql_schema.json</code> file in the root of your project.</p>
 <h2>Create the Apollo Client</h2>
 <p>Now we can start following the instructions on the <a href="https://github.com/apollographql/reason-apollo">reason-apollo</a> site.</p>
 <p>Create the file <code>src/Client.re</code></p>
-<pre><code class="language-reasonml">/* Create an InMemoryCache */
-let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
+<pre><code class="language-reasonml"><span class="hljs-comment">/* Create an InMemoryCache */</span>
+<span class="hljs-keyword">let</span> inMemoryCache = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ApolloInMemoryCache</span>.</span></span>create<span class="hljs-constructor">InMemoryCache()</span>;
 
-/* Create an HTTP Link */
-let httpLink =
-  ApolloLinks.createHttpLink(~uri=&quot;https://swapi-graphql.netlify.com/.netlify/functions/index&quot;, ());
+<span class="hljs-comment">/* Create an HTTP Link */</span>
+<span class="hljs-keyword">let</span> httpLink =
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ApolloLinks</span>.</span></span>create<span class="hljs-constructor">HttpLink(~<span class="hljs-params">uri</span>=<span class="hljs-string">&quot;https://swapi-graphql.netlify.com/.netlify/functions/index&quot;</span>, ()</span>);
 
-let instance =
-  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+<span class="hljs-keyword">let</span> instance =
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonApollo</span>.</span></span>create<span class="hljs-constructor">ApolloClient(~<span class="hljs-params">link</span>=<span class="hljs-params">httpLink</span>, ~<span class="hljs-params">cache</span>=<span class="hljs-params">inMemoryCache</span>, ()</span>);
 </code></pre>
 <h2>Add the provider</h2>
 <p>Change the render code in <code>src/Index.re</code> from this:</p>
-<pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(&lt;App /&gt;, &quot;root&quot;);
+<pre><code class="language-reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReactDOMRe</span>.</span></span>render<span class="hljs-constructor">ToElementWithId(&lt;App <span class="hljs-operator">/</span>&gt;, <span class="hljs-string">&quot;root&quot;</span>)</span>;
 </code></pre>
 <p>to this:</p>
 <pre><code class="language-reasonml">ReactDOMRe.renderToElementWithId(
@@ -128,26 +128,26 @@ let instance =
 </code></pre>
 <h2>Add the query</h2>
 <p>Next add a file <code>src/Movies.re</code> and add the GraphQL query:</p>
-<pre><code class="language-reasonml">module GetMovies = [%graphql
+<pre><code class="language-reasonml"><span class="hljs-keyword">module</span> GetMovies = <span class="hljs-literal">[%<span class="hljs-identifier">graphql</span>
   {|
-    query {
-      allFilms {
-        films {
-          id
-          title
+    <span class="hljs-identifier">query</span> {
+      <span class="hljs-identifier">allFilms</span> {
+        <span class="hljs-identifier">films</span> {
+          <span class="hljs-identifier">id</span>
+          <span class="hljs-identifier">title</span>
         }
       }
     }
   |}
-];
+]</span>;
 
-module GetMoviesQuery = ReasonApollo.CreateQuery(GetMovies);
+<span class="hljs-keyword">module</span> GetMoviesQuery = ReasonApollo.<span class="hljs-constructor">CreateQuery(GetMovies)</span>;
 </code></pre>
 <h2>Add a type</h2>
 <p>Let's also add a type for the film titles we will be displaying:</p>
-<pre><code class="language-reasonml">type film = {
-  id: string,
-  title: string,
+<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> film = {
+  id: <span class="hljs-built_in">string</span>,
+  title: <span class="hljs-built_in">string</span>,
 };
 </code></pre>
 <h2>Handle the API response</h2>
@@ -175,22 +175,22 @@ The response <code>option</code> values, so parsing it is a bit involved:</p>
 </code></pre>
 <h2>Add the component</h2>
 <p>Lastly, now we can add the component to the same file:</p>
-<pre><code class="language-reasonml">[@react.component]
-let make = () =&gt; {
-  let getMoviesQuery = GetMovies.make();
+<pre><code class="language-reasonml"><span class="hljs-literal">[@<span class="hljs-identifier">react</span>.<span class="hljs-identifier">component</span>]</span>
+<span class="hljs-keyword">let</span> make =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> getMoviesQuery = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">GetMovies</span>.</span></span>make<span class="hljs-literal">()</span>;
   &lt;GetMoviesQuery variables=getMoviesQuery##variables&gt;
     ...{({result}) =&gt;
       switch (result) {
-      | Loading =&gt; &lt;div&gt; {React.string(&quot;Loading&quot;)} &lt;/div&gt;
-      | Error(error) =&gt; &lt;div&gt; {React.string(error##message)} &lt;/div&gt;
-      | Data(response) =&gt;
-        let films = responseToFilms(response);
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Loading</span> =&gt;</span> &lt;div&gt; {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Loading&quot;</span>)} &lt;/div&gt;
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span> =&gt;</span> &lt;div&gt; {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span><span class="hljs-built_in">string</span>(error##message)} &lt;/div&gt;
+      <span class="hljs-pattern-match">| <span class="hljs-constructor">Data(<span class="hljs-params">response</span>)</span> =&gt;</span>
+        <span class="hljs-keyword">let</span> films = response<span class="hljs-constructor">ToFilms(<span class="hljs-params">response</span>)</span>;
         &lt;ul&gt;
-          {films
-           |&gt; Array.map(film =&gt;
-                &lt;li key={film.id}&gt; {React.string(film.title)} &lt;/li&gt;
-              )
-           |&gt; React.array}
+          {films<span class="hljs-operator">
+           |&gt; </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Array</span>.</span></span>map(film =&gt;
+                &lt;li key={film.id}&gt; {<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span><span class="hljs-built_in">string</span>(film.title)} &lt;/li&gt;
+              )<span class="hljs-operator">
+           |&gt; </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span><span class="hljs-built_in">array</span>}
         &lt;/ul&gt;;
       }
     }
@@ -199,9 +199,9 @@ let make = () =&gt; {
 </code></pre>
 <h2>Updating the App component</h2>
 <p>Lastly, let's update the <code>App</code> component in <code>src/App.re</code>. Replace the file with the following content:</p>
-<pre><code class="language-reasonml">[@react.component]
-let make = () =&gt; {
+<pre><code class="language-reasonml"><span class="hljs-literal">[@<span class="hljs-identifier">react</span>.<span class="hljs-identifier">component</span>]</span>
+<span class="hljs-keyword">let</span> make =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> {
   &lt;Movies /&gt;;
 };
 </code></pre>
-</div></body></html>
+</div></div></body></html>
