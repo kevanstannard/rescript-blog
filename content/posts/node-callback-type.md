@@ -48,8 +48,8 @@ Now let's define a `nodeCallback` function type.
 Note that node callbacks must be uncurried, so we use the `(. )` function argument notation.
 
 ```re
-type nodeError = Js.nullable(Js.Exn.t);
-type nodeValue('a) = Js.nullable('a);
+type nodeError = Js.nullable<Js.Exn.t>
+type nodeValue<'a> = Js.nullable<'a>
 type nodeCallback<'a> = (. nodeError, nodeValue<'a>) => unit
 ```
 

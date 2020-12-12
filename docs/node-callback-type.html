@@ -23,8 +23,8 @@
 <h2>The node callback function</h2>
 <p>Now let's define a <code>nodeCallback</code> function type.</p>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> nodeError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t);
-<span class="hljs-keyword">type</span> node<span class="hljs-constructor">Value(&#x27;<span class="hljs-params">a</span>)</span> = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(&#x27;a);
+<pre><code class="language-re"><span class="hljs-keyword">type</span> nodeError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt;
+<span class="hljs-keyword">type</span> nodeValue&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;&#x27;a&gt;
 <span class="hljs-keyword">type</span> nodeCallback&lt;&#x27;a&gt; =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>, <span class="hljs-params">nodeValue</span>&lt;&#x27;<span class="hljs-params">a</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span>
 </code></pre>
 <p>If your callback only supplies an error, then you can use a similar type:</p>

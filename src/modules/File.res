@@ -26,12 +26,18 @@ let writeFile = (filePath: string, content: string): Js.Promise.t<unit> => {
   })
 }
 
-let glob = (glob: string): Js.Promise.t<array<string>> => Js.Promise.make((~resolve, ~reject) => {
+let glob = (glob: string): Js.Promise.t<array<string>> =>
+  Js.Promise.make((~resolve, ~reject) => {
     Glob.glob(glob, (error, paths) => {
       let errorOpt = Js.Nullable.toOption(error)
-      switch errorOpt {
-      | Some(_error) => reject(. Failure("Error reading glob: " ++ glob))
-      | None => resolve(. paths)
+      let pathsOpt = Js.Nullable.toOption(paths)
+      switch (errorOpt, pathsOpt) {
+      | (Some(error), _) => {
+          let reason = Belt.Option.getWithDefault(Js.Exn.message(error), "Unknown")
+          reject(. Failure("Error reading glob: " ++ glob ++ ". Reason: " ++ reason))
+        }
+      | (_, Some(paths)) => resolve(. paths)
+      | (None, None) => reject(. Failure("Error reading glob: " ++ glob ++ ". Reason: Unknown"))
       }
     })
   })

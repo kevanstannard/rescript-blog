@@ -3,6 +3,7 @@
 
 var Fs = require("fs");
 var Glob = require("glob");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 
 function readFile(filePath) {
   return new Promise((function (resolve, reject) {
@@ -48,13 +49,20 @@ function glob(glob$1) {
   return new Promise((function (resolve, reject) {
                 Glob(glob$1, (function (error, paths) {
                         if (error == null) {
-                          return resolve(paths);
-                        } else {
-                          return reject({
-                                      RE_EXN_ID: "Failure",
-                                      _1: "Error reading glob: " + glob$1
-                                    });
+                          if (paths == null) {
+                            return reject({
+                                        RE_EXN_ID: "Failure",
+                                        _1: "Error reading glob: " + glob$1 + ". Reason: Unknown"
+                                      });
+                          } else {
+                            return resolve(paths);
+                          }
                         }
+                        var reason = Belt_Option.getWithDefault(error.message, "Unknown");
+                        return reject({
+                                    RE_EXN_ID: "Failure",
+                                    _1: "Error reading glob: " + glob$1 + ". Reason: " + reason
+                                  });
                       }));
                 
               }));

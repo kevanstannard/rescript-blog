@@ -2,16 +2,16 @@
   "name": "rescript-blog",
   "private": true,
   "scripts": {
+    "postinstall": "npm run re:build",
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w",
     "blog:build": "node scripts/build",
     "blog:serve": "node scripts/serve -- ./docs",
     "blog:watch": "watch 'npm run blog:build -s' ./content ./src ./static",
-    "blog:dev": "npm run blog:serve & npm run blog:watch"
+    "dev": "npm run blog:serve & npm run blog:watch"
   },
   "dependencies": {
     "browser-sync": "^2.26.13",
-    "bs-glob": "github:reasonml-community/bs-glob",
     "bs-platform": "^8.4.2",
     "connect": "^3.7.0",
     "copyfiles": "^2.4.1",
