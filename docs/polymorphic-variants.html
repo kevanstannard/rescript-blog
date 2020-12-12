@@ -1,39 +1,27 @@
-<!doctype html><html data-reactroot=""><head><title>ReasonML Polymorphic Variants</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>ReasonML Polymorphic Variants</h1><p>Mon Jan 13 2020</p><div><p>Polymorphic variants are distinguished from ordinary variants by the leading backtick.</p>
+<!doctype html><html data-reactroot=""><head><title>ReScript Polymorphic Variants</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>ReScript Polymorphic Variants</h1><p>Sun Dec 13 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>Polymorphic variants are distinguished from ordinary variants by the leading hash.</p>
 <p>Unlike ordinary variants, polymorphic variants can be used without an explicit type declaration.</p>
-<p>Example 1:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> three = <span class="hljs-constructor">`Int(3)</span>;
-<span class="hljs-keyword">let</span> four = <span class="hljs-constructor">`Float(4.)</span>;
-<span class="hljs-keyword">let</span> nan = `Not_a_number;
-</code></pre>
-<p>Notice that multiple polymorophic variant values may be present together in an array.</p>
-<p>Example 2:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> is_positive =
-  <span class="hljs-keyword">fun</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">`Int(<span class="hljs-params">x</span>)</span> =&gt;</span> x &gt; <span class="hljs-number">0</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">`Float(<span class="hljs-params">x</span>)</span> =&gt;</span> x &gt; <span class="hljs-number">0.</span>;
+<p>Example:</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> status = #yes
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">List</span>.</span></span>filter(is_positive, <span class="hljs-literal">[<span class="hljs-identifier">three</span>, <span class="hljs-identifier">four</span>]</span>);
+<span class="hljs-keyword">let</span> statusString = {
+  switch status {
+  <span class="hljs-pattern-match">| #yes =&gt;</span> <span class="hljs-string">&quot;Yes&quot;</span>
+  <span class="hljs-pattern-match">| #no =&gt;</span> <span class="hljs-string">&quot;No&quot;</span>
+  }
+}
 </code></pre>
-<p>Example 3:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> is_positive_result =
-  <span class="hljs-keyword">fun</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">`Int(<span class="hljs-params">x</span>)</span> =&gt;</span> <span class="hljs-constructor">Ok(<span class="hljs-params">x</span> &gt; 0)</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">`Float(<span class="hljs-params">x</span>)</span> =&gt;</span> <span class="hljs-constructor">Ok(<span class="hljs-params">x</span> &gt; 0.)</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">`Not_a_number</span> =&gt;</span> <span class="hljs-constructor">Error(<span class="hljs-string">&quot;not a number&quot;</span>)</span>;
+<p>However they may be assigned to a type:</p>
+<pre><code class="language-re"><span class="hljs-keyword">type</span> color = <span class="hljs-literal">[#<span class="hljs-identifier">red</span> | #<span class="hljs-identifier">green</span> | #<span class="hljs-identifier">blue</span>]</span>
 
-<span class="hljs-keyword">let</span> result_to_bool =
-  <span class="hljs-keyword">fun</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Error(<span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-literal">false</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Ok(<span class="hljs-params">b</span>)</span> =&gt;</span> b;
+<span class="hljs-keyword">let</span> colorToString = (color: color):<span class="hljs-function"> <span class="hljs-params">string</span> =&gt;</span> {
+  switch color {
+  <span class="hljs-pattern-match">| #red =&gt;</span> <span class="hljs-string">&quot;Red&quot;</span>
+  <span class="hljs-pattern-match">| #green =&gt;</span> <span class="hljs-string">&quot;Green&quot;</span>
+  <span class="hljs-pattern-match">| #blue =&gt;</span> <span class="hljs-string">&quot;Blue&quot;</span>
+  }
+}```
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">List</span>.</span></span>filter(
- <span class="hljs-function"> <span class="hljs-params">value</span> =&gt;</span> result<span class="hljs-constructor">_to_bool(<span class="hljs-params">is_positive_result</span>(<span class="hljs-params">value</span>)</span>),
-  <span class="hljs-literal">[<span class="hljs-identifier">three</span>, <span class="hljs-identifier">four</span>, <span class="hljs-identifier">nan</span>]</span>,
-);
 </code></pre>
-<h2>References</h2>
-<ul>
-<li>Real World OCaml - Variants<br>
-<a href="https://v1.realworldocaml.org/v1/en/html/variants.html">https://v1.realworldocaml.org/v1/en/html/variants.html</a></li>
-</ul>
 </div></div></body></html>
