@@ -1,20 +1,20 @@
 ---
-title: How to create a multiline string in ReasonML
-date: 2019-12-15
+title: How to create a multiline string in ReScript
+date: 2020-12-12 11:28:21
 ---
 
-Multiline strings are created by enclosing the string with `{|` and `|}`.
+Multiline strings are created by enclosing the string with backticks.
 
 For example:
 
-```reasonml
-let message = {|
+```re
+let message = `
 Hello
 World
-|};
+`
 ```
 
 ## References
 
-String & Char
-https://reasonml.github.io/docs/en/string-and-char
+String Interpolation  
+https://rescript-lang.org/docs/manual/latest/primitive-types#string-interpolation

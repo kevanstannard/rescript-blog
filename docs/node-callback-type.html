@@ -1,4 +1,4 @@
-<!doctype html><html data-reactroot=""><head><title>What is the type of a node callback in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>What is the type of a node callback in ReasonML?</h1><p>Thu Dec 26 2019</p><div><p>Node callbacks are typically of the form:</p>
+<!doctype html><html data-reactroot=""><head><title>What is the type of a node callback in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>What is the type of a node callback in ReScript?</h1><p>Sat Dec 12 2020</p><div><p>Node callbacks are typically of the form:</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callback</span>(<span class="hljs-params">error, items</span>) </span>{
   <span class="hljs-keyword">if</span> (error) {
     <span class="hljs-comment">// handle error</span>
@@ -7,45 +7,127 @@
   }
 }
 </code></pre>
-<p>Let's break this down into smaller parts to convert to Reason.</p>
+<p>Let's break this down into smaller parts to convert to ReScript.</p>
 <h2>The error argument</h2>
-<p>The <code>error</code> argument may be null, or an error object. JavaScript errors in Reason are typed as <code>Js.Exn.t</code>, so the error argument becomes:</p>
-<pre><code>type nodeError = Js.nullable(Js.Exn.t)
+<p>The <code>error</code> argument may be null, or an error object. JavaScript errors in ReScript are typed as <code>Js.Exn.t</code>, so the error argument becomes:</p>
+<pre><code class="language-re"><span class="hljs-keyword">type</span> nodeError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt;
 </code></pre>
 <h2>The items argument</h2>
 <p>The <code>items</code> argument may be null, or provide a value. We can use a generic type here for the value.</p>
-<pre><code>type nodeValue = Js.nullable('a)
+<pre><code class="language-re"><span class="hljs-keyword">type</span> nodeValue&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;&#x27;a&gt;
 </code></pre>
 <h2>The return value</h2>
-<p>This function returns undefined in JavaScript, so the return value in Reason will be <code>unit</code>;</p>
+<p>This function returns undefined in JavaScript, so the return value in ReScript will be <code>unit</code>;</p>
 <h2>The node callback function</h2>
 <p>Now let's define a <code>nodeCallback</code> function type.</p>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
 <pre><code class="language-reasonml"><span class="hljs-keyword">type</span> nodeError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t);
 <span class="hljs-keyword">type</span> node<span class="hljs-constructor">Value(&#x27;<span class="hljs-params">a</span>)</span> = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable(&#x27;a);
-<span class="hljs-keyword">type</span> node<span class="hljs-constructor">Callback(&#x27;<span class="hljs-params">a</span>)</span> =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>, <span class="hljs-params">nodeValue</span>(&#x27;<span class="hljs-params">a</span>)) =&gt;</span> <span class="hljs-built_in">unit</span>;
+<span class="hljs-keyword">type</span> nodeCallback&lt;&#x27;a&gt; =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>, <span class="hljs-params">nodeValue</span>&lt;&#x27;<span class="hljs-params">a</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span>
 </code></pre>
 <p>If your callback only supplies an error, then you can use a similar type:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> node<span class="hljs-constructor">ErrorCallback(&#x27;<span class="hljs-params">a</span>)</span> =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>;
+<pre><code class="language-re"><span class="hljs-keyword">type</span> nodeCallbackError =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>
 </code></pre>
-<h2>Utility function</h2>
-<p>A useful utility function for handling node callbacks.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> nodeCallback =<span class="hljs-function"> (<span class="hljs-params">f</span>) =&gt;</span>
- <span class="hljs-function"> (. <span class="hljs-params">error</span>, <span class="hljs-params">result</span>) =&gt;</span> {
-    <span class="hljs-keyword">let</span> errorOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>;
-    <span class="hljs-keyword">let</span> resultOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>;
-    switch (errorOpt, resultOpt) {
-    <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">None</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>)
-    <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span>)
-    <span class="hljs-comment">// Throw if APIs break nodeback &#x27;guarantee&#x27;:</span>
-    <span class="hljs-pattern-match">| <span class="hljs-constructor">_</span> =&gt;</span> invalid<span class="hljs-constructor">_arg(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>
-    };
-  };
+<h2>Utility function #1</h2>
+<p>An example utility function for handling node callbacks that returns a <code>Result</code>.</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithResult =<span class="hljs-function"> (
+  <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Result</span>.</span>t&lt;&#x27;a,</span> Js.Exn.t&gt; =&gt; unit,</span>
+  . <span class="hljs-params">error<span class="hljs-typing">: nodeError,</span>
+</span>  <span class="hljs-params">result<span class="hljs-typing">: nodeResult&lt;&#x27;a&gt;,</span>
+</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
+  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+  switch (errorOpt, resultOpt) {
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>)
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span>)
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> raise(<span class="hljs-constructor">Invalid_argument(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>)
+  }
+}
+</code></pre>
+<p>Example usage:</p>
+<pre><code class="language-re">@bs.<span class="hljs-keyword">module</span>(<span class="hljs-string">&quot;fs&quot;</span>) <span class="hljs-keyword">external</span> readFile:<span class="hljs-function"> (<span class="hljs-params">string</span>, <span class="hljs-params">string</span>, <span class="hljs-params">nodeCallback</span>&lt;<span class="hljs-params">string</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;readFile&quot;</span>
+
+<span class="hljs-keyword">let</span> onResult =<span class="hljs-function"> (<span class="hljs-params">result</span>: <span class="hljs-params">result</span>&lt;<span class="hljs-params">string</span>, J<span class="hljs-params">s</span>.E<span class="hljs-params">xn</span>.<span class="hljs-params">t</span>&gt;) =&gt;</span> {
+  <span class="hljs-keyword">let</span> message = switch result {
+  <span class="hljs-pattern-match">| <span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span> =&gt;</span> <span class="hljs-string">&quot;Success: &quot;</span><span class="hljs-operator"> ++ </span>result
+  <span class="hljs-pattern-match">| <span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span> =&gt;</span> <span class="hljs-string">&quot;Error: &quot;</span><span class="hljs-operator"> ++ </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
+  }
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+}
+
+read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">nodeCallbackWithResult</span>(<span class="hljs-params">onResult</span>)</span>)
+</code></pre>
+<h2>Utility function #2</h2>
+<p>Another example utility function that uses <code>onSuccess</code> and <code>onError</code> callbacks</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithSuccessError =<span class="hljs-function"> (
+  <span class="hljs-params">onSuccess<span class="hljs-typing">: &#x27;a =&gt; unit,</span>
+</span>  <span class="hljs-params">onError<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span>t =&gt; unit,</span>
+</span>  . <span class="hljs-params">error<span class="hljs-typing">: nodeError,</span>
+</span>  <span class="hljs-params">result<span class="hljs-typing">: nodeResult&lt;&#x27;a&gt;,</span>
+</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
+  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+  switch (errorOpt, resultOpt) {
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> on<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> on<span class="hljs-constructor">Success(<span class="hljs-params">result</span>)</span>
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> raise(<span class="hljs-constructor">Invalid_argument(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>)
+  }
+}
+</code></pre>
+<p>And example usage:</p>
+<pre><code class="language-re">@bs.<span class="hljs-keyword">module</span>(<span class="hljs-string">&quot;fs&quot;</span>) <span class="hljs-keyword">external</span> readFile:<span class="hljs-function"> (<span class="hljs-params">string</span>, <span class="hljs-params">string</span>, <span class="hljs-params">nodeCallback</span>&lt;<span class="hljs-params">string</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;readFile&quot;</span>
+
+<span class="hljs-keyword">let</span> onSuccess =<span class="hljs-function"> (<span class="hljs-params">result</span>: <span class="hljs-params">string</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Success: &quot;</span><span class="hljs-operator"> ++ </span>result
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+}
+
+<span class="hljs-keyword">let</span> onError =<span class="hljs-function"> (<span class="hljs-params">error</span>: J<span class="hljs-params">s</span>.E<span class="hljs-params">xn</span>.<span class="hljs-params">t</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Error: &quot;</span><span class="hljs-operator"> ++ </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+}
+
+read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">nodeCallbackWithSuccessError</span>(<span class="hljs-params">onSuccess</span>, <span class="hljs-params">onError</span>)</span>)
+</code></pre>
+<h2>Utility function #3</h2>
+<p>Last example converts the result to a promise.</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithPromise =<span class="hljs-function"> (
+  <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>t&lt;&#x27;a&gt; =&gt; unit,</span>
+</span>  . <span class="hljs-params">error<span class="hljs-typing">: nodeError,</span>
+</span>  <span class="hljs-params">result<span class="hljs-typing">: nodeResult&lt;&#x27;a&gt;,</span>
+</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
+  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+  switch (errorOpt, resultOpt) {
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> {
+      <span class="hljs-keyword">let</span> message = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
+      f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-constructor">Failure(<span class="hljs-params">message</span>)</span>))
+    }
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(result))
+  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-constructor">Failure(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>))
+  }
+}
+</code></pre>
+<p>And example usage:</p>
+<pre><code class="language-re">@bs.module(&quot;fs&quot;) external readFile: (string, string, nodeCallback&lt;string&gt;) =&gt; unit = &quot;readFile&quot;
+
+let handlePromise = (promise: Js.Promise.t&lt;string&gt;) =&gt; {
+  open Js.Promise
+  promise
+  -&gt;then_((result: string) =&gt; resolve(&quot;Success: &quot; ++ result), _)
+  -&gt;catch((_error: Js.Promise.error) =&gt; resolve(&quot;Error: Unknown&quot;), _)
+  -&gt;then_(message =&gt; {
+    Js.log(message)
+    resolve()
+  }, _)
+  -&gt;ignore
+}
+
+readFile(&quot;hello.txt&quot;, &quot;UTF-8&quot;, nodeCallbackWithPromise(handlePromise))
 </code></pre>
 <h2>Reference</h2>
-<p>This content came from a <a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">post on the ReasonML forums</a>. Copying here for reference:</p>
+<p>This content came from a post on the ReasonML forums. Copying here for reference:</p>
 <blockquote>
-<p><a href="https://reasonml.chat/u/yawaramin">yawaramin</a></p>
 <p>I’d model the callback type as:</p>
 <p><code>type nodeCallback('a) = (. Js.nullable(Js.Exn.t), Js.nullable('a)) =&gt; unit;</code></p>
 <p>Few things to note:</p>
@@ -57,8 +139,8 @@ There’s some magic going on in the transformation from OCaml exceptions (which
 <p>In general to handle JavaScript exceptions in a safe way use the Js.Exn module, it provides useful functions to work with them. You can use <code>Belt.Result.t('a, Js.Exn.t)</code>.</p>
 </blockquote>
 <h2>References</h2>
-<ul>
-<li><a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">What is the proper type for a node callback</a></li>
-<li><a href="https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7">How to handle a node callback in ReasonML</a></li>
-</ul>
+<p>What is the proper type for a node callback<br>
+<a href="https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326">https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326</a></p>
+<p>How to handle a node callback in ReasonML<br>
+<a href="https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7">https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7</a></p>
 </div></div></body></html>

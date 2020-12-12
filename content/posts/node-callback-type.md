@@ -1,6 +1,6 @@
 ---
-title: What is the type of a node callback in ReasonML?
-date: 2019-12-26 07:38:20
+title: What is the type of a node callback in ReScript?
+date: 2020-12-12 11:28:36
 ---
 
 Node callbacks are typically of the form:
@@ -15,27 +15,27 @@ function callback(error, items) {
 }
 ```
 
-Let's break this down into smaller parts to convert to Reason.
+Let's break this down into smaller parts to convert to ReScript.
 
 ## The error argument
 
-The `error` argument may be null, or an error object. JavaScript errors in Reason are typed as `Js.Exn.t`, so the error argument becomes:
+The `error` argument may be null, or an error object. JavaScript errors in ReScript are typed as `Js.Exn.t`, so the error argument becomes:
 
-```
-type nodeError = Js.nullable(Js.Exn.t)
+```re
+type nodeError = Js.nullable<Js.Exn.t>
 ```
 
 ## The items argument
 
 The `items` argument may be null, or provide a value. We can use a generic type here for the value.
 
-```
-type nodeValue = Js.nullable('a)
+```re
+type nodeValue<'a> = Js.nullable<'a>
 ```
 
 ## The return value
 
-This function returns undefined in JavaScript, so the return value in Reason will be `unit`;
+This function returns undefined in JavaScript, so the return value in ReScript will be `unit`;
 
 ## The node callback function
 
@@ -46,39 +46,137 @@ Note that node callbacks must be uncurried, so we use the `(. )` function argume
 ```reasonml
 type nodeError = Js.nullable(Js.Exn.t);
 type nodeValue('a) = Js.nullable('a);
-type nodeCallback('a) = (. nodeError, nodeValue('a)) => unit;
+type nodeCallback<'a> = (. nodeError, nodeValue<'a>) => unit
 ```
 
 If your callback only supplies an error, then you can use a similar type:
 
 ```re
-type nodeErrorCallback('a) = (. nodeError) => unit;
+type nodeCallbackError = (. nodeError) => unit
 ```
 
-## Utility function
+## Utility function #1
 
-A useful utility function for handling node callbacks.
+An example utility function for handling node callbacks that returns a `Result`.
 
-```reasonml
-let nodeCallback = (f) =>
-  (. error, result) => {
-    let errorOpt = Js.Nullable.toOption(error);
-    let resultOpt = Js.Nullable.toOption(result);
-    switch (errorOpt, resultOpt) {
-    | (Some(error), None) => f(Belt.Result.Error(error))
-    | (None, Some(result)) => f(Belt.Result.Ok(result))
-    // Throw if APIs break nodeback 'guarantee':
-    | _ => invalid_arg("nodeCallback arguments invalid")
-    };
-  };
+```re
+let nodeCallbackWithResult = (
+  f: Belt.Result.t<'a, Js.Exn.t> => unit,
+  . error: nodeError,
+  result: nodeResult<'a>,
+) => {
+  let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
+  let resultOpt: option<'a> = Js.Nullable.toOption(result)
+  switch (errorOpt, resultOpt) {
+  | (Some(error), _) => f(Belt.Result.Error(error))
+  | (_, Some(result)) => f(Belt.Result.Ok(result))
+  | (None, None) => raise(Invalid_argument("nodeCallback arguments invalid"))
+  }
+}
+```
+
+Example usage:
+
+```re
+@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+
+let onResult = (result: result<string, Js.Exn.t>) => {
+  let message = switch result {
+  | Ok(result) => "Success: " ++ result
+  | Error(error) => "Error: " ++ Belt.Option.getWithDefault(Js.Exn.message(error), "Unknown")
+  }
+  Js.log(message)
+}
+
+readFile("hello.txt", "UTF-8", nodeCallbackWithResult(onResult))
+```
+
+## Utility function #2
+
+Another example utility function that uses `onSuccess` and `onError` callbacks
+
+```re
+let nodeCallbackWithSuccessError = (
+  onSuccess: 'a => unit,
+  onError: Js.Exn.t => unit,
+  . error: nodeError,
+  result: nodeResult<'a>,
+) => {
+  let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
+  let resultOpt: option<'a> = Js.Nullable.toOption(result)
+  switch (errorOpt, resultOpt) {
+  | (Some(error), _) => onError(error)
+  | (_, Some(result)) => onSuccess(result)
+  | (None, None) => raise(Invalid_argument("nodeCallback arguments invalid"))
+  }
+}
+```
+
+And example usage:
+
+```re
+@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+
+let onSuccess = (result: string) => {
+  let message = "Success: " ++ result
+  Js.log(message)
+}
+
+let onError = (error: Js.Exn.t) => {
+  let message = "Error: " ++ Belt.Option.getWithDefault(Js.Exn.message(error), "Unknown")
+  Js.log(message)
+}
+
+readFile("hello.txt", "UTF-8", nodeCallbackWithSuccessError(onSuccess, onError))
+```
+
+## Utility function #3
+
+Last example converts the result to a promise.
+
+```re
+let nodeCallbackWithPromise = (
+  f: Js.Promise.t<'a> => unit,
+  . error: nodeError,
+  result: nodeResult<'a>,
+) => {
+  let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
+  let resultOpt: option<'a> = Js.Nullable.toOption(result)
+  switch (errorOpt, resultOpt) {
+  | (Some(error), _) => {
+      let message = Belt.Option.getWithDefault(Js.Exn.message(error), "Unknown")
+      f(Js.Promise.reject(Failure(message)))
+    }
+  | (_, Some(result)) => f(Js.Promise.resolve(result))
+  | (None, None) => f(Js.Promise.reject(Failure("nodeCallback arguments invalid")))
+  }
+}
+```
+
+And example usage:
+
+```re
+@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+
+let handlePromise = (promise: Js.Promise.t<string>) => {
+  open Js.Promise
+  promise
+  ->then_((result: string) => resolve("Success: " ++ result), _)
+  ->catch((_error: Js.Promise.error) => resolve("Error: Unknown"), _)
+  ->then_(message => {
+    Js.log(message)
+    resolve()
+  }, _)
+  ->ignore
+}
+
+readFile("hello.txt", "UTF-8", nodeCallbackWithPromise(handlePromise))
 ```
 
 ## Reference
 
-This content came from a [post on the ReasonML forums][1]. Copying here for reference:
+This content came from a post on the ReasonML forums. Copying here for reference:
 
-> [yawaramin][2]
->
 > I’d model the callback type as:
 >
 > `type nodeCallback('a) = (. Js.nullable(Js.Exn.t), Js.nullable('a)) => unit;`
@@ -93,9 +191,8 @@ This content came from a [post on the ReasonML forums][1]. Copying here for refe
 
 ## References
 
-- [What is the proper type for a node callback][1]
-- [How to handle a node callback in ReasonML][3]
+What is the proper type for a node callback  
+https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326
 
-[1]: https://reasonml.chat/t/what-is-the-proper-type-for-node-callback/1326
-[2]: https://reasonml.chat/u/yawaramin
-[3]: https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7
+How to handle a node callback in ReasonML  
+https://dev.to/yawaramin/how-to-handle-a-nodeback-in-reasonml-in7
