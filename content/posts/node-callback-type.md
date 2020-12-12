@@ -1,6 +1,6 @@
 ---
 title: What is the type of a node callback in ReScript?
-date: 2020-12-12 11:28:36
+date: 2020-12-13 07:03:45
 ---
 
 ```
@@ -26,7 +26,7 @@ Let's break this down into smaller parts to convert to ReScript.
 The `error` argument may be null, or an error object. JavaScript errors in ReScript are typed as `Js.Exn.t`, so the error argument becomes:
 
 ```re
-type nodeError = Js.nullable<Js.Exn.t>
+type callbackError = Js.nullable<Js.Exn.t>
 ```
 
 ## The items argument
@@ -34,29 +34,29 @@ type nodeError = Js.nullable<Js.Exn.t>
 The `items` argument may be null, or provide a value. We can use a generic type here for the value.
 
 ```re
-type nodeValue<'a> = Js.nullable<'a>
+type callbackResult<'a> = Js.nullable<'a>
 ```
 
 ## The return value
 
 This function returns undefined in JavaScript, so the return value in ReScript will be `unit`;
 
-## The node callback function
+## The callback function
 
-Now let's define a `nodeCallback` function type.
-
-Note that node callbacks must be uncurried, so we use the `(. )` function argument notation.
+Now let's define a `callback` function type.
 
 ```re
-type nodeError = Js.nullable<Js.Exn.t>
-type nodeValue<'a> = Js.nullable<'a>
-type nodeCallback<'a> = (. nodeError, nodeValue<'a>) => unit
+type callbackError = Js.nullable<Js.Exn.t>
+type callbackResult<'a> = Js.nullable<'a>
+type callback<'a> = (. callbackError, callbackResult<'a>) => unit
 ```
+
+Note that node callbacks must be uncurried, so we use the `(. )` function argument notation.
 
 If your callback only supplies an error, then you can use a similar type:
 
 ```re
-type nodeCallbackError = (. nodeError) => unit
+type callbackOnlyError = (. nodeError) => unit
 ```
 
 ## Utility function #1
@@ -66,8 +66,8 @@ An example utility function for handling node callbacks that returns a `Result`.
 ```re
 let nodeCallbackWithResult = (
   f: Belt.Result.t<'a, Js.Exn.t> => unit,
-  . error: nodeError,
-  result: nodeResult<'a>,
+  . error: callbackError,
+  result: callbackResult<'a>,
 ) => {
   let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
   let resultOpt: option<'a> = Js.Nullable.toOption(result)
@@ -82,7 +82,7 @@ let nodeCallbackWithResult = (
 Example usage:
 
 ```re
-@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+@bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let onResult = (result: result<string, Js.Exn.t>) => {
   let message = switch result {
@@ -103,8 +103,8 @@ Another example utility function that uses `onSuccess` and `onError` callbacks
 let nodeCallbackWithSuccessError = (
   onSuccess: 'a => unit,
   onError: Js.Exn.t => unit,
-  . error: nodeError,
-  result: nodeResult<'a>,
+  . error: callbackError,
+  result: callbackResult<'a>,
 ) => {
   let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
   let resultOpt: option<'a> = Js.Nullable.toOption(result)
@@ -116,10 +116,10 @@ let nodeCallbackWithSuccessError = (
 }
 ```
 
-And example usage:
+Example usage:
 
 ```re
-@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+@bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let onSuccess = (result: string) => {
   let message = "Success: " ++ result
@@ -141,8 +141,8 @@ Last example converts the result to a promise.
 ```re
 let nodeCallbackWithPromise = (
   f: Js.Promise.t<'a> => unit,
-  . error: nodeError,
-  result: nodeResult<'a>,
+  . error: callbackError,
+  result: callbackResult<'a>,
 ) => {
   let errorOpt: option<Js.Exn.t> = Js.Nullable.toOption(error)
   let resultOpt: option<'a> = Js.Nullable.toOption(result)
@@ -157,10 +157,10 @@ let nodeCallbackWithPromise = (
 }
 ```
 
-And example usage:
+Example usage:
 
 ```re
-@bs.module("fs") external readFile: (string, string, nodeCallback<string>) => unit = "readFile"
+@bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let handlePromise = (promise: Js.Promise.t<string>) => {
   open Js.Promise
