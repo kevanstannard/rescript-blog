@@ -1,54 +1,40 @@
 ---
-title: ReasonML Polymorphic Variants
-date: 2020-01-13 06:11:10
+title: ReScript Polymorphic Variants
+date: 2020-12-12 14:37:31
 ---
 
-Polymorphic variants are distinguished from ordinary variants by the leading backtick.
+```
+ReScript version: bs-platform@8.4.2
+```
+
+Polymorphic variants are distinguished from ordinary variants by the leading hash.
 
 Unlike ordinary variants, polymorphic variants can be used without an explicit type declaration.
 
-Example 1:
+Example:
 
 ```re
-let three = `Int(3);
-let four = `Float(4.);
-let nan = `Not_a_number;
+let status = #yes
+
+let statusString = {
+  switch status {
+  | #yes => "Yes"
+  | #no => "No"
+  }
+}
 ```
 
-Notice that multiple polymorophic variant values may be present together in an array.
+However they may be assigned to a type:
 
-Example 2:
+````re
+type color = [#red | #green | #blue]
 
-```re
-let is_positive =
-  fun
-  | `Int(x) => x > 0
-  | `Float(x) => x > 0.;
+let colorToString = (color: color): string => {
+  switch color {
+  | #red => "Red"
+  | #green => "Green"
+  | #blue => "Blue"
+  }
+}```
 
-List.filter(is_positive, [three, four]);
-```
-
-Example 3:
-
-```re
-let is_positive_result =
-  fun
-  | `Int(x) => Ok(x > 0)
-  | `Float(x) => Ok(x > 0.)
-  | `Not_a_number => Error("not a number");
-
-let result_to_bool =
-  fun
-  | Error(_) => false
-  | Ok(b) => b;
-
-List.filter(
-  value => result_to_bool(is_positive_result(value)),
-  [three, four, nan],
-);
-```
-
-## References
-
-- Real World OCaml - Variants  
-  https://v1.realworldocaml.org/v1/en/html/variants.html
+````
