@@ -1,67 +1,71 @@
-<!doctype html><html data-reactroot=""><head><title>Writing a simple stateful Redux store in ReasonML (without React)</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Writing a simple stateful Redux store in ReasonML (without React)</h1><p>Thu Dec 12 2019</p><div><h2>Creating our store</h2>
+<!doctype html><html data-reactroot=""><head><title>Writing a simple stateful Redux store in ReScript (without React)</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Writing a simple stateful Redux store in ReScript (without React)</h1><p>Sun Dec 13 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<h2>Creating our store</h2>
 <p>Firstly, we need to create a stateful store that can be mutated by actions.</p>
-<p>Let’s create a <code>Store.re</code> module and add a type for the store.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> t(&#x27;action, &#x27;state) = {
-  <span class="hljs-keyword">mutable</span> state: &#x27;state,
-  reducer:<span class="hljs-function"> (&#x27;<span class="hljs-params">state</span>, &#x27;<span class="hljs-params">action</span>) =&gt;</span> &#x27;state,
-};
+<p>Let’s create a <code>Store</code> module</p>
+<pre><code class="language-re"><span class="hljs-keyword">module</span> Store = {
+  <span class="hljs-keyword">type</span> t&lt;&#x27;action, &#x27;state&gt; = {
+    <span class="hljs-keyword">mutable</span> state: &#x27;state,
+    reducer:<span class="hljs-function"> (&#x27;<span class="hljs-params">state</span>, &#x27;<span class="hljs-params">action</span>) =&gt;</span> &#x27;state,
+  }
+}
 </code></pre>
 <p>This follows the naming convention <code>t</code> for a module. Also notice here that we’re using the <code>mutable</code> attribute for the state.</p>
 <p>Next, add a function that creates the initial store.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> create =<span class="hljs-function"> (<span class="hljs-params">reducer</span>, <span class="hljs-params">initialState</span>): <span class="hljs-params">t</span>(&#x27;<span class="hljs-params">action</span>, &#x27;<span class="hljs-params">state</span>) =&gt;</span> {
+<pre><code class="language-re"><span class="hljs-keyword">let</span> create = (reducer, initialState): t&lt;&#x27;action, &#x27;state&gt; =&gt; {
   state: initialState,
-  reducer,
-};
+  reducer: reducer,
+}
 </code></pre>
 <p>Plus a function for dispatching actions. This mutates the state inside the store.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> dispatch = (store, action):<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> {
-  store.state = store.reducer(store.state, action);
-};
+<pre><code class="language-re"><span class="hljs-keyword">let</span> dispatch = (store, action):<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> {
+  store.state = store.reducer(store.state, action)
+}
 </code></pre>
 <p>Lastly, let’s add a function for extracting the state from the store.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> getState = (store: t(&#x27;action, &#x27;state)): &#x27;state =&gt; store.state;
+<pre><code class="language-re"><span class="hljs-keyword">let</span> getState = (store: t&lt;&#x27;action, &#x27;state&gt;): &#x27;state =&gt; store.state
 </code></pre>
 <h2>Using the store</h2>
-<p>Create an <code>Index.re</code> as our main application module.</p>
+<p>Let's write some code that uses our store module.</p>
 <p>Declare our types; we’ll create a simple increment/decrement behaviour.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> state = {counter: <span class="hljs-built_in">int</span>};
+<pre><code class="language-re"><span class="hljs-keyword">type</span> state = {counter: <span class="hljs-built_in">int</span>}
 
 <span class="hljs-keyword">type</span> action =
   <span class="hljs-pattern-match">| <span class="hljs-constructor">Increment</span>
-  | <span class="hljs-constructor">Decrement</span>;
+  | <span class="hljs-constructor">Decrement</span>
 </span></code></pre>
 <p>Next, create the reducer to process the actions.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> reducer =<span class="hljs-function"> (<span class="hljs-params">state</span>, <span class="hljs-params">action</span>) =&gt;</span> {
-  switch (action) {
+<pre><code class="language-re"><span class="hljs-keyword">let</span> reducer =<span class="hljs-function"> (<span class="hljs-params">state</span>, <span class="hljs-params">action</span>) =&gt;</span> {
+  switch action {
   <span class="hljs-pattern-match">| <span class="hljs-constructor">Increment</span> =&gt;</span> {counter: state.counter + <span class="hljs-number">1</span>}
   <span class="hljs-pattern-match">| <span class="hljs-constructor">Decrement</span> =&gt;</span> {counter: state.counter - <span class="hljs-number">1</span>}
-  };
-};
+  }
+}
 </code></pre>
 <p>Now, we can create our store.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> initalState = {counter: <span class="hljs-number">0</span>};
+<pre><code class="language-re"><span class="hljs-keyword">let</span> initalState = {counter: <span class="hljs-number">0</span>}
 
-<span class="hljs-keyword">let</span> store = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>create(reducer, initalState);
+<span class="hljs-keyword">let</span> store = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>create(reducer, initalState)
 </code></pre>
 <p>Let’s also create two convenience functions that operate on the store we just created:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> dispatch =<span class="hljs-function"> <span class="hljs-params">action</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>dispatch(store, action);
+<pre><code class="language-re"><span class="hljs-keyword">let</span> dispatch =<span class="hljs-function"> <span class="hljs-params">action</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>dispatch(store, action)
 
-<span class="hljs-keyword">let</span> getState =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>get<span class="hljs-constructor">State(<span class="hljs-params">store</span>)</span>;
+<span class="hljs-keyword">let</span> getState =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>get<span class="hljs-constructor">State(<span class="hljs-params">store</span>)</span>
 </code></pre>
 <p>And now we can write some code that uses the store:</p>
-<pre><code class="language-reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>get<span class="hljs-constructor">State()</span>);
+<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(get<span class="hljs-constructor">State()</span>)
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>dispatch(CounterStore.Increment);
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>get<span class="hljs-constructor">State()</span>);
+dispatch(Increment)
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(get<span class="hljs-constructor">State()</span>)
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>dispatch(CounterStore.Increment);
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>get<span class="hljs-constructor">State()</span>);
+dispatch(Increment)
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(get<span class="hljs-constructor">State()</span>)
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>dispatch(CounterStore.Decrement);
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>get<span class="hljs-constructor">State()</span>);
+dispatch(Decrement)
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(get<span class="hljs-constructor">State()</span>)
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>dispatch(CounterStore.Decrement);
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">CounterStore</span>.</span></span>get<span class="hljs-constructor">State()</span>);
+dispatch(Decrement)
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(get<span class="hljs-constructor">State()</span>)
 </code></pre>
 <p>Which outputs:</p>
 <pre><code class="language-bash">{ counter: 0 }

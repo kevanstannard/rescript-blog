@@ -1,103 +1,109 @@
 ---
-title: Writing a simple stateful Redux store in ReasonML (without React)
-date: 2019-12-12
+title: Writing a simple stateful Redux store in ReScript (without React)
+date: 2020-12-12 16:50:00
 ---
+
+```
+ReScript version: bs-platform@8.4.2
+```
 
 ## Creating our store
 
 Firstly, we need to create a stateful store that can be mutated by actions.
 
-Let’s create a `Store.re` module and add a type for the store.
+Let’s create a `Store` module
 
-```reasonml
-type t('action, 'state) = {
-  mutable state: 'state,
-  reducer: ('state, 'action) => 'state,
-};
+```re
+module Store = {
+  type t<'action, 'state> = {
+    mutable state: 'state,
+    reducer: ('state, 'action) => 'state,
+  }
+}
 ```
 
 This follows the naming convention `t` for a module. Also notice here that we’re using the `mutable` attribute for the state.
 
 Next, add a function that creates the initial store.
 
-```reasonml
-let create = (reducer, initialState): t('action, 'state) => {
+```re
+let create = (reducer, initialState): t<'action, 'state> => {
   state: initialState,
-  reducer,
-};
+  reducer: reducer,
+}
 ```
 
 Plus a function for dispatching actions. This mutates the state inside the store.
 
-```reasonml
+```re
 let dispatch = (store, action): unit => {
-  store.state = store.reducer(store.state, action);
-};
+  store.state = store.reducer(store.state, action)
+}
 ```
 
 Lastly, let’s add a function for extracting the state from the store.
 
-```reasonml
-let getState = (store: t('action, 'state)): 'state => store.state;
+```re
+let getState = (store: t<'action, 'state>): 'state => store.state
 ```
 
 ## Using the store
 
-Create an `Index.re` as our main application module.
+Let's write some code that uses our store module.
 
 Declare our types; we’ll create a simple increment/decrement behaviour.
 
-```reasonml
-type state = {counter: int};
+```re
+type state = {counter: int}
 
 type action =
   | Increment
-  | Decrement;
+  | Decrement
 ```
 
 Next, create the reducer to process the actions.
 
-```reasonml
+```re
 let reducer = (state, action) => {
-  switch (action) {
+  switch action {
   | Increment => {counter: state.counter + 1}
   | Decrement => {counter: state.counter - 1}
-  };
-};
+  }
+}
 ```
 
 Now, we can create our store.
 
-```reasonml
-let initalState = {counter: 0};
+```re
+let initalState = {counter: 0}
 
-let store = Store.create(reducer, initalState);
+let store = Store.create(reducer, initalState)
 ```
 
 Let’s also create two convenience functions that operate on the store we just created:
 
-```reasonml
-let dispatch = action => Store.dispatch(store, action);
+```re
+let dispatch = action => Store.dispatch(store, action)
 
-let getState = () => Store.getState(store);
+let getState = () => Store.getState(store)
 ```
 
 And now we can write some code that uses the store:
 
-```reasonml
-Js.log(CounterStore.getState());
+```re
+Js.log(getState())
 
-CounterStore.dispatch(CounterStore.Increment);
-Js.log(CounterStore.getState());
+dispatch(Increment)
+Js.log(getState())
 
-CounterStore.dispatch(CounterStore.Increment);
-Js.log(CounterStore.getState());
+dispatch(Increment)
+Js.log(getState())
 
-CounterStore.dispatch(CounterStore.Decrement);
-Js.log(CounterStore.getState());
+dispatch(Decrement)
+Js.log(getState())
 
-CounterStore.dispatch(CounterStore.Decrement);
-Js.log(CounterStore.getState());
+dispatch(Decrement)
+Js.log(getState())
 ```
 
 Which outputs:
