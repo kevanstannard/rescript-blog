@@ -1,3 +1,3 @@
-# reason-blog
+# rescript-blog
 
-https://kevanstannard.github.io/reason-blog/
+https://kevanstannard.github.io/rescript-blog/
