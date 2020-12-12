@@ -1,16 +1,16 @@
-<!doctype html><html data-reactroot=""><head><title>Using ReasonML server side with Node.js</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Using ReasonML server side with Node.js</h1><p>Wed Dec 11 2019</p><div><p>Node version <code>13.3.0</code></p>
-<p>Bucklescript version <code>5.2.1</code></p>
-<p>When writing client side code in ReasonML, you would typically have a <code>bsconfig.json</code> setting for es6 modules:</p>
-<pre><code>&quot;package-specs&quot;: [
+<!doctype html><html data-reactroot=""><head><title>Using ReScript server side with Node.js</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Using ReScript server side with Node.js</h1><p>Sun Dec 13 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>When writing client side code in ReScript, you would typically have a <code>bsconfig.json</code> setting for es6 modules:</p>
+<pre><code class="language-json">&quot;package-specs&quot;: [
   {
    &quot;module&quot;: &quot;es6&quot;,
    &quot;in-source&quot;: true
   }
 ]
 </code></pre>
-<p>This generates import statements that don't work in the current version of Node.</p>
-<p>To fix this, change the module setting to commonjs , which will generate require statements instead:</p>
-<pre><code>&quot;package-specs&quot;: [
+<p>This generates <code>import</code> statements that don't work in the current version of Node.</p>
+<p>To fix this, change the module setting to commonjs , which will generate <code>require()</code> statements instead:</p>
+<pre><code class="language-json">&quot;package-specs&quot;: [
   {
    &quot;module&quot;: &quot;commonjs&quot;,
    &quot;in-source&quot;: true
