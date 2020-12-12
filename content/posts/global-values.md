@@ -1,23 +1,27 @@
 ---
 title: How to determine if a global value exists in ReasonML?
-date: 2019-12-29 06:46:11
+date: 2020-12-12 06:35:06
 ---
 
-Use the `[%external your_identified_name]` annotation.
+```
+ReScript version: bs-platform@8.4.2
+```
+
+Use the `%external(your_global)` annotation.
 
 This returns an `option` value.
 
-```reasonml
-let devOpt = [%external __DEV__];
-switch (devOpt) {
+```re
+let devOpt = %external(__DEV__)
+switch devOpt {
 | Some(_) => Js.log("development mode")
 | None => Js.log("production mode")
-};
+}
 ```
 
 This generates:
 
-```
+```js
 var devOpt = typeof __DEV__ === "undefined" ? undefined : __DEV__;
 
 if (devOpt !== undefined) {

@@ -1,18 +1,20 @@
-<!doctype html><html data-reactroot=""><head><title>How to determine if a global value exists in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to determine if a global value exists in ReasonML?</h1><p>Sun Dec 29 2019</p><div><p>Use the <code>[%external your_identified_name]</code> annotation.</p>
+<!doctype html><html data-reactroot=""><head><title>How to determine if a global value exists in ReasonML?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to determine if a global value exists in ReasonML?</h1><p>Sat Dec 12 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>Use the <code>%external(your_global)</code> annotation.</p>
 <p>This returns an <code>option</code> value.</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> devOpt = <span class="hljs-literal">[%<span class="hljs-identifier">external</span> <span class="hljs-identifier">__DEV__</span>]</span>;
-switch (devOpt) {
+<pre><code class="language-re"><span class="hljs-keyword">let</span> devOpt = %<span class="hljs-keyword">external</span>(__DEV__)
+switch devOpt {
 <span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;development mode&quot;</span>)
 <span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;production mode&quot;</span>)
-};
+}
 </code></pre>
 <p>This generates:</p>
-<pre><code>var devOpt = typeof __DEV__ === &quot;undefined&quot; ? undefined : __DEV__;
+<pre><code class="language-js"><span class="hljs-keyword">var</span> devOpt = <span class="hljs-keyword">typeof</span> __DEV__ === <span class="hljs-string">&quot;undefined&quot;</span> ? <span class="hljs-literal">undefined</span> : __DEV__;
 
-if (devOpt !== undefined) {
-  console.log(&quot;development mode&quot;);
-} else {
-  console.log(&quot;production mode&quot;);
+<span class="hljs-keyword">if</span> (devOpt !== <span class="hljs-literal">undefined</span>) {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;development mode&quot;</span>);
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;production mode&quot;</span>);
 }
 </code></pre>
 </div></div></body></html>

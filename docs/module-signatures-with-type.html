@@ -1,39 +1,39 @@
-<!doctype html><html data-reactroot=""><head><title>ReasonML module signatures with abstract types</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>ReasonML module signatures with abstract types</h1><p>Sun Dec 29 2019</p><div><p>Suppose we declare a module signature:</p>
-<pre><code class="language-reasonml"><span class="hljs-module-def"><span class="hljs-keyword">module</span> <span class="hljs-keyword">type</span> <span class="hljs-module">SHOW</span> = {
-  <span class="hljs-keyword">type</span> t;
-  <span class="hljs-keyword">let</span> show: t =&gt; <span class="hljs-built_in">string</span>;
-};
+<!doctype html><html data-reactroot=""><head><title>ReScript module signatures with abstract types</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>ReScript module signatures with abstract types</h1><p>Sat Dec 12 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>Suppose we declare a module signature:</p>
+<pre><code class="language-re"><span class="hljs-module-def"><span class="hljs-keyword">module</span> <span class="hljs-keyword">type</span> <span class="hljs-module">SHOW</span> = {
+  <span class="hljs-keyword">type</span> t
+  <span class="hljs-keyword">let</span> show: t =&gt; <span class="hljs-built_in">string</span>
+}
 </span></code></pre>
 <p>Here we have an abstract type <code>t</code> and it's up to the implmentation module to provide the type.</p>
 <p>Let's declare a <code>person</code> type:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">type</span> person = {name: <span class="hljs-built_in">string</span>};
+<pre><code class="language-re"><span class="hljs-keyword">type</span> person = {name: <span class="hljs-built_in">string</span>}
 </code></pre>
 <p>And a <code>ShowPerson: SHOW</code> module:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">module</span> ShowPerson: SHOW = {
-  <span class="hljs-keyword">type</span> t = person;
-  <span class="hljs-keyword">let</span> show =<span class="hljs-function"> <span class="hljs-params">person</span> =&gt;</span> person.name;
-};
+<pre><code class="language-re"><span class="hljs-keyword">module</span> ShowPerson: SHOW = {
+  <span class="hljs-keyword">type</span> t = person
+  <span class="hljs-keyword">let</span> show =<span class="hljs-function"> (<span class="hljs-params">person</span>: <span class="hljs-params">t</span>) =&gt;</span> person.name
+}
 </code></pre>
 <p>Now we can make use of our <code>ShowPerson</code> module:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">let</span> joe: person = {name: <span class="hljs-string">&quot;Joe&quot;</span>};
+<pre><code class="language-re"><span class="hljs-keyword">let</span> joe: person = {name: <span class="hljs-string">&quot;Joe&quot;</span>};
 
 <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ShowPerson</span>.</span></span>show(joe);
 </code></pre>
-<p>Unfortunately on that last line the referemce to <code>joe</code> is causing an error:</p>
-<pre><code>This has type:
-    person
-  But somewhere wanted:
-    ShowPerson.t
+<p>Unfortunately on that last line the reference to <code>joe</code> is causing an error:</p>
+<pre><code>This has type: person
+Somewhere wanted: ShowPerson.t
 </code></pre>
 <p>To fix this we need to add a <code>with type</code> annotation to our <code>ShowPerson</code> module:</p>
-<pre><code class="language-reasonml"><span class="hljs-keyword">module</span> ShowPerson: SHOW <span class="hljs-keyword">with</span> <span class="hljs-keyword">type</span> t = person = {
-  <span class="hljs-keyword">type</span> t = person;
-  <span class="hljs-keyword">let</span> show =<span class="hljs-function"> <span class="hljs-params">person</span> =&gt;</span> person.name;
-};
+<pre><code class="language-re"><span class="hljs-keyword">module</span> ShowPerson: SHOW <span class="hljs-keyword">with</span> <span class="hljs-keyword">type</span> t = person = {
+  <span class="hljs-keyword">type</span> t = person
+  <span class="hljs-keyword">let</span> show =<span class="hljs-function"> <span class="hljs-params">person</span> =&gt;</span> person.name
+}
 </code></pre>
 <h2>References</h2>
-<ul>
-<li><a href="https://github.com/reazen/relude/issues/193">Unfamiliar syntax in documentation for Show</a></li>
-<li><a href="https://dev.to/mlms13/type-classes-in-reasonml-a-world-of-functions-for-free-2lag">Type Classes in ReasonML: A World of Functions for Free</a></li>
-</ul>
+<p>Unfamiliar syntax in documentation for Show<br>
+<a href="https://github.com/reazen/relude/issues/193">https://github.com/reazen/relude/issues/193</a></p>
+<p>Type Classes in ReasonML: A World of Functions for Free<br>
+<a href="https://dev.to/mlms13/type-classes-in-reasonml-a-world-of-functions-for-free-2lag">https://dev.to/mlms13/type-classes-in-reasonml-a-world-of-functions-for-free-2lag</a></p>
 </div></div></body></html>

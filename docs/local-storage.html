@@ -1,12 +1,14 @@
-<!doctype html><html data-reactroot=""><head><title>How to use local storage in ReasonML</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to use local storage in ReasonML</h1><p>Thu Jan 02 2020</p><div><p>Bucklescript provides a <a href="https://bucklescript.github.io/bucklescript/api/Dom.Storage.html">Dom.Storage</a> module for accessing local storage (and session storage).</p>
+<!doctype html><html data-reactroot=""><head><title>How to use local storage in ReScript</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to use local storage in ReScript</h1><p>Sat Dec 12 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
+</code></pre>
+<p>ReScript provides a <a href="https://rescript-lang.org/docs/manual/latest/api/dom/storage2">Dom.Storage2</a> module for accessing local storage (and session storage).</p>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage</span>.</span></span>set<span class="hljs-constructor">Item(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;hello&quot;</span>, Dom.Storage.<span class="hljs-params">localStorage</span>)</span>;
+<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage2</span>.</span></span>set<span class="hljs-constructor">Item(Dom.Storage2.<span class="hljs-params">localStorage</span>, <span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;hello&quot;</span>)</span>
 
-<span class="hljs-keyword">let</span> messageOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage</span>.</span></span>get<span class="hljs-constructor">Item(<span class="hljs-string">&quot;message&quot;</span>, Dom.Storage.<span class="hljs-params">localStorage</span>)</span>;
+<span class="hljs-keyword">let</span> messageOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage2</span>.</span></span>get<span class="hljs-constructor">Item(Dom.Storage2.<span class="hljs-params">localStorage</span>, <span class="hljs-string">&quot;message&quot;</span>)</span>
 
-switch (messageOpt) {
-<span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> print<span class="hljs-constructor">_endline(<span class="hljs-string">&quot;No message&quot;</span>)</span>
-<span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">value</span>)</span> =&gt;</span> print<span class="hljs-constructor">_endline(<span class="hljs-params">value</span>)</span>
-};
+switch messageOpt {
+<span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;No message&quot;</span>)
+<span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">value</span>)</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(value)
+}
 </code></pre>
 </div></div></body></html>

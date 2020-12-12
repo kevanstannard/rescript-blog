@@ -1,19 +1,23 @@
 ---
-title: How to use local storage in ReasonML
-date: 2020-01-02 08:13:12
+title: How to use local storage in ReScript
+date: 2020-12-12 06:40:42
 ---
 
-Bucklescript provides a [Dom.Storage](https://bucklescript.github.io/bucklescript/api/Dom.Storage.html) module for accessing local storage (and session storage).
+```
+ReScript version: bs-platform@8.4.2
+```
+
+ReScript provides a [Dom.Storage2](https://rescript-lang.org/docs/manual/latest/api/dom/storage2) module for accessing local storage (and session storage).
 
 Example:
 
 ```re
-Dom.Storage.setItem("message", "hello", Dom.Storage.localStorage);
+Dom.Storage2.setItem(Dom.Storage2.localStorage, "message", "hello")
 
-let messageOpt = Dom.Storage.getItem("message", Dom.Storage.localStorage);
+let messageOpt = Dom.Storage2.getItem(Dom.Storage2.localStorage, "message")
 
-switch (messageOpt) {
-| None => print_endline("No message")
-| Some(value) => print_endline(value)
-};
+switch messageOpt {
+| None => Js.log("No message")
+| Some(value) => Js.log(value)
+}
 ```
