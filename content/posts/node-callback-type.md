@@ -3,6 +3,10 @@ title: What is the type of a node callback in ReScript?
 date: 2020-12-12 11:28:36
 ---
 
+```
+ReScript version: bs-platform@8.4.2
+```
+
 Node callbacks are typically of the form:
 
 ```js
