@@ -7,7 +7,7 @@ date: 2020-12-12 16:58:52
 ReScript version: bs-platform@8.4.2
 ```
 
-When writing JSX in Reason, you will need to use the `ReasonReact.string()` function when rendering string values.
+When writing JSX in ReScript, you will need to use the `ReasonReact.string()` function when rendering string values.
 
 For example:
 

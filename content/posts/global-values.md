@@ -1,5 +1,5 @@
 ---
-title: How to determine if a global value exists in ReasonML?
+title: How to determine if a global value exists in ReScript?
 date: 2020-12-12 06:35:06
 ---
 

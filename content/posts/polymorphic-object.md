@@ -1,5 +1,5 @@
 ---
-title: Simple example of a polymorphic object in ReasonML
+title: Simple example of a polymorphic object in ReScript
 date: 2020-12-12 14:35:00
 ---
 
