@@ -10,7 +10,7 @@ function Template__BlogPost(Props) {
               title: blogPost.title,
               children: null
             }, React.createElement("p", undefined, React.createElement("a", {
-                      href: "index.html"
+                      href: "/"
                     }, "← Back to index")), React.createElement("h1", undefined, blogPost.title), React.createElement("p", undefined, blogPost.date.toDateString()), React.createElement("div", {
                   dangerouslySetInnerHTML: {
                     __html: blogPost.body

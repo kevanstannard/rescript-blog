@@ -6,10 +6,6 @@
     {
       "dir": "src",
       "subdirs": true
-    },
-    {
-      "dir": "temp",
-      "subdirs": true
     }
   ],
   "package-specs": {

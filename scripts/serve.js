@@ -1,9 +1,22 @@
-const superstatic = require("superstatic");
-const connect = require("connect");
+const browserSync = require("browser-sync");
+const yargs = require("yargs");
 
-const port = 3000;
-const app = connect().use(superstatic({ cwd: "./docs" }));
+const argv = yargs.argv;
 
-app.listen(port, function () {
-  console.log("Dev server started on port " + port);
-});
+const dir = argv._[0];
+
+if (!dir) {
+  console.log("Usage: serve <dir>");
+  return;
+}
+
+const options = {
+  server: dir,
+  watch: true,
+  open: false,
+  notify: false,
+};
+
+const server = browserSync.create("rescript-blog");
+
+server.init(options);

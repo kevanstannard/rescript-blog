@@ -5,9 +5,12 @@
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w",
     "blog:build": "node scripts/build",
-    "blog:serve": "node scripts/serve"
+    "blog:serve": "node scripts/serve -- ./docs",
+    "blog:watch": "watch 'npm run blog:build -s' ./content ./src ./static",
+    "blog:dev": "npm run blog:serve & npm run blog:watch"
   },
   "dependencies": {
+    "browser-sync": "^2.26.13",
     "bs-glob": "github:reasonml-community/bs-glob",
     "bs-platform": "^8.4.2",
     "connect": "^3.7.0",
@@ -21,6 +24,7 @@
     "react-dom": "^17.0.1",
     "reason-react": "^0.9.1",
     "rimraf": "^3.0.0",
-    "superstatic": "^7.1.0"
+    "watch": "^1.0.2",
+    "yargs": "^16.2.0"
   }
 }

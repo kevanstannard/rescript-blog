@@ -1,6 +1,6 @@
 ---
 title: How to access global modules and values in ReScript?
-date: 2019-12-29 06:57:19
+date: 2020-12-13 05:55:24
 ---
 
 ```

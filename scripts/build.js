@@ -3,7 +3,7 @@ const { make } = require("../src/App.bs.js");
 
 make()
   .then(() => {
-    copyfiles(["./static/**/*", "./docs"], { verbose: true }, (error) => {
+    copyfiles(["./static/**/*", "./docs"], { verbose: false }, (error) => {
       if (error) {
         console.error(error);
       }
