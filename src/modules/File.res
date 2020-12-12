@@ -28,7 +28,7 @@ let writeFile = (filePath: string, content: string): Js.Promise.t<unit> => {
 
 let glob = (glob: string): Js.Promise.t<array<string>> =>
   Js.Promise.make((~resolve, ~reject) => {
-    Glob.glob(glob, (error, paths) => {
+    Glob.glob(glob, (. error, paths) => {
       let errorOpt = Js.Nullable.toOption(error)
       let pathsOpt = Js.Nullable.toOption(paths)
       switch (errorOpt, pathsOpt) {

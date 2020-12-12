@@ -5,7 +5,7 @@
     "postinstall": "npm run re:build",
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w",
-    "blog:build": "node scripts/build",
+    "blog:build": "node scripts/build -- ./docs",
     "blog:serve": "node scripts/serve -- ./docs",
     "blog:watch": "watch 'npm run blog:build -s' ./content ./src ./static",
     "dev": "npm run blog:serve & npm run blog:watch"
