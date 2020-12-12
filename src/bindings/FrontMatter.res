@@ -1,7 +1,7 @@
-type fm<'a> = {
+type frontmatter<'a> = {
   frontmatter: string,
   body: string,
   attributes: 'a,
 }
 
-@bs.module external fm: string => fm<'a> = "front-matter"
+@bs.module external parse: string => frontmatter<'a> = "front-matter"

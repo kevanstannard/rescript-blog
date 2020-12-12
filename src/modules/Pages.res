@@ -26,9 +26,9 @@ type attributes = {
 let pathBaseName = (path: string) => Path.basename(~path, ~ext=".md", ())
 
 let parsePage = (data: string, filePath: string): page => {
-  let fmData = FrontMatter.fm(data)
-  let {id, title, date}: attributes = fmData.attributes
-  let body = Markdown.render(fmData.body)
+  let fm = FrontMatter.parse(data)
+  let {id, title, date}: attributes = fm.attributes
+  let body = Markdown.render(fm.body)
   let pageId = {
     switch id {
     | Some(id) => id
@@ -102,7 +102,8 @@ let ensureDirectoryExists = (dir: string) =>
     Fs.mkdirSync(dir)->ignore
   }
 
-let deleteDirectoryContents = (dir: string) => Js.Promise.make((~resolve, ~reject) => {
+let deleteDirectoryContents = (dir: string) =>
+  Js.Promise.make((~resolve, ~reject) => {
     let glob = dir ++ "/**/*"
     Rimraf.rimraf(.glob, error => {
       let errorOpt = Js.Nullable.toOption(error)

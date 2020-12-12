@@ -14,10 +14,10 @@ var File$ReasonBlog = require("./File.bs.js");
 var Markdown$ReasonBlog = require("../bindings/Markdown.bs.js");
 
 function parsePage(data, filePath) {
-  var fmData = FrontMatter(data);
-  var match = fmData.attributes;
+  var fm = FrontMatter(data);
+  var match = fm.attributes;
   var id = match.id;
-  var body = Markdown$ReasonBlog.render(fmData.body);
+  var body = Markdown$ReasonBlog.render(fm.body);
   var pageId = id !== undefined ? id : Path.basename(filePath, ".md");
   return {
           filePath: filePath,
