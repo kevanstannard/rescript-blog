@@ -149,16 +149,18 @@ let writeBlogPost = (
 
 let writeBlogIndex = (
   outputDir: string,
+  indexName: string,
   renderBlogIndex: array<blogPost> => string,
   blogPosts: array<blogPost>,
 ): Js.Promise.t<unit> => {
   let html = blogPosts->renderBlogIndex
-  let filePath = outputDir ++ "/index.html"
+  let filePath = outputDir ++ "/" ++ indexName ++ ".html"
   File.writeFile(filePath, html)
 }
 
 let createBlogFromCollection = (
   outputDir: string,
+  indexName: string,
   renderBlogPost: blogPost => string,
   renderBlogIndex: array<blogPost> => string,
   collection: contentCollection,
@@ -173,7 +175,7 @@ let createBlogFromCollection = (
   }
 
   let createIndex = () => {
-    writeBlogIndex(outputDir, renderBlogIndex, blogPosts)
+    writeBlogIndex(outputDir, indexName, renderBlogIndex, blogPosts)
   }
 
   ensureDirectoryExists(outputDir)
@@ -204,9 +206,9 @@ let cleanDirectory = (dir: string) => {
   deleteDirectoryContents(dir)
 }
 
-let createBlog = (collectionDir, outputDir, renderBlogPost, renderBlogIndex) => {
+let createBlog = (~collectionDir, ~outputDir, ~indexName, ~renderBlogPost, ~renderBlogIndex) => {
   readContentCollection(collectionDir)->Js.Promise.then_(
-    createBlogFromCollection(outputDir, renderBlogPost, renderBlogIndex),
+    createBlogFromCollection(outputDir, indexName, renderBlogPost, renderBlogIndex),
     _,
   )
 }

@@ -41,3 +41,8 @@ let isLeaf = tree =>
   | Leaf(_) => true
   }
 ```
+
+## Reference
+
+How do I bind subtyping in ReScript?  
+https://forum.rescript-lang.org/t/how-do-i-bind-subtyping-in-rescript/767

@@ -47,7 +47,7 @@ var Render = {
 };
 
 function makeBlog(param) {
-  return Pages$RescriptBlog.createBlog(postsDir, outputDir, blogPost, blogIndex);
+  return Pages$RescriptBlog.createBlog(postsDir, outputDir, "index", blogPost, blogIndex);
 }
 
 function makePages(param) {

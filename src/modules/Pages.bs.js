@@ -141,7 +141,7 @@ function cleanDirectory(dir) {
               }));
 }
 
-function createBlog(collectionDir, outputDir, renderBlogPost, renderBlogIndex) {
+function createBlog(collectionDir, outputDir, indexName, renderBlogPost, renderBlogIndex) {
   var __x = readContentCollection(collectionDir);
   return __x.then(function (param) {
               var blogPosts = contentCollectionToBlogPosts(param);
@@ -157,7 +157,7 @@ function createBlog(collectionDir, outputDir, renderBlogPost, renderBlogIndex) {
               };
               var createIndex = function (param) {
                 var html = Curry._1(renderBlogIndex, blogPosts);
-                var filePath = outputDir + "/index.html";
+                var filePath = outputDir + "/" + indexName + ".html";
                 return File$RescriptBlog.writeFile(filePath, html);
               };
               ensureDirectoryExists(outputDir);

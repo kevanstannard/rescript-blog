@@ -21,7 +21,14 @@ module Render = {
   }
 }
 
-let makeBlog = () => Pages.createBlog(postsDir, outputDir, Render.blogPost, Render.blogIndex)
+let makeBlog = () =>
+  Pages.createBlog(
+    ~collectionDir=postsDir,
+    ~outputDir,
+    ~indexName="index",
+    ~renderBlogPost=Render.blogPost,
+    ~renderBlogIndex=Render.blogIndex,
+  )
 
 let makePages = () => Pages.createPages(pagesDir, outputDir, Render.page)
 

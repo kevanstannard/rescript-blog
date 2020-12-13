@@ -28,10 +28,11 @@ let findContentById: (contentCollection, string) => option<content>
 let cleanDirectory: string => Js.Promise.t<unit>
 
 let createBlog: (
-  string,
-  string,
-  blogPost => string,
-  array<blogPost> => string,
+  ~collectionDir: string,
+  ~outputDir: string,
+  ~indexName: string,
+  ~renderBlogPost: blogPost => string,
+  ~renderBlogIndex: array<blogPost> => string,
 ) => Js.Promise.t<unit>
 
 let createPages: (string, string, page => string) => Js.Promise.t<unit>
