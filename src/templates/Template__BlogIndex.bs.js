@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require("react");
-var Template__Html$ReasonBlog = require("./Template__Html.bs.js");
+var Template__Html$RescriptBlog = require("./Template__Html.bs.js");
 
 function blogPostToListItem(blogPost) {
   return React.createElement("p", {
@@ -14,7 +14,7 @@ function blogPostToListItem(blogPost) {
 
 function Template__BlogIndex(Props) {
   var blogPosts = Props.blogPosts;
-  return React.createElement(Template__Html$ReasonBlog.make, {
+  return React.createElement(Template__Html$RescriptBlog.make, {
               title: "ReScript Blog",
               children: null
             }, React.createElement("p", undefined, React.createElement("a", {

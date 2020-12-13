@@ -10,14 +10,14 @@ var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var FrontMatter = require("front-matter");
 var Belt_SortArray = require("bs-platform/lib/js/belt_SortArray.js");
-var File$ReasonBlog = require("./File.bs.js");
-var Markdown$ReasonBlog = require("../bindings/Markdown.bs.js");
+var File$RescriptBlog = require("./File.bs.js");
+var Markdown$RescriptBlog = require("../bindings/Markdown.bs.js");
 
 function parsePage(data, filePath) {
   var fm = FrontMatter(data);
   var match = fm.attributes;
   var id = match.id;
-  var body = Markdown$ReasonBlog.render(fm.body);
+  var body = Markdown$RescriptBlog.render(fm.body);
   var pageId = id !== undefined ? id : Path.basename(filePath, ".md");
   return {
           filePath: filePath,
@@ -29,7 +29,7 @@ function parsePage(data, filePath) {
 }
 
 function readPage(filePath) {
-  var __x = File$ReasonBlog.readFile(filePath);
+  var __x = File$RescriptBlog.readFile(filePath);
   return __x.then(function (content) {
               return Promise.resolve(parsePage(content, filePath));
             });
@@ -60,7 +60,7 @@ function compareDateDescending(pageA, pageB) {
 }
 
 function readPageCollection(dirPath) {
-  var __x = File$ReasonBlog.glob(dirPath + "/*.md");
+  var __x = File$RescriptBlog.glob(dirPath + "/*.md");
   var __x$1 = __x.then(readPages);
   return __x$1.then(function (collection) {
               return Promise.resolve(Belt_SortArray.stableSortBy(collection, compareDateDescending));
@@ -113,7 +113,7 @@ function createBlog(outputDir, renderBlogPost, renderBlogIndex, collection) {
     var __x = Promise.all(Belt_Array.map(blogPosts, (function (param) {
                 var html = Curry._1(renderBlogPost, param);
                 var filePath = outputDir + "/" + param.id + ".html";
-                return File$ReasonBlog.writeFile(filePath, html);
+                return File$RescriptBlog.writeFile(filePath, html);
               })));
     return __x.then(function (param) {
                 return Promise.resolve(undefined);
@@ -122,7 +122,7 @@ function createBlog(outputDir, renderBlogPost, renderBlogIndex, collection) {
   var createIndex = function (param) {
     var html = Curry._1(renderBlogIndex, blogPosts);
     var filePath = outputDir + "/index.html";
-    return File$ReasonBlog.writeFile(filePath, html);
+    return File$RescriptBlog.writeFile(filePath, html);
   };
   ensureDirectoryExists(outputDir);
   var __x = createPosts(undefined);
@@ -134,7 +134,7 @@ function createPages(outputDir, renderPage, collection) {
   var __x = Promise.all(Belt_Array.map(collection, (function (param) {
               var html = Curry._1(renderPage, param);
               var filePath = outputDir + "/" + param.id + ".html";
-              return File$ReasonBlog.writeFile(filePath, html);
+              return File$RescriptBlog.writeFile(filePath, html);
             })));
   return __x.then(function (param) {
               return Promise.resolve(undefined);
