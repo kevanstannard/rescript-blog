@@ -1,9 +1,3 @@
-let rawCss = "
-  pre {
-    border: 1px solid black
-  }
-"
-
 @react.component
 let make = (~title, ~children) => {
   <html>

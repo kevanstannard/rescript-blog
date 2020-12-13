@@ -22,10 +22,7 @@ function Template__Html(Props) {
                     }, children)));
 }
 
-var rawCss = "\n  pre {\n    border: 1px solid black\n  }\n";
-
 var make = Template__Html;
 
-exports.rawCss = rawCss;
 exports.make = make;
 /* react Not a pure module */
