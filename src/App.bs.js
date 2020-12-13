@@ -8,15 +8,7 @@ var Template__Page$RescriptBlog = require("./templates/Template__Page.bs.js");
 var Template__BlogPost$RescriptBlog = require("./templates/Template__BlogPost.bs.js");
 var Template__BlogIndex$RescriptBlog = require("./templates/Template__BlogIndex.bs.js");
 
-var pagesDir = "./content/pages";
-
-var postsDir = "./content/posts";
-
 var outputDir = "./docs";
-
-function prefixWithDocType(html) {
-  return "<!doctype html>" + html;
-}
 
 function blogIndex(blogPosts) {
   var el = React.createElement(Template__BlogIndex$RescriptBlog.make, {
@@ -39,19 +31,12 @@ function page(page$1) {
   return "<!doctype html>" + Server.renderToString(el);
 }
 
-var Render = {
-  prefixWithDocType: prefixWithDocType,
-  blogIndex: blogIndex,
-  blogPost: blogPost,
-  page: page
-};
-
 function makeBlog(param) {
-  return Pages$RescriptBlog.createBlog(postsDir, outputDir, "index", blogPost, blogIndex);
+  return Pages$RescriptBlog.createBlog("./content/posts", outputDir, "index", blogPost, blogIndex);
 }
 
 function makePages(param) {
-  return Pages$RescriptBlog.createPages(pagesDir, outputDir, page);
+  return Pages$RescriptBlog.createPages("./content/pages", outputDir, page);
 }
 
 function make(param) {
@@ -60,11 +45,5 @@ function make(param) {
   return __x$1.then(makePages);
 }
 
-exports.pagesDir = pagesDir;
-exports.postsDir = postsDir;
-exports.outputDir = outputDir;
-exports.Render = Render;
-exports.makeBlog = makeBlog;
-exports.makePages = makePages;
 exports.make = make;
 /* react Not a pure module */
