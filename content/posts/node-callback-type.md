@@ -56,7 +56,7 @@ Note that node callbacks must be uncurried, so we use the `(. )` function argume
 If your callback only supplies an error, then you can use a similar type:
 
 ```re
-type callbackOnlyError = (. nodeError) => unit
+type callbackOnlyError = (. callbackError) => unit
 ```
 
 ## Utility function #1
@@ -64,7 +64,7 @@ type callbackOnlyError = (. nodeError) => unit
 An example utility function for handling node callbacks that returns a `Result`.
 
 ```re
-let nodeCallbackWithResult = (
+let callbackWithResult = (
   f: Belt.Result.t<'a, Js.Exn.t> => unit,
   . error: callbackError,
   result: callbackResult<'a>,
@@ -92,7 +92,7 @@ let onResult = (result: result<string, Js.Exn.t>) => {
   Js.log(message)
 }
 
-readFile("hello.txt", "UTF-8", nodeCallbackWithResult(onResult))
+readFile("hello.txt", "UTF-8", callbackWithResult(onResult))
 ```
 
 ## Utility function #2
@@ -100,7 +100,7 @@ readFile("hello.txt", "UTF-8", nodeCallbackWithResult(onResult))
 Another example utility function that uses `onSuccess` and `onError` callbacks
 
 ```re
-let nodeCallbackWithSuccessError = (
+let callbackWithSuccessOrError = (
   onSuccess: 'a => unit,
   onError: Js.Exn.t => unit,
   . error: callbackError,
@@ -131,7 +131,7 @@ let onError = (error: Js.Exn.t) => {
   Js.log(message)
 }
 
-readFile("hello.txt", "UTF-8", nodeCallbackWithSuccessError(onSuccess, onError))
+readFile("hello.txt", "UTF-8", callbackWithSuccessOrError(onSuccess, onError))
 ```
 
 ## Utility function #3
@@ -139,7 +139,7 @@ readFile("hello.txt", "UTF-8", nodeCallbackWithSuccessError(onSuccess, onError))
 Last example converts the result to a promise.
 
 ```re
-let nodeCallbackWithPromise = (
+let callbackWithPromise = (
   f: Js.Promise.t<'a> => unit,
   . error: callbackError,
   result: callbackResult<'a>,
@@ -174,7 +174,7 @@ let handlePromise = (promise: Js.Promise.t<string>) => {
   ->ignore
 }
 
-readFile("hello.txt", "UTF-8", nodeCallbackWithPromise(handlePromise))
+readFile("hello.txt", "UTF-8", callbackWithPromise(handlePromise))
 ```
 
 ## Reference

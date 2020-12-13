@@ -28,11 +28,11 @@
 </code></pre>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
 <p>If your callback only supplies an error, then you can use a similar type:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackOnlyError =<span class="hljs-function"> (. <span class="hljs-params">nodeError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>
+<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackOnlyError =<span class="hljs-function"> (. <span class="hljs-params">callbackError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>
 </code></pre>
 <h2>Utility function #1</h2>
 <p>An example utility function for handling node callbacks that returns a <code>Result</code>.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithResult =<span class="hljs-function"> (
+<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithResult =<span class="hljs-function"> (
   <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Result</span>.</span>t&lt;&#x27;a,</span> Js.Exn.t&gt; =&gt; unit,</span>
   . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
 </span>  <span class="hljs-params">result<span class="hljs-typing">: callbackResult&lt;&#x27;a&gt;,</span>
@@ -57,11 +57,11 @@
   <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
 }
 
-read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">nodeCallbackWithResult</span>(<span class="hljs-params">onResult</span>)</span>)
+read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">callbackWithResult</span>(<span class="hljs-params">onResult</span>)</span>)
 </code></pre>
 <h2>Utility function #2</h2>
 <p>Another example utility function that uses <code>onSuccess</code> and <code>onError</code> callbacks</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithSuccessError =<span class="hljs-function"> (
+<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithSuccessOrError =<span class="hljs-function"> (
   <span class="hljs-params">onSuccess<span class="hljs-typing">: &#x27;a =&gt; unit,</span>
 </span>  <span class="hljs-params">onError<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span>t =&gt; unit,</span>
 </span>  . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
@@ -89,11 +89,11 @@ read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.tx
   <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
 }
 
-read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">nodeCallbackWithSuccessError</span>(<span class="hljs-params">onSuccess</span>, <span class="hljs-params">onError</span>)</span>)
+read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">callbackWithSuccessOrError</span>(<span class="hljs-params">onSuccess</span>, <span class="hljs-params">onError</span>)</span>)
 </code></pre>
 <h2>Utility function #3</h2>
 <p>Last example converts the result to a promise.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> nodeCallbackWithPromise =<span class="hljs-function"> (
+<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithPromise =<span class="hljs-function"> (
   <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>t&lt;&#x27;a&gt; =&gt; unit,</span>
 </span>  . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
 </span>  <span class="hljs-params">result<span class="hljs-typing">: callbackResult&lt;&#x27;a&gt;,</span>
@@ -125,7 +125,7 @@ let handlePromise = (promise: Js.Promise.t&lt;string&gt;) =&gt; {
   -&gt;ignore
 }
 
-readFile(&quot;hello.txt&quot;, &quot;UTF-8&quot;, nodeCallbackWithPromise(handlePromise))
+readFile(&quot;hello.txt&quot;, &quot;UTF-8&quot;, callbackWithPromise(handlePromise))
 </code></pre>
 <h2>Reference</h2>
 <p>This content came from a post on the ReasonML forums. Copying here for reference:</p>
