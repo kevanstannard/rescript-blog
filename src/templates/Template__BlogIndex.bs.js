@@ -4,26 +4,35 @@
 var React = require("react");
 var Template__Html$RescriptBlog = require("./Template__Html.bs.js");
 
-function blogPostToListItem(blogPost) {
-  return React.createElement("p", {
-              key: blogPost.id
-            }, React.createElement("a", {
+function Template__BlogIndex$BlogPost(Props) {
+  var blogPost = Props.blogPost;
+  return React.createElement("p", undefined, React.createElement("a", {
                   href: blogPost.id + ".html"
                 }, blogPost.title), React.createElement("br", undefined), React.createElement("span", undefined, blogPost.date.toDateString()));
 }
 
+var BlogPost = {
+  make: Template__BlogIndex$BlogPost
+};
+
 function Template__BlogIndex(Props) {
   var blogPosts = Props.blogPosts;
+  var title = "ReScript Blog";
   return React.createElement(Template__Html$RescriptBlog.make, {
-              title: "ReScript Blog",
+              title: title,
               children: null
             }, React.createElement("p", undefined, React.createElement("a", {
                       href: "about.html"
-                    }, "About this blog →")), React.createElement("h1", undefined, "ReScript Blog"), blogPosts.map(blogPostToListItem));
+                    }, "About this blog →")), React.createElement("h1", undefined, title), blogPosts.map(function (blogPost) {
+                  return React.createElement(Template__BlogIndex$BlogPost, {
+                              blogPost: blogPost,
+                              key: blogPost.id
+                            });
+                }));
 }
 
 var make = Template__BlogIndex;
 
-exports.blogPostToListItem = blogPostToListItem;
+exports.BlogPost = BlogPost;
 exports.make = make;
 /* react Not a pure module */
