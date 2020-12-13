@@ -13,7 +13,6 @@
   "dependencies": {
     "browser-sync": "^2.26.13",
     "bs-platform": "^8.4.2",
-    "connect": "^3.7.0",
     "copyfiles": "^2.4.1",
     "front-matter": "^3.0.2",
     "glob": "^7.1.6",

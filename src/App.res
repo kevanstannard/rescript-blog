@@ -32,6 +32,7 @@ let makePages = () => {
   Pages.readPageCollection(pagesDir)->Js.Promise.then_(Pages.createPages(outputDir, Render.page), _)
 }
 
+// The make() function is called by the build script
 let make = () => {
   Pages.cleanDirectory(outputDir)->Js.Promise.then_(makeBlog, _)->Js.Promise.then_(makePages, _)
 }
