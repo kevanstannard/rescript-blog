@@ -9,6 +9,7 @@ let blogPostToListItem = (blogPost: Pages.blogPost) => {
 @react.component
 let make = (~blogPosts: array<Pages.blogPost>) => {
   <Template__Html title="ReScript Blog">
+    <p> <a href="about.html"> {ReasonReact.string(`About this blog →`)} </a> </p>
     <h1> {ReasonReact.string("ReScript Blog")} </h1>
     {blogPosts->Js.Array2.map(blogPostToListItem)->ReasonReact.array}
   </Template__Html>

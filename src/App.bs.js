@@ -4,48 +4,73 @@
 var React = require("react");
 var Pages$ReasonBlog = require("./modules/Pages.bs.js");
 var Server = require("react-dom/server");
+var Template__Page$ReasonBlog = require("./templates/Template__Page.bs.js");
 var Template__BlogPost$ReasonBlog = require("./templates/Template__BlogPost.bs.js");
 var Template__BlogIndex$ReasonBlog = require("./templates/Template__BlogIndex.bs.js");
 
+var pagesDir = "./content/pages";
+
 var postsDir = "./content/posts";
 
-var blogDir = "./docs";
+var outputDir = "./docs";
 
 function prefixWithDocType(html) {
   return "<!doctype html>" + html;
 }
 
-function renderBlogIndex(blogPosts) {
+function blogIndex(blogPosts) {
   var el = React.createElement(Template__BlogIndex$ReasonBlog.make, {
         blogPosts: blogPosts
       });
   return "<!doctype html>" + Server.renderToString(el);
 }
 
-function renderBlogPost(blogPost) {
+function blogPost(blogPost$1) {
   var el = React.createElement(Template__BlogPost$ReasonBlog.make, {
-        blogPost: blogPost
+        blogPost: blogPost$1
       });
   return "<!doctype html>" + Server.renderToString(el);
 }
 
+function page(page$1) {
+  var el = React.createElement(Template__Page$ReasonBlog.make, {
+        page: page$1
+      });
+  return "<!doctype html>" + Server.renderToString(el);
+}
+
+var Render = {
+  prefixWithDocType: prefixWithDocType,
+  blogIndex: blogIndex,
+  blogPost: blogPost,
+  page: page
+};
+
 function makeBlog(param) {
-  var createBlog = function (param) {
-    return Pages$ReasonBlog.createBlog(blogDir, renderBlogPost, renderBlogIndex, param);
-  };
   var __x = Pages$ReasonBlog.readPageCollection(postsDir);
-  return __x.then(createBlog);
+  return __x.then(function (param) {
+              return Pages$ReasonBlog.createBlog(outputDir, blogPost, blogIndex, param);
+            });
+}
+
+function makePages(param) {
+  var __x = Pages$ReasonBlog.readPageCollection(pagesDir);
+  return __x.then(function (param) {
+              return Pages$ReasonBlog.createPages(outputDir, page, param);
+            });
 }
 
 function make(param) {
-  return makeBlog(undefined);
+  var __x = Pages$ReasonBlog.cleanDirectory(outputDir);
+  var __x$1 = __x.then(makeBlog);
+  return __x$1.then(makePages);
 }
 
+exports.pagesDir = pagesDir;
 exports.postsDir = postsDir;
-exports.blogDir = blogDir;
-exports.prefixWithDocType = prefixWithDocType;
-exports.renderBlogIndex = renderBlogIndex;
-exports.renderBlogPost = renderBlogPost;
+exports.outputDir = outputDir;
+exports.Render = Render;
 exports.makeBlog = makeBlog;
+exports.makePages = makePages;
 exports.make = make;
 /* react Not a pure module */

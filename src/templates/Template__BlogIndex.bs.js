@@ -17,7 +17,9 @@ function Template__BlogIndex(Props) {
   return React.createElement(Template__Html$ReasonBlog.make, {
               title: "ReScript Blog",
               children: null
-            }, React.createElement("h1", undefined, "ReScript Blog"), blogPosts.map(blogPostToListItem));
+            }, React.createElement("p", undefined, React.createElement("a", {
+                      href: "about.html"
+                    }, "About this blog →")), React.createElement("h1", undefined, "ReScript Blog"), blogPosts.map(blogPostToListItem));
 }
 
 var make = Template__BlogIndex;

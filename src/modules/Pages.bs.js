@@ -107,22 +107,6 @@ function ensureDirectoryExists(dir) {
   
 }
 
-function deleteDirectoryContents(dir) {
-  return new Promise((function (resolve, reject) {
-                var glob = dir + "/**/*";
-                return Rimraf(glob, (function (error) {
-                              if (error == null) {
-                                return resolve(undefined);
-                              } else {
-                                return reject({
-                                            RE_EXN_ID: "Failure",
-                                            _1: "Error deleting the directory " + dir
-                                          });
-                              }
-                            }));
-              }));
-}
-
 function createBlog(outputDir, renderBlogPost, renderBlogIndex, collection) {
   var blogPosts = pageCollectionToBlogPosts(collection);
   var createPosts = function (param) {
@@ -141,12 +125,41 @@ function createBlog(outputDir, renderBlogPost, renderBlogIndex, collection) {
     return File$ReasonBlog.writeFile(filePath, html);
   };
   ensureDirectoryExists(outputDir);
-  var __x = deleteDirectoryContents(outputDir);
-  var __x$1 = __x.then(createPosts);
-  return __x$1.then(createIndex);
+  var __x = createPosts(undefined);
+  return __x.then(createIndex);
+}
+
+function createPages(outputDir, renderPage, collection) {
+  ensureDirectoryExists(outputDir);
+  var __x = Promise.all(Belt_Array.map(collection, (function (param) {
+              var html = Curry._1(renderPage, param);
+              var filePath = outputDir + "/" + param.id + ".html";
+              return File$ReasonBlog.writeFile(filePath, html);
+            })));
+  return __x.then(function (param) {
+              return Promise.resolve(undefined);
+            });
+}
+
+function cleanDirectory(dir) {
+  return new Promise((function (resolve, reject) {
+                var glob = dir + "/**/*";
+                return Rimraf(glob, (function (error) {
+                              if (error == null) {
+                                return resolve(undefined);
+                              } else {
+                                return reject({
+                                            RE_EXN_ID: "Failure",
+                                            _1: "Error deleting the directory " + dir
+                                          });
+                              }
+                            }));
+              }));
 }
 
 exports.readPageCollection = readPageCollection;
 exports.findPageById = findPageById;
+exports.cleanDirectory = cleanDirectory;
 exports.createBlog = createBlog;
+exports.createPages = createPages;
 /* fs Not a pure module */

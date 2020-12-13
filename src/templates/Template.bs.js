@@ -6,6 +6,9 @@ var BlogIndex;
 
 var BlogPost;
 
+var Page;
+
 exports.BlogIndex = BlogIndex;
 exports.BlogPost = BlogPost;
+exports.Page = Page;
 /* No side effect */

@@ -15,8 +15,6 @@ type blogPost = {
   body: string,
 }
 
-type blog = {posts: array<blogPost>}
-
 type attributes = {
   id: option<string>,
   title: option<string>,
@@ -157,7 +155,23 @@ let createBlog = (
 
   ensureDirectoryExists(outputDir)
 
-  deleteDirectoryContents(outputDir)
-  ->Js.Promise.then_(createPosts, _)
-  ->Js.Promise.then_(createIndex, _)
+  createPosts()->Js.Promise.then_(createIndex, _)
+}
+
+let writePage = (outputDir: string, renderPage: page => string, page: page): Js.Promise.t<unit> => {
+  let html = page->renderPage
+  let filePath = outputDir ++ "/" ++ page.id ++ ".html"
+  File.writeFile(filePath, html)
+}
+
+let createPages = (outputDir: string, renderPage: page => string, collection: pageCollection) => {
+  ensureDirectoryExists(outputDir)
+  collection
+  ->Belt.Array.map(writePage(outputDir, renderPage))
+  ->Js.Promise.all
+  ->Js.Promise.then_(_ => Js.Promise.resolve(), _)
+}
+
+let cleanDirectory = (dir: string) => {
+  deleteDirectoryContents(dir)
 }
