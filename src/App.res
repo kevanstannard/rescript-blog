@@ -21,16 +21,9 @@ module Render = {
   }
 }
 
-let makeBlog = () => {
-  Pages.readPageCollection(postsDir)->Js.Promise.then_(
-    Pages.createBlog(outputDir, Render.blogPost, Render.blogIndex),
-    _,
-  )
-}
+let makeBlog = () => Pages.createBlog(postsDir, outputDir, Render.blogPost, Render.blogIndex)
 
-let makePages = () => {
-  Pages.readPageCollection(pagesDir)->Js.Promise.then_(Pages.createPages(outputDir, Render.page), _)
-}
+let makePages = () => Pages.createPages(pagesDir, outputDir, Render.page)
 
 // The make() function is called by the build script
 let make = () => {

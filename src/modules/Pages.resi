@@ -1,4 +1,4 @@
-type page = {
+type content = {
   filePath: string,
   id: string,
   date: option<Js.Date.t>,
@@ -6,7 +6,7 @@ type page = {
   body: string,
 }
 
-type pageCollection = array<page>
+type contentCollection = array<content>
 
 type blogPost = {
   id: string,
@@ -15,17 +15,23 @@ type blogPost = {
   body: string,
 }
 
-let readPageCollection: string => Js.Promise.t<pageCollection>
+type page = {
+  id: string,
+  title: string,
+  body: string,
+}
 
-let findPageById: (pageCollection, string) => option<page>
+let readContentCollection: string => Js.Promise.t<contentCollection>
+
+let findContentById: (contentCollection, string) => option<content>
 
 let cleanDirectory: string => Js.Promise.t<unit>
 
 let createBlog: (
   string,
+  string,
   blogPost => string,
   array<blogPost> => string,
-  pageCollection,
 ) => Js.Promise.t<unit>
 
-let createPages: (string, page => string, pageCollection) => Js.Promise.t<unit>
+let createPages: (string, string, page => string) => Js.Promise.t<unit>

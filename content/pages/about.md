@@ -1,7 +1,5 @@
 ---
-id: about
 title: About this blog
-date: 2020-12-13 13:06:19
 ---
 
 A simple blog about ReScript.

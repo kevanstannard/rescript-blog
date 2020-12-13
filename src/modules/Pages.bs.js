@@ -13,7 +13,7 @@ var Belt_SortArray = require("bs-platform/lib/js/belt_SortArray.js");
 var File$RescriptBlog = require("./File.bs.js");
 var Markdown$RescriptBlog = require("../bindings/Markdown.bs.js");
 
-function parsePage(data, filePath) {
+function parseContent(data, filePath) {
   var fm = FrontMatter(data);
   var match = fm.attributes;
   var id = match.id;
@@ -28,20 +28,20 @@ function parsePage(data, filePath) {
         };
 }
 
-function readPage(filePath) {
+function readContentFile(filePath) {
   var __x = File$RescriptBlog.readFile(filePath);
   return __x.then(function (content) {
-              return Promise.resolve(parsePage(content, filePath));
+              return Promise.resolve(parseContent(content, filePath));
             });
 }
 
-function readPages(filePaths) {
-  return Promise.all(filePaths.map(readPage));
+function readContentFiles(filePaths) {
+  return Promise.all(filePaths.map(readContentFile));
 }
 
-function compareDateDescending(pageA, pageB) {
-  var match = pageA.date;
-  var match$1 = pageB.date;
+function compareDateDescending(contentA, contentB) {
+  var match = contentA.date;
+  var match$1 = contentB.date;
   if (match === undefined) {
     return 0;
   }
@@ -59,30 +59,30 @@ function compareDateDescending(pageA, pageB) {
   }
 }
 
-function readPageCollection(dirPath) {
+function readContentCollection(dirPath) {
   var __x = File$RescriptBlog.glob(dirPath + "/*.md");
-  var __x$1 = __x.then(readPages);
+  var __x$1 = __x.then(readContentFiles);
   return __x$1.then(function (collection) {
               return Promise.resolve(Belt_SortArray.stableSortBy(collection, compareDateDescending));
             });
 }
 
-function findPageById(collection, id) {
-  return Caml_option.undefined_to_opt(collection.find(function (page) {
-                  return page.id === id;
+function findContentById(collection, id) {
+  return Caml_option.undefined_to_opt(collection.find(function (content) {
+                  return content.id === id;
                 }));
 }
 
-function pageCollectionToBlogPosts(collection) {
-  return Belt_Array.reduce(collection, [], (function (blogPosts, page) {
-                var title = page.title;
-                var date = page.date;
-                var filePath = page.filePath;
+function contentCollectionToBlogPosts(collection) {
+  return Belt_Array.reduce(collection, [], (function (blogPosts, content) {
+                var title = content.title;
+                var date = content.date;
+                var filePath = content.filePath;
                 if (date !== undefined) {
                   if (title !== undefined) {
-                    var blogPost_id = page.id;
+                    var blogPost_id = content.id;
                     var blogPost_date = Caml_option.valFromOption(date);
-                    var blogPost_body = page.body;
+                    var blogPost_body = content.body;
                     var blogPost = {
                       id: blogPost_id,
                       date: blogPost_date,
@@ -99,46 +99,30 @@ function pageCollectionToBlogPosts(collection) {
               }));
 }
 
+function contentCollectionToPages(collection) {
+  return Belt_Array.reduce(collection, [], (function (pages, content) {
+                var title = content.title;
+                if (title !== undefined) {
+                  var page_id = content.id;
+                  var page_body = content.body;
+                  var page = {
+                    id: page_id,
+                    title: title,
+                    body: page_body
+                  };
+                  return Belt_Array.concat(pages, [page]);
+                }
+                console.log("title missing in " + content.filePath);
+                return pages;
+              }));
+}
+
 function ensureDirectoryExists(dir) {
   if (!Fs.existsSync(dir)) {
     Fs.mkdirSync(dir);
     return ;
   }
   
-}
-
-function createBlog(outputDir, renderBlogPost, renderBlogIndex, collection) {
-  var blogPosts = pageCollectionToBlogPosts(collection);
-  var createPosts = function (param) {
-    var __x = Promise.all(Belt_Array.map(blogPosts, (function (param) {
-                var html = Curry._1(renderBlogPost, param);
-                var filePath = outputDir + "/" + param.id + ".html";
-                return File$RescriptBlog.writeFile(filePath, html);
-              })));
-    return __x.then(function (param) {
-                return Promise.resolve(undefined);
-              });
-  };
-  var createIndex = function (param) {
-    var html = Curry._1(renderBlogIndex, blogPosts);
-    var filePath = outputDir + "/index.html";
-    return File$RescriptBlog.writeFile(filePath, html);
-  };
-  ensureDirectoryExists(outputDir);
-  var __x = createPosts(undefined);
-  return __x.then(createIndex);
-}
-
-function createPages(outputDir, renderPage, collection) {
-  ensureDirectoryExists(outputDir);
-  var __x = Promise.all(Belt_Array.map(collection, (function (param) {
-              var html = Curry._1(renderPage, param);
-              var filePath = outputDir + "/" + param.id + ".html";
-              return File$RescriptBlog.writeFile(filePath, html);
-            })));
-  return __x.then(function (param) {
-              return Promise.resolve(undefined);
-            });
 }
 
 function cleanDirectory(dir) {
@@ -157,8 +141,48 @@ function cleanDirectory(dir) {
               }));
 }
 
-exports.readPageCollection = readPageCollection;
-exports.findPageById = findPageById;
+function createBlog(collectionDir, outputDir, renderBlogPost, renderBlogIndex) {
+  var __x = readContentCollection(collectionDir);
+  return __x.then(function (param) {
+              var blogPosts = contentCollectionToBlogPosts(param);
+              var createPosts = function (param) {
+                var __x = Promise.all(Belt_Array.map(blogPosts, (function (param) {
+                            var html = Curry._1(renderBlogPost, param);
+                            var filePath = outputDir + "/" + param.id + ".html";
+                            return File$RescriptBlog.writeFile(filePath, html);
+                          })));
+                return __x.then(function (param) {
+                            return Promise.resolve(undefined);
+                          });
+              };
+              var createIndex = function (param) {
+                var html = Curry._1(renderBlogIndex, blogPosts);
+                var filePath = outputDir + "/index.html";
+                return File$RescriptBlog.writeFile(filePath, html);
+              };
+              ensureDirectoryExists(outputDir);
+              var __x = createPosts(undefined);
+              return __x.then(createIndex);
+            });
+}
+
+function createPages(collectionDir, outputDir, renderPage) {
+  var __x = readContentCollection(collectionDir);
+  return __x.then(function (param) {
+              ensureDirectoryExists(outputDir);
+              var __x = Promise.all(Belt_Array.map(contentCollectionToPages(param), (function (param) {
+                          var html = Curry._1(renderPage, param);
+                          var filePath = outputDir + "/" + param.id + ".html";
+                          return File$RescriptBlog.writeFile(filePath, html);
+                        })));
+              return __x.then(function (param) {
+                          return Promise.resolve(undefined);
+                        });
+            });
+}
+
+exports.readContentCollection = readContentCollection;
+exports.findContentById = findContentById;
 exports.cleanDirectory = cleanDirectory;
 exports.createBlog = createBlog;
 exports.createPages = createPages;

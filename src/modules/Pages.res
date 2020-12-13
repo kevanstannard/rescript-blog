@@ -1,4 +1,4 @@
-type page = {
+type content = {
   filePath: string,
   id: string,
   date: option<Js.Date.t>,
@@ -6,7 +6,7 @@ type page = {
   body: string,
 }
 
-type pageCollection = array<page>
+type contentCollection = array<content>
 
 type blogPost = {
   id: string,
@@ -15,7 +15,13 @@ type blogPost = {
   body: string,
 }
 
-type attributes = {
+type page = {
+  id: string,
+  title: string,
+  body: string,
+}
+
+type contentAttributes = {
   id: option<string>,
   title: option<string>,
   date: option<Js.Date.t>,
@@ -23,9 +29,9 @@ type attributes = {
 
 let pathBaseName = (path: string) => Path.basename(~path, ~ext=".md", ())
 
-let parsePage = (data: string, filePath: string): page => {
+let parseContent = (data: string, filePath: string): content => {
   let fm = FrontMatter.parse(data)
-  let {id, title, date}: attributes = fm.attributes
+  let {id, title, date}: contentAttributes = fm.attributes
   let body = Markdown.render(fm.body)
   let pageId = {
     switch id {
@@ -42,16 +48,16 @@ let parsePage = (data: string, filePath: string): page => {
   }
 }
 
-let readPage = (filePath: string): Js.Promise.t<page> =>
+let readContentFile = (filePath: string): Js.Promise.t<content> =>
   filePath
   ->File.readFile
-  ->Js.Promise.then_((content: string) => content->parsePage(filePath)->Js.Promise.resolve, _)
+  ->Js.Promise.then_((content: string) => content->parseContent(filePath)->Js.Promise.resolve, _)
 
-let readPages = (filePaths: array<string>): Js.Promise.t<pageCollection> =>
-  filePaths->Js.Array2.map(readPage)->Js.Promise.all
+let readContentFiles = (filePaths: array<string>): Js.Promise.t<contentCollection> =>
+  filePaths->Js.Array2.map(readContentFile)->Js.Promise.all
 
-let compareDateDescending = (pageA: page, pageB: page) => {
-  switch (pageA.date, pageB.date) {
+let compareDateDescending = (contentA: content, contentB: content) => {
+  switch (contentA.date, contentB.date) {
   | (Some(a), Some(b)) =>
     if a == b {
       0
@@ -64,20 +70,20 @@ let compareDateDescending = (pageA: page, pageB: page) => {
   }
 }
 
-let sortByDateDescending = (collection: pageCollection): pageCollection =>
+let sortByDateDescending = (collection: contentCollection): contentCollection =>
   collection->Belt.SortArray.stableSortBy(compareDateDescending)
 
-let readPageCollection = (dirPath: string): Js.Promise.t<pageCollection> =>
+let readContentCollection = (dirPath: string): Js.Promise.t<contentCollection> =>
   File.glob(dirPath ++ "/*.md")
-  ->Js.Promise.then_(readPages, _)
+  ->Js.Promise.then_(readContentFiles, _)
   ->Js.Promise.then_(collection => sortByDateDescending(collection)->Js.Promise.resolve, _)
 
-let findPageById = (collection: pageCollection, id: string): option<page> =>
-  collection->Js.Array2.find((page: page) => page.id == id)
+let findContentById = (collection: contentCollection, id: string): option<content> =>
+  collection->Js.Array2.find((content: content) => content.id == id)
 
-let pageCollectionToBlogPosts = (collection: pageCollection) => {
-  Belt.Array.reduce(collection, [], (blogPosts, page): array<blogPost> => {
-    let {filePath, id, date, title, body} = page
+let contentCollectionToBlogPosts = (collection: contentCollection) => {
+  Belt.Array.reduce(collection, [], (blogPosts, content): array<blogPost> => {
+    let {filePath, id, date, title, body} = content
     switch (date, title) {
     | (Some(date), Some(title)) => {
         let blogPost: blogPost = {id: id, date: date, title: title, body: body}
@@ -90,6 +96,23 @@ let pageCollectionToBlogPosts = (collection: pageCollection) => {
     | (_, None) => {
         Js.log("title missing in " ++ filePath)
         blogPosts
+      }
+    }
+  })
+}
+
+let contentCollectionToPages = (collection: contentCollection) => {
+  Belt.Array.reduce(collection, [], (pages, content): array<page> => {
+    let {filePath, id, title, body} = content
+    switch title {
+    | Some(title) => {
+        let page: page = {id: id, title: title, body: body}
+        Belt.Array.concat(pages, [page])
+      }
+
+    | None => {
+        Js.log("title missing in " ++ filePath)
+        pages
       }
     }
   })
@@ -134,13 +157,13 @@ let writeBlogIndex = (
   File.writeFile(filePath, html)
 }
 
-let createBlog = (
+let createBlogFromCollection = (
   outputDir: string,
   renderBlogPost: blogPost => string,
   renderBlogIndex: array<blogPost> => string,
-  collection: pageCollection,
+  collection: contentCollection,
 ) => {
-  let blogPosts = collection->pageCollectionToBlogPosts
+  let blogPosts = collection->contentCollectionToBlogPosts
 
   let createPosts = () => {
     blogPosts
@@ -164,9 +187,14 @@ let writePage = (outputDir: string, renderPage: page => string, page: page): Js.
   File.writeFile(filePath, html)
 }
 
-let createPages = (outputDir: string, renderPage: page => string, collection: pageCollection) => {
+let createPagesFromCollection = (
+  outputDir: string,
+  renderPage: page => string,
+  collection: contentCollection,
+) => {
   ensureDirectoryExists(outputDir)
   collection
+  ->contentCollectionToPages
   ->Belt.Array.map(writePage(outputDir, renderPage))
   ->Js.Promise.all
   ->Js.Promise.then_(_ => Js.Promise.resolve(), _)
@@ -174,4 +202,18 @@ let createPages = (outputDir: string, renderPage: page => string, collection: pa
 
 let cleanDirectory = (dir: string) => {
   deleteDirectoryContents(dir)
+}
+
+let createBlog = (collectionDir, outputDir, renderBlogPost, renderBlogIndex) => {
+  readContentCollection(collectionDir)->Js.Promise.then_(
+    createBlogFromCollection(outputDir, renderBlogPost, renderBlogIndex),
+    _,
+  )
+}
+
+let createPages = (collectionDir, outputDir, renderPage) => {
+  readContentCollection(collectionDir)->Js.Promise.then_(
+    createPagesFromCollection(outputDir, renderPage),
+    _,
+  )
 }

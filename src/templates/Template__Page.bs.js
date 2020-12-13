@@ -2,12 +2,11 @@
 'use strict';
 
 var React = require("react");
-var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Template__Html$RescriptBlog = require("./Template__Html.bs.js");
 
 function Template__Page(Props) {
   var page = Props.page;
-  var title = Belt_Option.getWithDefault(page.title, "");
+  var title = page.title;
   return React.createElement(Template__Html$RescriptBlog.make, {
               title: title,
               children: null

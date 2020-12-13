@@ -47,17 +47,11 @@ var Render = {
 };
 
 function makeBlog(param) {
-  var __x = Pages$RescriptBlog.readPageCollection(postsDir);
-  return __x.then(function (param) {
-              return Pages$RescriptBlog.createBlog(outputDir, blogPost, blogIndex, param);
-            });
+  return Pages$RescriptBlog.createBlog(postsDir, outputDir, blogPost, blogIndex);
 }
 
 function makePages(param) {
-  var __x = Pages$RescriptBlog.readPageCollection(pagesDir);
-  return __x.then(function (param) {
-              return Pages$RescriptBlog.createPages(outputDir, page, param);
-            });
+  return Pages$RescriptBlog.createPages(pagesDir, outputDir, page);
 }
 
 function make(param) {
