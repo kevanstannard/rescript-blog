@@ -67,12 +67,6 @@ function readContentCollection(dirPath) {
             });
 }
 
-function findContentById(collection, id) {
-  return Caml_option.undefined_to_opt(collection.find(function (content) {
-                  return content.id === id;
-                }));
-}
-
 function contentCollectionToBlogPosts(collection) {
   return Belt_Array.reduce(collection, [], (function (blogPosts, content) {
                 var title = content.title;
@@ -182,7 +176,6 @@ function createPages(collectionDir, outputDir, renderPage) {
 }
 
 exports.readContentCollection = readContentCollection;
-exports.findContentById = findContentById;
 exports.cleanDirectory = cleanDirectory;
 exports.createBlog = createBlog;
 exports.createPages = createPages;

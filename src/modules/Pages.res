@@ -78,9 +78,6 @@ let readContentCollection = (dirPath: string): Js.Promise.t<contentCollection> =
   ->Js.Promise.then_(readContentFiles, _)
   ->Js.Promise.then_(collection => sortByDateDescending(collection)->Js.Promise.resolve, _)
 
-let findContentById = (collection: contentCollection, id: string): option<content> =>
-  collection->Js.Array2.find((content: content) => content.id == id)
-
 let contentCollectionToBlogPosts = (collection: contentCollection) => {
   Belt.Array.reduce(collection, [], (blogPosts, content): array<blogPost> => {
     let {filePath, id, date, title, body} = content

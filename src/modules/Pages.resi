@@ -23,8 +23,6 @@ type page = {
 
 let readContentCollection: string => Js.Promise.t<contentCollection>
 
-let findContentById: (contentCollection, string) => option<content>
-
 let cleanDirectory: string => Js.Promise.t<unit>
 
 let createBlog: (
