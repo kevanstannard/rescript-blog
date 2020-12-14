@@ -1,0 +1,97 @@
+<!doctype html><html data-reactroot=""><head><title>How to handle JavaScript objects with different shapes in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to handle JavaScript objects with different shapes in ReScript?</h1><p>Tue Dec 15 2020</p><div><p>Sometimes we need to handle JavaScript data that may have arbitrary fields.</p>
+<p>Suppose we have the following data coming from JavaScript:</p>
+<pre><code class="language-re">%%raw(`
+const dataA = {
+  body: <span class="hljs-string">&quot;My hello content&quot;</span>,
+  attributes: {
+    id: <span class="hljs-number">1</span>,
+    title: <span class="hljs-string">&quot;Hello&quot;</span>,
+    date: <span class="hljs-keyword">new</span> <span class="hljs-constructor">Date(<span class="hljs-string">&quot;2020-12-14 19:47:57&quot;</span>)</span>
+  }
+}
+
+const dataB = {
+  body: <span class="hljs-string">&quot;My world content&quot;</span>,
+  attributes: {
+    title: <span class="hljs-string">&quot;World&quot;</span>,
+    template: <span class="hljs-string">&quot;main&quot;</span>
+  }
+}
+`)
+</code></pre>
+<p>Notice that the attributes are different in each case.</p>
+<p>How to type this data?</p>
+<p>If we <strong>know in advance</strong> what the possible shapes may be, we can use <strong>polymorphic object</strong> types.</p>
+<p>For example, we can type the data as follows:</p>
+<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataA: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: &#x27;a} = <span class="hljs-string">&quot;dataA&quot;</span>
+@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataB: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: &#x27;a} = <span class="hljs-string">&quot;dataB&quot;</span>
+</code></pre>
+<p>Notice the types of the two objects are the <strong>same</strong> and the <code>attributes</code> type is not specified.</p>
+<p>To declare the type of the <code>attribites</code> we need to use <strong>inline</strong> types. Let's create a function for each type.</p>
+<p>For &quot;dataA&quot;:</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataA =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: &#x27;<span class="hljs-params">a</span>}) =&gt;</span> {
+  <span class="hljs-keyword">let</span> o: {
+    <span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>,
+    <span class="hljs-string">&quot;attributes&quot;</span>: {
+      ..
+      <span class="hljs-string">&quot;id&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
+      <span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
+      <span class="hljs-string">&quot;date&quot;</span>: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Date</span>.</span></span>t&gt;
+    },
+  } = data
+
+  <span class="hljs-keyword">let</span> body: <span class="hljs-built_in">string</span> = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">body</span>&quot;]</span>
+  <span class="hljs-keyword">let</span> id: option&lt;<span class="hljs-built_in">string</span>&gt; = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">attributes</span>&quot;]</span><span class="hljs-literal">[&quot;<span class="hljs-identifier">id</span>&quot;]</span>
+  <span class="hljs-keyword">let</span> title: option&lt;<span class="hljs-built_in">string</span>&gt; = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">attributes</span>&quot;]</span><span class="hljs-literal">[&quot;<span class="hljs-identifier">title</span>&quot;]</span>
+  <span class="hljs-keyword">let</span> date: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Date</span>.</span></span>t&gt; = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">attributes</span>&quot;]</span><span class="hljs-literal">[&quot;<span class="hljs-identifier">date</span>&quot;]</span>
+
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(body)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(id)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(title)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(date)
+}
+</code></pre>
+<p>and &quot;dataB&quot;:</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataB =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: &#x27;<span class="hljs-params">a</span>}) =&gt;</span> {
+  <span class="hljs-keyword">let</span> o: {
+    <span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>,
+    <span class="hljs-string">&quot;attributes&quot;</span>: {
+      ..
+      <span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
+      <span class="hljs-string">&quot;template&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;
+    },
+  } = data
+
+  <span class="hljs-keyword">let</span> body: <span class="hljs-built_in">string</span> = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">body</span>&quot;]</span>
+  <span class="hljs-keyword">let</span> title: option&lt;<span class="hljs-built_in">string</span>&gt; = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">attributes</span>&quot;]</span><span class="hljs-literal">[&quot;<span class="hljs-identifier">title</span>&quot;]</span>
+  <span class="hljs-keyword">let</span> template: option&lt;<span class="hljs-built_in">string</span>&gt; = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">attributes</span>&quot;]</span><span class="hljs-literal">[&quot;<span class="hljs-identifier">template</span>&quot;]</span>
+
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(body)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(title)
+  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(template)
+}
+</code></pre>
+<h2>Notes</h2>
+<p>This strategy is only useful when you <strong>know the data types</strong>. If the data types change, then ReScript won't know about it.</p>
+<h2>Context</h2>
+<p>The context for this post was parsing Markdown files with &quot;front matter&quot;.</p>
+<p>For the examples above, the Markdown file content was as follows.</p>
+<p>File #1:</p>
+<pre><code>---
+id: 1
+title: Hello
+date: 2020-12-15 06:16:22
+---
+
+My hello content
+</code></pre>
+<p>File #2:</p>
+<pre><code>---
+title: World
+template: main
+---
+
+My world content
+</code></pre>
+<p>Which was then parsed using a <a href="https://github.com/jxson/front-matter">Markdown parser</a>.</p>
+</div></div></body></html>
