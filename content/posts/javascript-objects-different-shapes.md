@@ -37,26 +37,21 @@ If we **know in advance** what the possible shapes may be, we can use **polymorp
 For example, we can type the data as follows:
 
 ```re
-@bs.val external dataA: {"body": string, "attributes": 'a} = "dataA"
-@bs.val external dataB: {"body": string, "attributes": 'a} = "dataB"
+@bs.val external dataA: {"body": string, "attributes": {..}} = "dataA"
+@bs.val external dataB: {"body": string, "attributes": {..}} = "dataB"
 ```
 
-Notice the types of the two objects are the **same** and the `attributes` type is not specified.
+Notice the types of `dataA` and `dataB` are the **same** with the `attributes` type being an "open" object.
 
-To declare the type of the `attribites` we need to use **inline** types. Let's create a function for each type.
+Next, we can use **inline** types to dynamically assign the attribute types.
 
 For "dataA":
 
 ```re
-let handleDataA = (data: {"body": string, "attributes": 'a}) => {
+let handleDataA = (data: {"body": string, "attributes": {..}}) => {
   let o: {
     "body": string,
-    "attributes": {
-      ..
-      "id": option<string>,
-      "title": option<string>,
-      "date": option<Js.Date.t>
-    },
+    "attributes": {"id": option<string>, "title": option<string>, "date": option<Js.Date.t>},
   } = data
 
   let body: string = o["body"]
@@ -71,17 +66,13 @@ let handleDataA = (data: {"body": string, "attributes": 'a}) => {
 }
 ```
 
-and "dataB":
+And "dataB":
 
 ```re
-let handleDataB = (data: {"body": string, "attributes": 'a}) => {
+let handleDataB = (data: {"body": string, "attributes": {..}}) => {
   let o: {
     "body": string,
-    "attributes": {
-      ..
-      "title": option<string>,
-      "template": option<string>
-    },
+    "attributes": {"title": option<string>, "template": option<string>},
   } = data
 
   let body: string = o["body"]
@@ -94,13 +85,20 @@ let handleDataB = (data: {"body": string, "attributes": 'a}) => {
 }
 ```
 
+Then test the types with:
+
+```re
+handleDataA(dataA)
+handleDataB(dataB)
+```
+
 ## Notes
 
 This strategy is only useful when you **know the data types**. If the data types change, then ReScript won't know about it.
 
 ## Context
 
-The context for this post was parsing Markdown files with "front matter".
+The context for this post was parsing Markdown files containing "front matter".
 
 For the examples above, the Markdown file content was as follows.
 

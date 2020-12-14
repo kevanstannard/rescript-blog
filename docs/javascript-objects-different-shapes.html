@@ -23,21 +23,16 @@ const dataB = {
 <p>How to type this data?</p>
 <p>If we <strong>know in advance</strong> what the possible shapes may be, we can use <strong>polymorphic object</strong> types.</p>
 <p>For example, we can type the data as follows:</p>
-<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataA: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: &#x27;a} = <span class="hljs-string">&quot;dataA&quot;</span>
-@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataB: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: &#x27;a} = <span class="hljs-string">&quot;dataB&quot;</span>
+<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataA: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: {..}} = <span class="hljs-string">&quot;dataA&quot;</span>
+@bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> dataB: {<span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>, <span class="hljs-string">&quot;attributes&quot;</span>: {..}} = <span class="hljs-string">&quot;dataB&quot;</span>
 </code></pre>
-<p>Notice the types of the two objects are the <strong>same</strong> and the <code>attributes</code> type is not specified.</p>
-<p>To declare the type of the <code>attribites</code> we need to use <strong>inline</strong> types. Let's create a function for each type.</p>
+<p>Notice the types of <code>dataA</code> and <code>dataB</code> are the <strong>same</strong> with the <code>attributes</code> type being an &quot;open&quot; object.</p>
+<p>Next, we can use <strong>inline</strong> types to dynamically assign the attribute types.</p>
 <p>For &quot;dataA&quot;:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataA =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: &#x27;<span class="hljs-params">a</span>}) =&gt;</span> {
+<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataA =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: {..}}) =&gt;</span> {
   <span class="hljs-keyword">let</span> o: {
     <span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>,
-    <span class="hljs-string">&quot;attributes&quot;</span>: {
-      ..
-      <span class="hljs-string">&quot;id&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
-      <span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
-      <span class="hljs-string">&quot;date&quot;</span>: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Date</span>.</span></span>t&gt;
-    },
+    <span class="hljs-string">&quot;attributes&quot;</span>: {<span class="hljs-string">&quot;id&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;, <span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;, <span class="hljs-string">&quot;date&quot;</span>: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Date</span>.</span></span>t&gt;},
   } = data
 
   <span class="hljs-keyword">let</span> body: <span class="hljs-built_in">string</span> = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">body</span>&quot;]</span>
@@ -51,15 +46,11 @@ const dataB = {
   <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(date)
 }
 </code></pre>
-<p>and &quot;dataB&quot;:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataB =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: &#x27;<span class="hljs-params">a</span>}) =&gt;</span> {
+<p>And &quot;dataB&quot;:</p>
+<pre><code class="language-re"><span class="hljs-keyword">let</span> handleDataB =<span class="hljs-function"> (<span class="hljs-params">data</span>: {&quot;<span class="hljs-params">body</span>&quot;: <span class="hljs-params">string</span>, &quot;<span class="hljs-params">attributes</span>&quot;: {..}}) =&gt;</span> {
   <span class="hljs-keyword">let</span> o: {
     <span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">string</span>,
-    <span class="hljs-string">&quot;attributes&quot;</span>: {
-      ..
-      <span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;,
-      <span class="hljs-string">&quot;template&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;
-    },
+    <span class="hljs-string">&quot;attributes&quot;</span>: {<span class="hljs-string">&quot;title&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;, <span class="hljs-string">&quot;template&quot;</span>: option&lt;<span class="hljs-built_in">string</span>&gt;},
   } = data
 
   <span class="hljs-keyword">let</span> body: <span class="hljs-built_in">string</span> = o<span class="hljs-literal">[&quot;<span class="hljs-identifier">body</span>&quot;]</span>
@@ -71,10 +62,14 @@ const dataB = {
   <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(template)
 }
 </code></pre>
+<p>Then test the types with:</p>
+<pre><code class="language-re">handle<span class="hljs-constructor">DataA(<span class="hljs-params">dataA</span>)</span>
+handle<span class="hljs-constructor">DataB(<span class="hljs-params">dataB</span>)</span>
+</code></pre>
 <h2>Notes</h2>
 <p>This strategy is only useful when you <strong>know the data types</strong>. If the data types change, then ReScript won't know about it.</p>
 <h2>Context</h2>
-<p>The context for this post was parsing Markdown files with &quot;front matter&quot;.</p>
+<p>The context for this post was parsing Markdown files containing &quot;front matter&quot;.</p>
 <p>For the examples above, the Markdown file content was as follows.</p>
 <p>File #1:</p>
 <pre><code>---
