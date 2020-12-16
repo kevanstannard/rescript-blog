@@ -4,8 +4,8 @@ title: About this blog
 
 A simple blog about ReScript.
 
-Custom static site generator written in ReScript  
-https://github.com/kevanstannard/rescript-blog
+Created with the **React Static** static site generator  
+https://github.com/kevanstannard/rescript-static
 
 CSS theme  
 https://github.com/markdowncss/modest
