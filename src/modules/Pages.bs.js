@@ -39,17 +39,14 @@ function readContentFiles(filePaths) {
   return Promise.all(filePaths.map(readContentFile));
 }
 
-function compareDateDescending(contentA, contentB) {
-  var match = contentA.date;
-  var match$1 = contentB.date;
-  if (match === undefined) {
-    return 0;
-  }
-  if (match$1 === undefined) {
-    return 0;
-  }
-  var b = Caml_option.valFromOption(match$1);
-  var a = Caml_option.valFromOption(match);
+function readContentCollection(dirPath) {
+  var __x = File$RescriptBlog.glob(dirPath + "/*.md");
+  return __x.then(readContentFiles);
+}
+
+function compareDateDescending(blogPostA, blogPostB) {
+  var a = blogPostA.date;
+  var b = blogPostB.date;
   if (Caml_obj.caml_equal(a, b)) {
     return 0;
   } else if (Caml_obj.caml_lessthan(a, b)) {
@@ -59,38 +56,30 @@ function compareDateDescending(contentA, contentB) {
   }
 }
 
-function readContentCollection(dirPath) {
-  var __x = File$RescriptBlog.glob(dirPath + "/*.md");
-  var __x$1 = __x.then(readContentFiles);
-  return __x$1.then(function (collection) {
-              return Promise.resolve(Belt_SortArray.stableSortBy(collection, compareDateDescending));
-            });
-}
-
 function contentCollectionToBlogPosts(collection) {
-  return Belt_Array.reduce(collection, [], (function (blogPosts, content) {
-                var title = content.title;
-                var date = content.date;
-                var filePath = content.filePath;
-                if (date !== undefined) {
-                  if (title !== undefined) {
-                    var blogPost_id = content.id;
-                    var blogPost_date = Caml_option.valFromOption(date);
-                    var blogPost_body = content.body;
-                    var blogPost = {
-                      id: blogPost_id,
-                      date: blogPost_date,
-                      title: title,
-                      body: blogPost_body
-                    };
-                    return Belt_Array.concat(blogPosts, [blogPost]);
-                  }
-                  console.log("title missing in " + filePath);
-                  return blogPosts;
-                }
-                console.log("date missing in " + filePath);
-                return blogPosts;
-              }));
+  return Belt_SortArray.stableSortBy(Belt_Array.reduce(collection, [], (function (blogPosts, content) {
+                    var title = content.title;
+                    var date = content.date;
+                    var filePath = content.filePath;
+                    if (date !== undefined) {
+                      if (title !== undefined) {
+                        var blogPost_id = content.id;
+                        var blogPost_date = Caml_option.valFromOption(date);
+                        var blogPost_body = content.body;
+                        var blogPost = {
+                          id: blogPost_id,
+                          date: blogPost_date,
+                          title: title,
+                          body: blogPost_body
+                        };
+                        return Belt_Array.concat(blogPosts, [blogPost]);
+                      }
+                      console.log("title missing in " + filePath);
+                      return blogPosts;
+                    }
+                    console.log("date missing in " + filePath);
+                    return blogPosts;
+                  })), compareDateDescending);
 }
 
 function contentCollectionToPages(collection) {

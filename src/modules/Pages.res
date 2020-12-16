@@ -56,30 +56,26 @@ let readContentFile = (filePath: string): Js.Promise.t<content> =>
 let readContentFiles = (filePaths: array<string>): Js.Promise.t<contentCollection> =>
   filePaths->Js.Array2.map(readContentFile)->Js.Promise.all
 
-let compareDateDescending = (contentA: content, contentB: content) => {
-  switch (contentA.date, contentB.date) {
-  | (Some(a), Some(b)) =>
-    if a == b {
-      0
-    } else if a < b {
-      1
-    } else {
-      -1
-    }
-  | _ => 0
+let readContentCollection = (dirPath: string): Js.Promise.t<contentCollection> =>
+  File.glob(dirPath ++ "/*.md")->Js.Promise.then_(readContentFiles, _)
+
+let compareDateDescending = (blogPostA: blogPost, blogPostB: blogPost) => {
+  let a = blogPostA.date
+  let b = blogPostB.date
+  if a == b {
+    0
+  } else if a < b {
+    1
+  } else {
+    -1
   }
 }
 
-let sortByDateDescending = (collection: contentCollection): contentCollection =>
-  collection->Belt.SortArray.stableSortBy(compareDateDescending)
-
-let readContentCollection = (dirPath: string): Js.Promise.t<contentCollection> =>
-  File.glob(dirPath ++ "/*.md")
-  ->Js.Promise.then_(readContentFiles, _)
-  ->Js.Promise.then_(collection => sortByDateDescending(collection)->Js.Promise.resolve, _)
+let sortByDateDescending = (blogPosts: array<blogPost>): array<blogPost> =>
+  blogPosts->Belt.SortArray.stableSortBy(compareDateDescending)
 
 let contentCollectionToBlogPosts = (collection: contentCollection) => {
-  Belt.Array.reduce(collection, [], (blogPosts, content): array<blogPost> => {
+  let posts = Belt.Array.reduce(collection, [], (blogPosts, content): array<blogPost> => {
     let {filePath, id, date, title, body} = content
     switch (date, title) {
     | (Some(date), Some(title)) => {
@@ -96,6 +92,7 @@ let contentCollectionToBlogPosts = (collection: contentCollection) => {
       }
     }
   })
+  posts->sortByDateDescending
 }
 
 let contentCollectionToPages = (collection: contentCollection) => {
