@@ -2,4 +2,4 @@
 
 https://kevanstannard.github.io/rescript-blog/
 
-Created with the [React Static](https://github.com/kevanstannard/rescript-static) static site generator.
+Created with the [ReScript Static](https://github.com/kevanstannard/rescript-static) static site generator.
