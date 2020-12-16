@@ -33,4 +33,8 @@ let createBlog: (
   ~renderBlogIndex: array<blogPost> => string,
 ) => Js.Promise.t<unit>
 
-let createPages: (string, string, page => string) => Js.Promise.t<unit>
+let createPages: (
+  ~collectionDir: string,
+  ~outputDir: string,
+  ~renderPage: page => string,
+) => Js.Promise.t<unit>

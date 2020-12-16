@@ -207,7 +207,7 @@ let createBlog = (~collectionDir, ~outputDir, ~indexName, ~renderBlogPost, ~rend
   )
 }
 
-let createPages = (collectionDir, outputDir, renderPage) => {
+let createPages = (~collectionDir, ~outputDir, ~renderPage) => {
   readContentCollection(collectionDir)->Js.Promise.then_(
     createPagesFromCollection(outputDir, renderPage),
     _,

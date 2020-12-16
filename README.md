@@ -18,7 +18,7 @@ npm run dev
 
 ## Development
 
-Templates are in `/src/templates`,
+Templates are in `/src/templates`.
 
 CSS and images can be placed in `/static`.
 

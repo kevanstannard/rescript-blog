@@ -30,7 +30,8 @@ let makeBlog = () =>
     ~renderBlogIndex=Render.blogIndex,
   )
 
-let makePages = () => Pages.createPages(pagesDir, outputDir, Render.page)
+let makePages = () =>
+  Pages.createPages(~collectionDir=pagesDir, ~outputDir, ~renderPage=Render.page)
 
 let make = () => {
   Pages.cleanDirectory(outputDir)->Js.Promise.then_(makeBlog, _)->Js.Promise.then_(makePages, _)
