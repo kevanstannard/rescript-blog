@@ -1,0 +1,13 @@
+<!doctype html><html data-reactroot=""><head><title>Reading JSON files in ReScript</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Reading JSON files in ReScript</h1><p>Sat Feb 06 2021</p><div><pre><code>ReScript version: bs-platform@9.0.0
+</code></pre>
+<p>ReScript has built in support for reading JSON files.</p>
+<p>For example, to read the <code>package.json</code> file:</p>
+<pre><code class="language-res">// Define the type and properties you want to access
+// Alternatively you can use Js.Json.t
+type package = {dependencies: Js.Dict.t&lt;string&gt;}
+
+@module external package: package = &quot;../package.json&quot;
+
+Js.Dict.keys(package.dependencies)-&gt;Js.Array2.forEach(Js.log)
+</code></pre>
+</div></div></body></html>
