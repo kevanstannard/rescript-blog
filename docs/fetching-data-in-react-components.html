@@ -1,0 +1,28 @@
+<!doctype html><html data-reactroot=""><head><title>Fetching data in React components</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Fetching data in React components</h1><p>Sun Feb 14 2021</p><div><pre><code>ReScript version: bs-platform@9.0.0
+</code></pre>
+<p>When fetching data within React components, we can use <code>XMLHttpRequest</code> so the requests are cancellable.</p>
+<pre><code class="language-res">// Notice that instead of `useEffect`, we have `useEffect0`. See
+// reasonml.github.io/reason-react/docs/en/components#hooks for more info
+React.useEffect0(() =&gt; {
+  let request = makeXMLHttpRequest()
+  request-&gt;addEventListener(&quot;load&quot;, () =&gt; {
+    setState(_previousState =&gt; LoadedDogs((request-&gt;response-&gt;parseResponse)##message));
+  })
+  request-&gt;addEventListener(&quot;error&quot;, () =&gt; {
+    setState(_previousState =&gt; ErrorFetchingDogs);
+  })
+  request-&gt;open_(&quot;GET&quot;, &quot;https://dog.ceo/api/breeds/image/random/3&quot;);
+  request-&gt;send
+
+  // the return value is called by React's useEffect when the component unmounts
+  Some(() =&gt; {
+    request-&gt;abort
+  })
+});
+</code></pre>
+<h2>References</h2>
+<ul>
+<li><a href="https://forum.rescript-lang.org/t/how-do-i-perform-http-requests/251/28">https://forum.rescript-lang.org/t/how-do-i-perform-http-requests/251/28</a></li>
+<li><a href="https://gist.github.com/chenglou/b6cf738a5d7adbde2ee008eb93117b49#file-fetcheddogpictures-re-L50">https://gist.github.com/chenglou/b6cf738a5d7adbde2ee008eb93117b49#file-fetcheddogpictures-re-L50</a></li>
+</ul>
+</div></div></body></html>
