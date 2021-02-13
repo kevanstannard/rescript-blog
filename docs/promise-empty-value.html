@@ -1,0 +1,8 @@
+<!doctype html><html data-reactroot=""><head><title>Return empty value in a promise</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Return empty value in a promise</h1><p>Sun Feb 14 2021</p><div><pre><code>ReScript version: bs-platform@9.0.0
+</code></pre>
+<p>When using <code>Promise.make()</code> you can return an empty value using <code>ignore()</code>:</p>
+<pre><code class="language-res">let _ = Promise.make((resolve, _reject) =&gt; {
+  resolve(. ignore())
+})
+</code></pre>
+</div></div></body></html>
