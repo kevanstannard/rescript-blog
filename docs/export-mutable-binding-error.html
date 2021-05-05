@@ -1,0 +1,41 @@
+<!doctype html><html data-reactroot=""><head><title>Error when exporting a mutable binding</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Error when exporting a mutable binding</h1><p>Thu May 06 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<p>When attemping to export mutable bindings we may see an error.</p>
+<p>For example, this code:</p>
+<pre><code class="language-res">let good = None
+let bad = ref(None) // Error
+</code></pre>
+<p>Produces the error:</p>
+<pre><code>This expression's type contains type variables that can't be generalized:
+ref&lt;option&lt;'_weak1&gt;&gt;
+
+This happens when the type system senses there's a mutation/side-effect,
+in combination with a polymorphic value.
+Using or annotating that value usually solves it.
+</code></pre>
+<p><code>bad</code> is both mutable <strong>and</strong> does not have a well defined type yet. This can be fixed by declaring a type:</p>
+<pre><code class="language-res">let good = None
+let bad: ref&lt;option&lt;string&gt;&gt; = ref(None)
+</code></pre>
+<p><code>bad</code> is no longer a polymorphic type.</p>
+<p>Next, consider the case of <strong>open</strong> polymorphic types:</p>
+<pre><code class="language-res">let good: [&gt; #Red] = #Red
+let bad: ref&lt;[&gt; #Red]&gt; = ref(#Red) // Error
+</code></pre>
+<p>This produces the error:</p>
+<pre><code>This expression's type contains type variables that can't be generalized:
+ref&lt;_[&gt; #Red]&gt;
+
+This happens when the type system senses there's a mutation/side-effect,
+in combination with a polymorphic value.
+Using or annotating that value usually solves it.
+</code></pre>
+<p>This may be solved by changing the type to a <strong>closed</strong> poly var.</p>
+<pre><code class="language-res">let good: [&gt; #Red] = #Red
+let bad: ref&lt;[#Red]&gt; = ref(#Red)
+</code></pre>
+<h2>Reference</h2>
+<ul>
+<li><a href="https://forum.rescript-lang.org/t/learning-poly-variants/1574/2">https://forum.rescript-lang.org/t/learning-poly-variants/1574/2</a></li>
+</ul>
+</div></div></body></html>
