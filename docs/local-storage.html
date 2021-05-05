@@ -2,13 +2,13 @@
 </code></pre>
 <p>ReScript provides a <a href="https://rescript-lang.org/docs/manual/latest/api/dom/storage2">Dom.Storage2</a> module for accessing local storage (and session storage).</p>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage2</span>.</span></span>set<span class="hljs-constructor">Item(Dom.Storage2.<span class="hljs-params">localStorage</span>, <span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;hello&quot;</span>)</span>
+<pre><code class="language-res">Dom.Storage2.setItem(Dom.Storage2.localStorage, &quot;message&quot;, &quot;hello&quot;)
 
-<span class="hljs-keyword">let</span> messageOpt = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dom</span>.</span><span class="hljs-module"><span class="hljs-identifier">Storage2</span>.</span></span>get<span class="hljs-constructor">Item(Dom.Storage2.<span class="hljs-params">localStorage</span>, <span class="hljs-string">&quot;message&quot;</span>)</span>
+let messageOpt = Dom.Storage2.getItem(Dom.Storage2.localStorage, &quot;message&quot;)
 
 switch messageOpt {
-<span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;No message&quot;</span>)
-<span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">value</span>)</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(value)
+| None =&gt; Js.log(&quot;No message&quot;)
+| Some(value) =&gt; Js.log(value)
 }
 </code></pre>
 </div></div></body></html>

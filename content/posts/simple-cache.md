@@ -7,7 +7,7 @@ In this post, let's consider caching a database connection.
 
 For this post consider a mock connection function and omit callbacks or promises to make the code simpler.
 
-```re
+```res
 module Database = {
   type client = {id: string}
   let connect = (id: string): client => {id: id}
@@ -16,7 +16,7 @@ module Database = {
 
 ## Example 1: Caching using a ref
 
-```re
+```res
 let cache: Pervasives.ref<option<Database.client>> = ref(None)
 
 let connect = () => {
@@ -33,7 +33,7 @@ let connect = () => {
 
 ## Example 2: Caching using a Dict
 
-```re
+```res
 let cache: Js.Dict.t<Database.client> = Js.Dict.empty()
 
 let connect = () => {

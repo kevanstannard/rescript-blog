@@ -2,19 +2,19 @@
 </code></pre>
 <p>Use the <code>%external(your_global)</code> annotation.</p>
 <p>This returns an <code>option</code> value.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> devOpt = %<span class="hljs-keyword">external</span>(__DEV__)
+<pre><code class="language-res">let devOpt = %external(__DEV__)
 switch devOpt {
-<span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;development mode&quot;</span>)
-<span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(<span class="hljs-string">&quot;production mode&quot;</span>)
+| Some(_) =&gt; Js.log(&quot;development mode&quot;)
+| None =&gt; Js.log(&quot;production mode&quot;)
 }
 </code></pre>
 <p>This generates:</p>
-<pre><code class="language-js"><span class="hljs-keyword">var</span> devOpt = <span class="hljs-keyword">typeof</span> __DEV__ === <span class="hljs-string">&quot;undefined&quot;</span> ? <span class="hljs-literal">undefined</span> : __DEV__;
+<pre><code class="language-js">var devOpt = typeof __DEV__ === &quot;undefined&quot; ? undefined : __DEV__;
 
-<span class="hljs-keyword">if</span> (devOpt !== <span class="hljs-literal">undefined</span>) {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;development mode&quot;</span>);
-} <span class="hljs-keyword">else</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;production mode&quot;</span>);
+if (devOpt !== undefined) {
+  console.log(&quot;development mode&quot;);
+} else {
+  console.log(&quot;production mode&quot;);
 }
 </code></pre>
 </div></div></body></html>

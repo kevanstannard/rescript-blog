@@ -3,30 +3,30 @@
 <p>As of this writing, there is an <a href="https://github.com/reasonml-community/bs-webapi-incubator">experimental DOM binding</a> being developed.</p>
 <p>However if your needs are simple you may like to create your own simple bindings.</p>
 <h2>Bindings</h2>
-<pre><code class="language-re"><span class="hljs-keyword">module</span> Element = {
-  <span class="hljs-keyword">type</span> t
-  @bs.send <span class="hljs-keyword">external</span> innerText:<span class="hljs-function"> (<span class="hljs-params">t</span>, <span class="hljs-params">string</span>) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;innerText&quot;</span>
+<pre><code class="language-res">module Element = {
+  type t
+  @bs.send external innerText: (t, string) =&gt; unit = &quot;innerText&quot;
 }
 
-<span class="hljs-keyword">module</span> Document = {
-  <span class="hljs-keyword">type</span> t
-  @bs.send <span class="hljs-keyword">external</span> getElementById:<span class="hljs-function"> (<span class="hljs-params">t</span>, <span class="hljs-params">string</span>) =&gt;</span> option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>t&gt; = <span class="hljs-string">&quot;getElementById&quot;</span>
+module Document = {
+  type t
+  @bs.send external getElementById: (t, string) =&gt; option&lt;Element.t&gt; = &quot;getElementById&quot;
 }
 
-<span class="hljs-keyword">module</span> Window = {
-  <span class="hljs-keyword">type</span> t
-  @bs.<span class="hljs-keyword">val</span> <span class="hljs-keyword">external</span> document: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Document</span>.</span></span>t = <span class="hljs-string">&quot;document&quot;</span>
+module Window = {
+  type t
+  @bs.val external document: Document.t = &quot;document&quot;
 }
 </code></pre>
 <h2>Example usage</h2>
-<pre><code class="language-re"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Window</span>.</span></span>document
--&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Document</span>.</span></span>get<span class="hljs-constructor">ElementById(<span class="hljs-string">&quot;my-element&quot;</span>)</span>
--&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>map((el: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>t) =&gt; el-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Element</span>.</span></span>inner<span class="hljs-constructor">Text(<span class="hljs-string">&quot;Hello&quot;</span>)</span>)
+<pre><code class="language-res">Window.document
+-&gt;Document.getElementById(&quot;my-element&quot;)
+-&gt;Belt.Option.map((el: Element.t) =&gt; el-&gt;Element.innerText(&quot;Hello&quot;))
 </code></pre>
 <p>Here, we're using <code>Belt.Option.map()</code> to get access to the element value, but this could also be a <code>switch</code> statement.</p>
 <p>This generates the JavaScript code:</p>
-<pre><code class="language-js">Belt_Option.map(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;my-element&quot;</span>), <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el</span>) </span>{
-  el.innerText(<span class="hljs-string">&quot;Hello&quot;</span>);
+<pre><code class="language-js">Belt_Option.map(document.getElementById(&quot;my-element&quot;), function (el) {
+  el.innerText(&quot;Hello&quot;);
 });
 </code></pre>
 </div></div></body></html>

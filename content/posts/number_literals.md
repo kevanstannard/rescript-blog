@@ -11,7 +11,7 @@ Number literals may use an `_` separator as a thousand's separator.
 
 For example:
 
-```re
+```res
 let x = 3_000_000
 ```
 

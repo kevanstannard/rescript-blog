@@ -11,7 +11,7 @@ Use the `%external(your_global)` annotation.
 
 This returns an `option` value.
 
-```re
+```res
 let devOpt = %external(__DEV__)
 switch devOpt {
 | Some(_) => Js.log("development mode")

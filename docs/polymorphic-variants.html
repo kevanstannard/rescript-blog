@@ -3,25 +3,24 @@
 <p>Polymorphic variants are distinguished from ordinary variants by the leading hash.</p>
 <p>Unlike ordinary variants, polymorphic variants can be used without an explicit type declaration.</p>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> status = #yes
+<pre><code class="language-res">let status = #yes
 
-<span class="hljs-keyword">let</span> statusString = {
+let statusString = {
   switch status {
-  <span class="hljs-pattern-match">| #yes =&gt;</span> <span class="hljs-string">&quot;Yes&quot;</span>
-  <span class="hljs-pattern-match">| #no =&gt;</span> <span class="hljs-string">&quot;No&quot;</span>
+  | #yes =&gt; &quot;Yes&quot;
+  | #no =&gt; &quot;No&quot;
   }
 }
 </code></pre>
 <p>However they may be assigned to a type:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> color = <span class="hljs-literal">[#<span class="hljs-identifier">red</span> | #<span class="hljs-identifier">green</span> | #<span class="hljs-identifier">blue</span>]</span>
+<pre><code class="language-res">type color = [#red | #green | #blue]
 
-<span class="hljs-keyword">let</span> colorToString = (color: color):<span class="hljs-function"> <span class="hljs-params">string</span> =&gt;</span> {
+let colorToString = (color: color): string =&gt; {
   switch color {
-  <span class="hljs-pattern-match">| #red =&gt;</span> <span class="hljs-string">&quot;Red&quot;</span>
-  <span class="hljs-pattern-match">| #green =&gt;</span> <span class="hljs-string">&quot;Green&quot;</span>
-  <span class="hljs-pattern-match">| #blue =&gt;</span> <span class="hljs-string">&quot;Blue&quot;</span>
+  | #red =&gt; &quot;Red&quot;
+  | #green =&gt; &quot;Green&quot;
+  | #blue =&gt; &quot;Blue&quot;
   }
-}```
-
+}
 </code></pre>
 </div></div></body></html>

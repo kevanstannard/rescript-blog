@@ -9,7 +9,7 @@ ReScript version: bs-platform@8.4.2
 
 Use the `@bs.val` annotation:
 
-```re
+```res
 @bs.val external setTimeout : (unit => unit, int) => float = "setTimeout";
 
 let _ = setTimeout(() => {

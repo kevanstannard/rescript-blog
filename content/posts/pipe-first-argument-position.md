@@ -9,7 +9,7 @@ However, it's possible to change it's insert position using the underscore place
 
 For example:
 
-```re
+```res
 type item = {id: int, group: string, name: string}
 
 let make = (id: int, name: string, group: string) => {id: id, name: name, group: group}

@@ -13,7 +13,7 @@ However if your needs are simple you may like to create your own simple bindings
 
 ## Bindings
 
-```re
+```res
 module Element = {
   type t
   @bs.send external innerText: (t, string) => unit = "innerText"
@@ -32,7 +32,7 @@ module Window = {
 
 ## Example usage
 
-```re
+```res
 Window.document
 ->Document.getElementById("my-element")
 ->Belt.Option.map((el: Element.t) => el->Element.innerText("Hello"))

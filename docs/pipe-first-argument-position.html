@@ -1,11 +1,11 @@
 <!doctype html><html data-reactroot=""><head><title>Pipe first argument position</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Pipe first argument position</h1><p>Thu Jan 07 2021</p><div><p>The pipe first operator <code>-&gt;</code> inserts a value into the first argument of a function.</p>
 <p>However, it's possible to change it's insert position using the underscore placeholder <code>_</code>.</p>
 <p>For example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> item = {id: <span class="hljs-built_in">int</span>, group: <span class="hljs-built_in">string</span>, name: <span class="hljs-built_in">string</span>}
+<pre><code class="language-res">type item = {id: int, group: string, name: string}
 
-<span class="hljs-keyword">let</span> make =<span class="hljs-function"> (<span class="hljs-params">id</span>: <span class="hljs-params">int</span>, <span class="hljs-params">name</span>: <span class="hljs-params">string</span>, <span class="hljs-params">group</span>: <span class="hljs-params">string</span>) =&gt;</span> {id: id, name: name, group: group}
+let make = (id: int, name: string, group: string) =&gt; {id: id, name: name, group: group}
 
-<span class="hljs-comment">// Insert the value &quot;One&quot; into the middle argument</span>
-<span class="hljs-keyword">let</span> p1 = <span class="hljs-string">&quot;One&quot;</span>-&gt;make(<span class="hljs-number">1</span>, _, <span class="hljs-string">&quot;numbers&quot;</span>)
+// Insert the value &quot;One&quot; into the middle argument
+let p1 = &quot;One&quot;-&gt;make(1, _, &quot;numbers&quot;)
 </code></pre>
 </div></div></body></html>

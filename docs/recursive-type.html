@@ -1,30 +1,30 @@
 <!doctype html><html data-reactroot=""><head><title>How to create a recursive type in ReScript</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to create a recursive type in ReScript</h1><p>Mon Dec 14 2020</p><div><p>Use the <code>rec</code> keyword.</p>
 <p>Example type:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> <span class="hljs-keyword">rec</span> tree&lt;&#x27;a&gt; =
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Node(<span class="hljs-params">tree</span>&lt;&#x27;<span class="hljs-params">a</span>&gt;, &#x27;<span class="hljs-params">a</span>, <span class="hljs-params">tree</span>&lt;&#x27;<span class="hljs-params">a</span>&gt;)</span>
-  | <span class="hljs-constructor">Leaf(&#x27;<span class="hljs-params">a</span>)</span>
-</span></code></pre>
+<pre><code class="language-res">type rec tree&lt;'a&gt; =
+  | Node(tree&lt;'a&gt;, 'a, tree&lt;'a&gt;)
+  | Leaf('a)
+</code></pre>
 <p>Example usage:</p>
-<pre><code class="language-re"><span class="hljs-comment">//      1</span>
-<span class="hljs-comment">//     / \</span>
-<span class="hljs-comment">//    /   \</span>
-<span class="hljs-comment">//   2     5</span>
-<span class="hljs-comment">//  / \   / \</span>
-<span class="hljs-comment">// 3   4 6   7</span>
+<pre><code class="language-res">//      1
+//     / \
+//    /   \
+//   2     5
+//  / \   / \
+// 3   4 6   7
 
-<span class="hljs-keyword">let</span> numbers = <span class="hljs-constructor">Node(Node(Leaf(3)</span>, <span class="hljs-number">2</span>, <span class="hljs-constructor">Leaf(4)</span>), <span class="hljs-number">1</span>, <span class="hljs-constructor">Node(Leaf(6)</span>, <span class="hljs-number">5</span>, <span class="hljs-constructor">Leaf(7)</span>))
+let numbers = Node(Node(Leaf(3), 2, Leaf(4)), 1, Node(Leaf(6), 5, Leaf(7)))
 </code></pre>
 <p>Example functions:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> isNode =<span class="hljs-function"> <span class="hljs-params">tree</span> =&gt;</span>
+<pre><code class="language-res">let isNode = tree =&gt;
   switch tree {
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Node(<span class="hljs-params">_</span>, <span class="hljs-params">_</span>, <span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-literal">true</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Leaf(<span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-literal">false</span>
+  | Node(_, _, _) =&gt; true
+  | Leaf(_) =&gt; false
   }
 
-<span class="hljs-keyword">let</span> isLeaf =<span class="hljs-function"> <span class="hljs-params">tree</span> =&gt;</span>
+let isLeaf = tree =&gt;
   switch tree {
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Node(<span class="hljs-params">_</span>, <span class="hljs-params">_</span>, <span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-literal">false</span>
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Leaf(<span class="hljs-params">_</span>)</span> =&gt;</span> <span class="hljs-literal">true</span>
+  | Node(_, _, _) =&gt; false
+  | Leaf(_) =&gt; true
   }
 </code></pre>
 <h2>Reference</h2>

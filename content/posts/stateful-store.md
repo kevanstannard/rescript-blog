@@ -13,7 +13,7 @@ Firstly, we need to create a stateful store that can be mutated by actions.
 
 Let’s create a `Store` module
 
-```re
+```res
 module Store = {
   type t<'action, 'state> = {
     mutable state: 'state,
@@ -26,7 +26,7 @@ This follows the naming convention `t` for a module. Also notice here that we’
 
 Next, add a function that creates the initial store.
 
-```re
+```res
 let create = (reducer, initialState): t<'action, 'state> => {
   state: initialState,
   reducer: reducer,
@@ -35,7 +35,7 @@ let create = (reducer, initialState): t<'action, 'state> => {
 
 Plus a function for dispatching actions. This mutates the state inside the store.
 
-```re
+```res
 let dispatch = (store, action): unit => {
   store.state = store.reducer(store.state, action)
 }
@@ -43,7 +43,7 @@ let dispatch = (store, action): unit => {
 
 Lastly, let’s add a function for extracting the state from the store.
 
-```re
+```res
 let getState = (store: t<'action, 'state>): 'state => store.state
 ```
 
@@ -53,7 +53,7 @@ Let's write some code that uses our store module.
 
 Declare our types; we’ll create a simple increment/decrement behaviour.
 
-```re
+```res
 type state = {counter: int}
 
 type action =
@@ -63,7 +63,7 @@ type action =
 
 Next, create the reducer to process the actions.
 
-```re
+```res
 let reducer = (state, action) => {
   switch action {
   | Increment => {counter: state.counter + 1}
@@ -74,7 +74,7 @@ let reducer = (state, action) => {
 
 Now, we can create our store.
 
-```re
+```res
 let initalState = {counter: 0}
 
 let store = Store.create(reducer, initalState)
@@ -82,7 +82,7 @@ let store = Store.create(reducer, initalState)
 
 Let’s also create two convenience functions that operate on the store we just created:
 
-```re
+```res
 let dispatch = action => Store.dispatch(store, action)
 
 let getState = () => Store.getState(store)
@@ -90,7 +90,7 @@ let getState = () => Store.getState(store)
 
 And now we can write some code that uses the store:
 
-```re
+```res
 Js.log(getState())
 
 dispatch(Increment)

@@ -9,7 +9,7 @@ ReScript version: bs-platform@8.4.2
 
 Suppose we declare a module signature:
 
-```re
+```res
 module type SHOW = {
   type t
   let show: t => string
@@ -20,13 +20,13 @@ Here we have an abstract type `t` and it's up to the implmentation module to pro
 
 Let's declare a `person` type:
 
-```re
+```res
 type person = {name: string}
 ```
 
 And a `ShowPerson: SHOW` module:
 
-```re
+```res
 module ShowPerson: SHOW = {
   type t = person
   let show = (person: t) => person.name
@@ -35,7 +35,7 @@ module ShowPerson: SHOW = {
 
 Now we can make use of our `ShowPerson` module:
 
-```re
+```res
 let joe: person = {name: "Joe"};
 
 ShowPerson.show(joe);
@@ -50,7 +50,7 @@ Somewhere wanted: ShowPerson.t
 
 To fix this we need to add a `with type` annotation to our `ShowPerson` module:
 
-```re
+```res
 module ShowPerson: SHOW with type t = person = {
   type t = person
   let show = person => person.name

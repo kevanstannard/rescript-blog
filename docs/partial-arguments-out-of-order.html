@@ -1,12 +1,12 @@
 <!doctype html><html data-reactroot=""><head><title>Partially applying function arguments out of order</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Partially applying function arguments out of order</h1><p>Sun Dec 13 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
 </code></pre>
 <p>Suppose you have the following function:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> divide =<span class="hljs-function"> (<span class="hljs-params">a</span>, <span class="hljs-params">b</span>) =&gt;</span> a<span class="hljs-operator"> / </span>b
+<pre><code class="language-res">let divide = (a, b) =&gt; a / b
 </code></pre>
 <p>We can partially apply the <em>second argument</em> by specifying an <code>_</code> for the first argument.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> half = divide(_, <span class="hljs-number">2</span>)
+<pre><code class="language-res">let half = divide(_, 2)
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(half(<span class="hljs-number">10</span>))
-<span class="hljs-comment">// 5</span>
+Js.log(half(10))
+// 5
 </code></pre>
 </div></div></body></html>

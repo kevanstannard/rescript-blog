@@ -19,25 +19,25 @@ This may also be read as `f` after `g`. I.e. we execute `g` first, and then exec
 
 The type of compose could be written as:
 
-```re
+```res
 type compose<'a, 'b, 'c> = ('b => 'c) => ('a => 'b) => 'a => 'c;
 ```
 
 Which in ReScript would typically be written as:
 
-```re
+```res
 type compose<'a, 'b, 'c> = ('b => 'c, 'a => 'b, 'a) => 'c
 ```
 
 We can then write our compose function as:
 
-```re
+```res
 let compose: compose<'a, 'b, 'c> = (f, g, x) => f(g(x))
 ```
 
 Example:
 
-```re
+```res
 let f = x => x + 1
 let g = x => x * 2
 let fn = compose(f, g)

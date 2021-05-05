@@ -7,7 +7,7 @@ Sometimes we need to handle JavaScript data that may have arbitrary fields.
 
 Suppose we have the following data coming from JavaScript:
 
-```re
+```res
 %%raw(`
 const dataA = {
   body: "My hello content",
@@ -36,7 +36,7 @@ If we **know in advance** what the possible shapes may be, we can use **polymorp
 
 For example, we can type the data as follows:
 
-```re
+```res
 @bs.val external dataA: {"body": string, "attributes": {..}} = "dataA"
 @bs.val external dataB: {"body": string, "attributes": {..}} = "dataB"
 ```
@@ -47,7 +47,7 @@ Next, we can use **inline** types to dynamically assign the attribute types.
 
 For "dataA":
 
-```re
+```res
 let handleDataA = (data: {"body": string, "attributes": {..}}) => {
   let o: {
     "body": string,
@@ -68,7 +68,7 @@ let handleDataA = (data: {"body": string, "attributes": {..}}) => {
 
 And "dataB":
 
-```re
+```res
 let handleDataB = (data: {"body": string, "attributes": {..}}) => {
   let o: {
     "body": string,
@@ -87,7 +87,7 @@ let handleDataB = (data: {"body": string, "attributes": {..}}) => {
 
 Then test the types with:
 
-```re
+```res
 handleDataA(dataA)
 handleDataB(dataB)
 ```

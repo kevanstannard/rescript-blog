@@ -3,7 +3,7 @@
 
 var Fs = require("fs");
 var Glob = require("glob");
-var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
+var Belt_Option = require("rescript/lib/js/belt_Option.js");
 
 function readFile(filePath) {
   return new Promise((function (resolve, reject) {

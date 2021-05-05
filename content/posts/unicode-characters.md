@@ -13,14 +13,14 @@ Instead use _backtick_ quoted strings.
 
 Example, double quotes:
 
-```re
+```res
 Js.log("😀")
 // Prints something like "ð"
 ```
 
 Example, backticks:
 
-```re
+```res
 Js.log(`😀`)
 // Prints 😀
 ```

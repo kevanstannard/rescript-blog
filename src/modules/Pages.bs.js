@@ -3,13 +3,13 @@
 
 var Fs = require("fs");
 var Path = require("path");
-var Curry = require("bs-platform/lib/js/curry.js");
+var Curry = require("rescript/lib/js/curry.js");
 var Rimraf = require("rimraf");
-var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
-var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var Caml_option = require("bs-platform/lib/js/caml_option.js");
+var Caml_obj = require("rescript/lib/js/caml_obj.js");
+var Belt_Array = require("rescript/lib/js/belt_Array.js");
+var Caml_option = require("rescript/lib/js/caml_option.js");
 var FrontMatter = require("front-matter");
-var Belt_SortArray = require("bs-platform/lib/js/belt_SortArray.js");
+var Belt_SortArray = require("rescript/lib/js/belt_SortArray.js");
 var File$RescriptBlog = require("./File.bs.js");
 var Markdown$RescriptBlog = require("../bindings/Markdown.bs.js");
 

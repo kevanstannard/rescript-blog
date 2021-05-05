@@ -18,43 +18,43 @@ We’ll be using one of the public APIs that provides random pictures of cats.</
 </code></pre>
 <h2>Fetching the data</h2>
 <p>We can do a simple JSON fetch using the following:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> _ =
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>)
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">json</span> =&gt; Js.<span class="hljs-params">log</span>(<span class="hljs-params">json</span>)</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve, _)
+<pre><code class="language-res">let _ =
+  Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+  -&gt;Js.Promise.then_(Fetch.Response.json, _)
+  -&gt;Js.Promise.then_(json =&gt; Js.log(json)-&gt;Js.Promise.resolve, _)
 </code></pre>
 <p>Next, let’s convert this to a function that returns the cat data.</p>
 <h2>Declaring your API response type</h2>
 <p>In this case the response type is very simple:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> catData = {file: <span class="hljs-built_in">string</span>};
+<pre><code class="language-res">type catData = {file: string};
 </code></pre>
 <h2>Converting your API response</h2>
 <p>Let's declare a Decode module with a catData function that converts the generic <code>Js.Json.t</code> type into a proper <code>catData</code> type.</p>
-<pre><code class="language-re"><span class="hljs-keyword">module</span> Decode = {
-  <span class="hljs-keyword">open</span> Json.Decode
-  <span class="hljs-keyword">let</span> catData =<span class="hljs-function"> (<span class="hljs-params">data</span>: J<span class="hljs-params">s</span>.J<span class="hljs-params">son</span>.<span class="hljs-params">t</span>) =&gt;</span> {
-    file: field(<span class="hljs-string">&quot;file&quot;</span>, <span class="hljs-built_in">string</span>, data),
+<pre><code class="language-res">module Decode = {
+  open Json.Decode
+  let catData = (data: Js.Json.t) =&gt; {
+    file: field(&quot;file&quot;, string, data),
   }
 }
 </code></pre>
 <p>Next we’ll create a fetchCat function to perform the fetch and convert the response.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span>
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>)
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">obj</span> =&gt; <span class="hljs-params">obj</span>-&gt;Decode.<span class="hljs-params">catData</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
+<pre><code class="language-res">let fetchCat = () =&gt;
+  Fetch.fetch(&quot;https://aws.random.cat/meow&quot;)
+  -&gt;Js.Promise.then_(Fetch.Response.json, _)
+  -&gt;Js.Promise.then_(obj =&gt; obj-&gt;Decode.catData-&gt;Js.Promise.resolve, _)
 
-<span class="hljs-keyword">let</span> _ = fetch<span class="hljs-constructor">Cat()</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">data</span> =&gt; <span class="hljs-params">data</span>.<span class="hljs-params">file</span>-&gt;Js.<span class="hljs-params">log</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
+let _ = fetchCat()-&gt;Js.Promise.then_(data =&gt; data.file-&gt;Js.log-&gt;Js.Promise.resolve, _)
 </code></pre>
 <h2>Making the fetch function more generic</h2>
 <p>Next let’s convert the fetch function into something more re-usable.</p>
 <p>For this we can abstract out the url and the decoder.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> fetchJson =<span class="hljs-function"> (<span class="hljs-params">url</span>, <span class="hljs-params">decoder</span>) =&gt;</span>
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Fetch</span>.</span></span>fetch(url)
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(Fetch.Response.<span class="hljs-params">json</span>, <span class="hljs-params">_</span>)</span>
-  -&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">obj</span> =&gt; <span class="hljs-params">obj</span>-&gt;<span class="hljs-params">decoder</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
+<pre><code class="language-res">let fetchJson = (url, decoder) =&gt;
+  Fetch.fetch(url)
+  -&gt;Js.Promise.then_(Fetch.Response.json, _)
+  -&gt;Js.Promise.then_(obj =&gt; obj-&gt;decoder-&gt;Js.Promise.resolve, _)
 
-<span class="hljs-keyword">let</span> fetchCat =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> fetch<span class="hljs-constructor">Json(<span class="hljs-string">&quot;https://aws.random.cat/meow&quot;</span>, Decode.<span class="hljs-params">catData</span>)</span>
+let fetchCat = () =&gt; fetchJson(&quot;https://aws.random.cat/meow&quot;, Decode.catData)
 
-<span class="hljs-keyword">let</span> _ = fetch<span class="hljs-constructor">Cat()</span>-&gt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span><span class="hljs-keyword">then</span><span class="hljs-constructor">_(<span class="hljs-params">data</span> =&gt; <span class="hljs-params">data</span>.<span class="hljs-params">file</span>-&gt;Js.<span class="hljs-params">log</span>-&gt;Js.Promise.<span class="hljs-params">resolve</span>, <span class="hljs-params">_</span>)</span>
+let _ = fetchCat()-&gt;Js.Promise.then_(data =&gt; data.file-&gt;Js.log-&gt;Js.Promise.resolve, _)
 </code></pre>
 </div></div></body></html>

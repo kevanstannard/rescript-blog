@@ -25,7 +25,7 @@ Let's break this down into smaller parts to convert to ReScript.
 
 The `error` argument may be null, or an error object. JavaScript errors in ReScript are typed as `Js.Exn.t`, so the error argument becomes:
 
-```re
+```res
 type callbackError = Js.nullable<Js.Exn.t>
 ```
 
@@ -33,7 +33,7 @@ type callbackError = Js.nullable<Js.Exn.t>
 
 The `items` argument may be null, or provide a value. We can use a generic type here for the value.
 
-```re
+```res
 type callbackResult<'a> = Js.nullable<'a>
 ```
 
@@ -45,7 +45,7 @@ This function returns undefined in JavaScript, so the return value in ReScript w
 
 Now let's define a `callback` function type.
 
-```re
+```res
 type callbackError = Js.nullable<Js.Exn.t>
 type callbackResult<'a> = Js.nullable<'a>
 type callback<'a> = (. callbackError, callbackResult<'a>) => unit
@@ -55,7 +55,7 @@ Note that node callbacks must be uncurried, so we use the `(. )` function argume
 
 If your callback only supplies an error, then you can use a similar type:
 
-```re
+```res
 type callbackOnlyError = (. callbackError) => unit
 ```
 
@@ -63,7 +63,7 @@ type callbackOnlyError = (. callbackError) => unit
 
 An example utility function for handling node callbacks that returns a `Result`.
 
-```re
+```res
 let callbackWithResult = (
   f: Belt.Result.t<'a, Js.Exn.t> => unit,
   . error: callbackError,
@@ -81,7 +81,7 @@ let callbackWithResult = (
 
 Example usage:
 
-```re
+```res
 @bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let onResult = (result: result<string, Js.Exn.t>) => {
@@ -99,7 +99,7 @@ readFile("hello.txt", "UTF-8", callbackWithResult(onResult))
 
 Another example utility function that uses `onSuccess` and `onError` callbacks
 
-```re
+```res
 let callbackWithSuccessOrError = (
   onSuccess: 'a => unit,
   onError: Js.Exn.t => unit,
@@ -118,7 +118,7 @@ let callbackWithSuccessOrError = (
 
 Example usage:
 
-```re
+```res
 @bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let onSuccess = (result: string) => {
@@ -138,7 +138,7 @@ readFile("hello.txt", "UTF-8", callbackWithSuccessOrError(onSuccess, onError))
 
 Last example converts the result to a promise.
 
-```re
+```res
 let callbackWithPromise = (
   f: Js.Promise.t<'a> => unit,
   . error: callbackError,
@@ -159,7 +159,7 @@ let callbackWithPromise = (
 
 Example usage:
 
-```re
+```res
 @bs.module("fs") external readFile: (string, string, callback<string>) => unit = "readFile"
 
 let handlePromise = (promise: Js.Promise.t<string>) => {

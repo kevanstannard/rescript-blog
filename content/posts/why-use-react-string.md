@@ -11,7 +11,7 @@ When writing JSX in ReScript, you will need to use the `ReasonReact.string()` fu
 
 For example:
 
-```re
+```res
 <h1>{ReasonReact.string("Hello")}</h1>
 ```
 
@@ -19,7 +19,7 @@ So why do we need to do this?
 
 The `string()` function in Reason React is implemented as:
 
-```re
+```res
 external string: string => element = "%identity";
 ```
 

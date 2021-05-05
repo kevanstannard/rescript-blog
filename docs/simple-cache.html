@@ -1,35 +1,35 @@
 <!doctype html><html data-reactroot=""><head><title>How to create a simple cache in ReScript</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to create a simple cache in ReScript</h1><p>Fri Dec 18 2020</p><div><p>In this post, let's consider caching a database connection.</p>
 <p>For this post consider a mock connection function and omit callbacks or promises to make the code simpler.</p>
-<pre><code class="language-re"><span class="hljs-keyword">module</span> Database = {
-  <span class="hljs-keyword">type</span> client = {id: <span class="hljs-built_in">string</span>}
-  <span class="hljs-keyword">let</span> connect = (id: <span class="hljs-built_in">string</span>):<span class="hljs-function"> <span class="hljs-params">client</span> =&gt;</span> {id: id}
+<pre><code class="language-res">module Database = {
+  type client = {id: string}
+  let connect = (id: string): client =&gt; {id: id}
 }
 </code></pre>
 <h2>Example 1: Caching using a ref</h2>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> cache: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Pervasives</span>.</span></span><span class="hljs-built_in">ref</span>&lt;option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Database</span>.</span></span>client&gt;&gt; = <span class="hljs-built_in">ref</span>(None)
+<pre><code class="language-res">let cache: Pervasives.ref&lt;option&lt;Database.client&gt;&gt; = ref(None)
 
-<span class="hljs-keyword">let</span> connect =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> {
+let connect = () =&gt; {
   switch cache.contents {
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">client</span>)</span> =&gt;</span> client
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> {
-      <span class="hljs-keyword">let</span> client = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Database</span>.</span></span>connect(<span class="hljs-string">&quot;abc&quot;</span>)
-      cache.contents = <span class="hljs-constructor">Some(<span class="hljs-params">client</span>)</span>
+  | Some(client) =&gt; client
+  | None =&gt; {
+      let client = Database.connect(&quot;abc&quot;)
+      cache.contents = Some(client)
       client
     }
   }
 }
 </code></pre>
 <h2>Example 2: Caching using a Dict</h2>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> cache: <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>t&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Database</span>.</span></span>client&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>empty<span class="hljs-literal">()</span>
+<pre><code class="language-res">let cache: Js.Dict.t&lt;Database.client&gt; = Js.Dict.empty()
 
-<span class="hljs-keyword">let</span> connect =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> {
-  <span class="hljs-keyword">let</span> key: <span class="hljs-built_in">string</span> = <span class="hljs-string">&quot;client&quot;</span>
-  <span class="hljs-keyword">let</span> optClient = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>get(cache, key)
+let connect = () =&gt; {
+  let key: string = &quot;client&quot;
+  let optClient = Js.Dict.get(cache, key)
   switch optClient {
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Some(<span class="hljs-params">client</span>)</span> =&gt;</span> client
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">None</span> =&gt;</span> {
-      <span class="hljs-keyword">let</span> client = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Database</span>.</span></span>connect(<span class="hljs-string">&quot;abc&quot;</span>)
-      <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Dict</span>.</span></span>set(cache, key, client)
+  | Some(client) =&gt; client
+  | None =&gt; {
+      let client = Database.connect(&quot;abc&quot;)
+      Js.Dict.set(cache, key, client)
       client
     }
   }

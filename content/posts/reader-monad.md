@@ -11,13 +11,13 @@ ReScript version: bs-platform@8.4.2
 
 A Reader is a function that takes an "environment" variable, that can be any data, and performs some operation on it.
 
-```re
+```res
 type t<'e, 'a> = Reader('e => 'a)
 ```
 
 Example:
 
-```re
+```res
 let r = Reader(e => e + 1)
 ```
 
@@ -25,14 +25,14 @@ let r = Reader(e => e + 1)
 
 The `run()` function takes a reader and an environment passes the environment to the reader function.
 
-```re
+```res
 type run<'e, 'a> = (t<'e, 'a>, 'e) => 'a
 let run: run<'e, 'a> = (Reader(r), env) => r(env)
 ```
 
 Example:
 
-```re
+```res
 let r1 = Reader(e => e + 1)
 let _ = run(r1, 1)
 // 2
@@ -42,14 +42,14 @@ let _ = run(r1, 1)
 
 The `return()` function creates a reader that always returns the same value, ignoring the environment.
 
-```re
+```res
 type return<'e, 'a> = 'a => t<'e, 'a>
 let return: return<'e, 'a> = a => Reader(_env => a)
 ```
 
 Example:
 
-```re
+```res
 let r2 = return(99)
 let _ = run(r2, 1)
 // 99
@@ -59,14 +59,14 @@ let _ = run(r2, 1)
 
 The `ask()` function creates a reader that returns the environment variable.
 
-```re
+```res
 type ask<'e> = unit => t<'e, 'e>
 let ask: ask<'e> = () => Reader(env => env)
 ```
 
 Example:
 
-```re
+```res
 let r3 = ask()
 let _ = run(r3, 123)
 // 123
@@ -76,14 +76,14 @@ let _ = run(r3, 123)
 
 The `local()` function creates a reader that allows you to transform the environment value before passing it to a subsequent reader.
 
-```re
+```res
 type local<'e, 'a> = ('e => 'e, t<'e, 'a>) => t<'e, 'a>
 let local: local<'e, 'a> = (f, m) => Reader(env => run(m, f(env)))
 ```
 
 Example:
 
-```re
+```res
 let r4 = Reader(e => e + 1)
 let r5 = local(e => -e, r4)
 let _ = run(r5, 1)
@@ -94,14 +94,14 @@ let _ = run(r5, 1)
 
 The `map()` function creates a reader that applies a function to the result provided by the reader.
 
-```re
+```res
 type map<'e, 'a, 'b> = ('a => 'b, t<'e, 'a>) => t<'e, 'b>
 let map: map<'e, 'a, 'b> = (f, m) => Reader(env => f(run(m, env)))
 ```
 
 Example:
 
-```re
+```res
 let r6 = Reader(e => e + 1)
 let r7 = map(x => x * 10, r6)
 let _ = run(r7, 1)
@@ -112,14 +112,14 @@ let _ = run(r7, 1)
 
 The `bind()` function is similar to map, except that the applied function must return a reader rather than a value. This allows two readers to be bound together.
 
-```re
+```res
 type bind<'e, 'a, 'b> = ('a => t<'e, 'b>, t<'e, 'a>) => t<'e, 'b>
 let bind: bind<'e, 'a, 'b> = (f, m) => Reader(env => run(f(run(m, env)), env))
 ```
 
 Example:
 
-```re
+```res
 let r8 = Reader(e => e + 1)
 let r9 = bind(x => Reader(_ => x * 2), r8)
 let _ = run(r9, 1)
@@ -128,7 +128,7 @@ let _ = run(r9, 1)
 
 For this example, we could also use the `return()` function:
 
-```re
+```res
 let r10 = Reader(e => e + 1)
 let r11 = bind(x => return(x * 2), r10)
 let _ = run(r11, 1)
@@ -137,7 +137,7 @@ let _ = run(r11, 1)
 
 And a more sophisitcated example:
 
-```re
+```res
 let greet = (name, greeting) => greeting ++ ": " ++ name
 let lines = Array.map(Js.log)
 let ra = Reader(greet("One"))
@@ -155,14 +155,14 @@ let _ = run(r12, "Hello")
 
 An example which flips the the bind arguments
 
-```re
+```res
 type bindFlip<'a, 'e, 'b> = (t<'e, 'a>, 'a => t<'e, 'b>) => t<'e, 'b>
 let bindFlip: bindFlip<'a, 'e, 'b> = (m, f) => bind(f, m)
 ```
 
 Example:
 
-```re
+```res
 let greet = (name, greeting) => greeting ++ ": " ++ name
 let lines = Array.map(Js.log)
 let ra = Reader(greet("One"))

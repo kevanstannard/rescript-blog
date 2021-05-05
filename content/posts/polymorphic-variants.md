@@ -13,7 +13,7 @@ Unlike ordinary variants, polymorphic variants can be used without an explicit t
 
 Example:
 
-```re
+```res
 let status = #yes
 
 let statusString = {
@@ -26,7 +26,7 @@ let statusString = {
 
 However they may be assigned to a type:
 
-````re
+```res
 type color = [#red | #green | #blue]
 
 let colorToString = (color: color): string => {
@@ -35,6 +35,5 @@ let colorToString = (color: color): string => {
   | #green => "Green"
   | #blue => "Blue"
   }
-}```
-
-````
+}
+```

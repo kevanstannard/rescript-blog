@@ -9,20 +9,20 @@ ReScript version: bs-platform@8.4.2
 
 Suppose we have the following type:
 
-```re
+```res
 type person = Person(string, int);
 ```
 
 We can use this type as follows:
 
-```re
+```res
 let joe = Person("Joe", 23);
 let jim = Person("Jim", 31);
 ```
 
 When we have variables like this, we can use pattern matching to extract the values:
 
-```re
+```res
 let Person(name1, age1) = joe;
 let Person(name2, age2) = jim;
 

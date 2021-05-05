@@ -1,117 +1,117 @@
 <!doctype html><html data-reactroot=""><head><title>What is the type of a node callback in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>What is the type of a node callback in ReScript?</h1><p>Sun Dec 13 2020</p><div><pre><code>ReScript version: bs-platform@8.4.2
 </code></pre>
 <p>Node callbacks are typically of the form:</p>
-<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callback</span>(<span class="hljs-params">error, items</span>) </span>{
-  <span class="hljs-keyword">if</span> (error) {
-    <span class="hljs-comment">// handle error</span>
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-comment">// handle items</span>
+<pre><code class="language-js">function callback(error, items) {
+  if (error) {
+    // handle error
+  } else {
+    // handle items
   }
 }
 </code></pre>
 <p>Let's break this down into smaller parts to convert to ReScript.</p>
 <h2>The error argument</h2>
 <p>The <code>error</code> argument may be null, or an error object. JavaScript errors in ReScript are typed as <code>Js.Exn.t</code>, so the error argument becomes:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt;
+<pre><code class="language-res">type callbackError = Js.nullable&lt;Js.Exn.t&gt;
 </code></pre>
 <h2>The items argument</h2>
 <p>The <code>items</code> argument may be null, or provide a value. We can use a generic type here for the value.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackResult&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;&#x27;a&gt;
+<pre><code class="language-res">type callbackResult&lt;'a&gt; = Js.nullable&lt;'a&gt;
 </code></pre>
 <h2>The return value</h2>
 <p>This function returns undefined in JavaScript, so the return value in ReScript will be <code>unit</code>;</p>
 <h2>The callback function</h2>
 <p>Now let's define a <code>callback</code> function type.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackError = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt;
-<span class="hljs-keyword">type</span> callbackResult&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>nullable&lt;&#x27;a&gt;
-<span class="hljs-keyword">type</span> callback&lt;&#x27;a&gt; =<span class="hljs-function"> (. <span class="hljs-params">callbackError</span>, <span class="hljs-params">callbackResult</span>&lt;&#x27;<span class="hljs-params">a</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span>
+<pre><code class="language-res">type callbackError = Js.nullable&lt;Js.Exn.t&gt;
+type callbackResult&lt;'a&gt; = Js.nullable&lt;'a&gt;
+type callback&lt;'a&gt; = (. callbackError, callbackResult&lt;'a&gt;) =&gt; unit
 </code></pre>
 <p>Note that node callbacks must be uncurried, so we use the <code>(. )</code> function argument notation.</p>
 <p>If your callback only supplies an error, then you can use a similar type:</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> callbackOnlyError =<span class="hljs-function"> (. <span class="hljs-params">callbackError</span>) =&gt;</span> <span class="hljs-built_in">unit</span>
+<pre><code class="language-res">type callbackOnlyError = (. callbackError) =&gt; unit
 </code></pre>
 <h2>Utility function #1</h2>
 <p>An example utility function for handling node callbacks that returns a <code>Result</code>.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithResult =<span class="hljs-function"> (
-  <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Result</span>.</span>t&lt;&#x27;a,</span> Js.Exn.t&gt; =&gt; unit,</span>
-  . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
-</span>  <span class="hljs-params">result<span class="hljs-typing">: callbackResult&lt;&#x27;a&gt;,</span>
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
-  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+<pre><code class="language-res">let callbackWithResult = (
+  f: Belt.Result.t&lt;'a, Js.Exn.t&gt; =&gt; unit,
+  . error: callbackError,
+  result: callbackResult&lt;'a&gt;,
+) =&gt; {
+  let errorOpt: option&lt;Js.Exn.t&gt; = Js.Nullable.toOption(error)
+  let resultOpt: option&lt;'a&gt; = Js.Nullable.toOption(result)
   switch (errorOpt, resultOpt) {
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>)
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(Belt.Result.<span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span>)
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> raise(<span class="hljs-constructor">Invalid_argument(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>)
+  | (Some(error), _) =&gt; f(Belt.Result.Error(error))
+  | (_, Some(result)) =&gt; f(Belt.Result.Ok(result))
+  | (None, None) =&gt; raise(Invalid_argument(&quot;nodeCallback arguments invalid&quot;))
   }
 }
 </code></pre>
 <p>Example usage:</p>
-<pre><code class="language-re">@bs.<span class="hljs-keyword">module</span>(<span class="hljs-string">&quot;fs&quot;</span>) <span class="hljs-keyword">external</span> readFile:<span class="hljs-function"> (<span class="hljs-params">string</span>, <span class="hljs-params">string</span>, <span class="hljs-params">callback</span>&lt;<span class="hljs-params">string</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;readFile&quot;</span>
+<pre><code class="language-res">@bs.module(&quot;fs&quot;) external readFile: (string, string, callback&lt;string&gt;) =&gt; unit = &quot;readFile&quot;
 
-<span class="hljs-keyword">let</span> onResult =<span class="hljs-function"> (<span class="hljs-params">result</span>: <span class="hljs-params">result</span>&lt;<span class="hljs-params">string</span>, J<span class="hljs-params">s</span>.E<span class="hljs-params">xn</span>.<span class="hljs-params">t</span>&gt;) =&gt;</span> {
-  <span class="hljs-keyword">let</span> message = switch result {
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Ok(<span class="hljs-params">result</span>)</span> =&gt;</span> <span class="hljs-string">&quot;Success: &quot;</span><span class="hljs-operator"> ++ </span>result
-  <span class="hljs-pattern-match">| <span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span> =&gt;</span> <span class="hljs-string">&quot;Error: &quot;</span><span class="hljs-operator"> ++ </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
+let onResult = (result: result&lt;string, Js.Exn.t&gt;) =&gt; {
+  let message = switch result {
+  | Ok(result) =&gt; &quot;Success: &quot; ++ result
+  | Error(error) =&gt; &quot;Error: &quot; ++ Belt.Option.getWithDefault(Js.Exn.message(error), &quot;Unknown&quot;)
   }
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+  Js.log(message)
 }
 
-read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">callbackWithResult</span>(<span class="hljs-params">onResult</span>)</span>)
+readFile(&quot;hello.txt&quot;, &quot;UTF-8&quot;, callbackWithResult(onResult))
 </code></pre>
 <h2>Utility function #2</h2>
 <p>Another example utility function that uses <code>onSuccess</code> and <code>onError</code> callbacks</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithSuccessOrError =<span class="hljs-function"> (
-  <span class="hljs-params">onSuccess<span class="hljs-typing">: &#x27;a =&gt; unit,</span>
-</span>  <span class="hljs-params">onError<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span>t =&gt; unit,</span>
-</span>  . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
-</span>  <span class="hljs-params">result<span class="hljs-typing">: callbackResult&lt;&#x27;a&gt;,</span>
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
-  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+<pre><code class="language-res">let callbackWithSuccessOrError = (
+  onSuccess: 'a =&gt; unit,
+  onError: Js.Exn.t =&gt; unit,
+  . error: callbackError,
+  result: callbackResult&lt;'a&gt;,
+) =&gt; {
+  let errorOpt: option&lt;Js.Exn.t&gt; = Js.Nullable.toOption(error)
+  let resultOpt: option&lt;'a&gt; = Js.Nullable.toOption(result)
   switch (errorOpt, resultOpt) {
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> on<span class="hljs-constructor">Error(<span class="hljs-params">error</span>)</span>
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> on<span class="hljs-constructor">Success(<span class="hljs-params">result</span>)</span>
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> raise(<span class="hljs-constructor">Invalid_argument(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>)
+  | (Some(error), _) =&gt; onError(error)
+  | (_, Some(result)) =&gt; onSuccess(result)
+  | (None, None) =&gt; raise(Invalid_argument(&quot;nodeCallback arguments invalid&quot;))
   }
 }
 </code></pre>
 <p>Example usage:</p>
-<pre><code class="language-re">@bs.<span class="hljs-keyword">module</span>(<span class="hljs-string">&quot;fs&quot;</span>) <span class="hljs-keyword">external</span> readFile:<span class="hljs-function"> (<span class="hljs-params">string</span>, <span class="hljs-params">string</span>, <span class="hljs-params">callback</span>&lt;<span class="hljs-params">string</span>&gt;) =&gt;</span> <span class="hljs-built_in">unit</span> = <span class="hljs-string">&quot;readFile&quot;</span>
+<pre><code class="language-res">@bs.module(&quot;fs&quot;) external readFile: (string, string, callback&lt;string&gt;) =&gt; unit = &quot;readFile&quot;
 
-<span class="hljs-keyword">let</span> onSuccess =<span class="hljs-function"> (<span class="hljs-params">result</span>: <span class="hljs-params">string</span>) =&gt;</span> {
-  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Success: &quot;</span><span class="hljs-operator"> ++ </span>result
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+let onSuccess = (result: string) =&gt; {
+  let message = &quot;Success: &quot; ++ result
+  Js.log(message)
 }
 
-<span class="hljs-keyword">let</span> onError =<span class="hljs-function"> (<span class="hljs-params">error</span>: J<span class="hljs-params">s</span>.E<span class="hljs-params">xn</span>.<span class="hljs-params">t</span>) =&gt;</span> {
-  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Error: &quot;</span><span class="hljs-operator"> ++ </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
-  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(message)
+let onError = (error: Js.Exn.t) =&gt; {
+  let message = &quot;Error: &quot; ++ Belt.Option.getWithDefault(Js.Exn.message(error), &quot;Unknown&quot;)
+  Js.log(message)
 }
 
-read<span class="hljs-constructor">File(<span class="hljs-string">&quot;hello.txt&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>, <span class="hljs-params">callbackWithSuccessOrError</span>(<span class="hljs-params">onSuccess</span>, <span class="hljs-params">onError</span>)</span>)
+readFile(&quot;hello.txt&quot;, &quot;UTF-8&quot;, callbackWithSuccessOrError(onSuccess, onError))
 </code></pre>
 <h2>Utility function #3</h2>
 <p>Last example converts the result to a promise.</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> callbackWithPromise =<span class="hljs-function"> (
-  <span class="hljs-params">f<span class="hljs-typing">: <span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span>t&lt;&#x27;a&gt; =&gt; unit,</span>
-</span>  . <span class="hljs-params">error<span class="hljs-typing">: callbackError,</span>
-</span>  <span class="hljs-params">result<span class="hljs-typing">: callbackResult&lt;&#x27;a&gt;,</span>
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">let</span> errorOpt: option&lt;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Exn</span>.</span></span>t&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">error</span>)</span>
-  <span class="hljs-keyword">let</span> resultOpt: option&lt;&#x27;a&gt; = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Nullable</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">Option(<span class="hljs-params">result</span>)</span>
+<pre><code class="language-res">let callbackWithPromise = (
+  f: Js.Promise.t&lt;'a&gt; =&gt; unit,
+  . error: callbackError,
+  result: callbackResult&lt;'a&gt;,
+) =&gt; {
+  let errorOpt: option&lt;Js.Exn.t&gt; = Js.Nullable.toOption(error)
+  let resultOpt: option&lt;'a&gt; = Js.Nullable.toOption(result)
   switch (errorOpt, resultOpt) {
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">Some(<span class="hljs-params">error</span>)</span>, <span class="hljs-constructor">_</span>) =&gt;</span> {
-      <span class="hljs-keyword">let</span> message = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Belt</span>.</span><span class="hljs-module"><span class="hljs-identifier">Option</span>.</span></span>get<span class="hljs-constructor">WithDefault(Js.Exn.<span class="hljs-params">message</span>(<span class="hljs-params">error</span>)</span>, <span class="hljs-string">&quot;Unknown&quot;</span>)
-      f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-constructor">Failure(<span class="hljs-params">message</span>)</span>))
+  | (Some(error), _) =&gt; {
+      let message = Belt.Option.getWithDefault(Js.Exn.message(error), &quot;Unknown&quot;)
+      f(Js.Promise.reject(Failure(message)))
     }
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">_</span>, <span class="hljs-constructor">Some(<span class="hljs-params">result</span>)</span>) =&gt;</span> f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(result))
-  <span class="hljs-pattern-match">| (<span class="hljs-constructor">None</span>, <span class="hljs-constructor">None</span>) =&gt;</span> f(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-constructor">Failure(<span class="hljs-string">&quot;nodeCallback arguments invalid&quot;</span>)</span>))
+  | (_, Some(result)) =&gt; f(Js.Promise.resolve(result))
+  | (None, None) =&gt; f(Js.Promise.reject(Failure(&quot;nodeCallback arguments invalid&quot;)))
   }
 }
 </code></pre>
 <p>Example usage:</p>
-<pre><code class="language-re">@bs.module(&quot;fs&quot;) external readFile: (string, string, callback&lt;string&gt;) =&gt; unit = &quot;readFile&quot;
+<pre><code class="language-res">@bs.module(&quot;fs&quot;) external readFile: (string, string, callback&lt;string&gt;) =&gt; unit = &quot;readFile&quot;
 
 let handlePromise = (promise: Js.Promise.t&lt;string&gt;) =&gt; {
   open Js.Promise

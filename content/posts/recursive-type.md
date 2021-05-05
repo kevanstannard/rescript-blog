@@ -7,7 +7,7 @@ Use the `rec` keyword.
 
 Example type:
 
-```re
+```res
 type rec tree<'a> =
   | Node(tree<'a>, 'a, tree<'a>)
   | Leaf('a)
@@ -15,7 +15,7 @@ type rec tree<'a> =
 
 Example usage:
 
-```re
+```res
 //      1
 //     / \
 //    /   \
@@ -28,7 +28,7 @@ let numbers = Node(Node(Leaf(3), 2, Leaf(4)), 1, Node(Leaf(6), 5, Leaf(7)))
 
 Example functions:
 
-```re
+```res
 let isNode = tree =>
   switch tree {
   | Node(_, _, _) => true

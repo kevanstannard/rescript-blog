@@ -2,110 +2,110 @@
 </code></pre>
 <h2>Reader type</h2>
 <p>A Reader is a function that takes an &quot;environment&quot; variable, that can be any data, and performs some operation on it.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> t&lt;&#x27;e, &#x27;a&gt; = <span class="hljs-constructor">Reader(&#x27;<span class="hljs-params">e</span> =&gt; &#x27;<span class="hljs-params">a</span>)</span>
+<pre><code class="language-res">type t&lt;'e, 'a&gt; = Reader('e =&gt; 'a)
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
+<pre><code class="language-res">let r = Reader(e =&gt; e + 1)
 </code></pre>
 <h2>run()</h2>
 <p>The <code>run()</code> function takes a reader and an environment passes the environment to the reader function.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> run&lt;&#x27;e, &#x27;a&gt; =<span class="hljs-function"> (<span class="hljs-params">t</span>&lt;&#x27;<span class="hljs-params">e</span>, &#x27;<span class="hljs-params">a</span>&gt;, &#x27;<span class="hljs-params">e</span>) =&gt;</span> &#x27;a
-<span class="hljs-keyword">let</span> run: run&lt;&#x27;e, &#x27;a&gt; =<span class="hljs-function"> (R<span class="hljs-params">eader</span>(<span class="hljs-params">r</span>), <span class="hljs-params">env</span>) =&gt;</span> r(env)
+<pre><code class="language-res">type run&lt;'e, 'a&gt; = (t&lt;'e, 'a&gt;, 'e) =&gt; 'a
+let run: run&lt;'e, 'a&gt; = (Reader(r), env) =&gt; r(env)
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r1 = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
-<span class="hljs-keyword">let</span> _ = run(r1, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 2</span>
+<pre><code class="language-res">let r1 = Reader(e =&gt; e + 1)
+let _ = run(r1, 1)
+// 2
 </code></pre>
 <h2>return()</h2>
 <p>The <code>return()</code> function creates a reader that always returns the same value, ignoring the environment.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> return&lt;&#x27;e, &#x27;a&gt; = &#x27;a =&gt; t&lt;&#x27;e, &#x27;a&gt;
-<span class="hljs-keyword">let</span> return: return&lt;&#x27;e, &#x27;a&gt; =<span class="hljs-function"> <span class="hljs-params">a</span> =&gt;</span> <span class="hljs-constructor">Reader(<span class="hljs-params">_env</span> =&gt; <span class="hljs-params">a</span>)</span>
+<pre><code class="language-res">type return&lt;'e, 'a&gt; = 'a =&gt; t&lt;'e, 'a&gt;
+let return: return&lt;'e, 'a&gt; = a =&gt; Reader(_env =&gt; a)
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r2 = return(<span class="hljs-number">99</span>)
-<span class="hljs-keyword">let</span> _ = run(r2, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 99</span>
+<pre><code class="language-res">let r2 = return(99)
+let _ = run(r2, 1)
+// 99
 </code></pre>
 <h2>ask()</h2>
 <p>The <code>ask()</code> function creates a reader that returns the environment variable.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> ask&lt;&#x27;e&gt; =<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> t&lt;&#x27;e, &#x27;e&gt;
-<span class="hljs-keyword">let</span> ask: ask&lt;&#x27;e&gt; =<span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> <span class="hljs-constructor">Reader(<span class="hljs-params">env</span> =&gt; <span class="hljs-params">env</span>)</span>
+<pre><code class="language-res">type ask&lt;'e&gt; = unit =&gt; t&lt;'e, 'e&gt;
+let ask: ask&lt;'e&gt; = () =&gt; Reader(env =&gt; env)
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r3 = ask<span class="hljs-literal">()</span>
-<span class="hljs-keyword">let</span> _ = run(r3, <span class="hljs-number">123</span>)
-<span class="hljs-comment">// 123</span>
+<pre><code class="language-res">let r3 = ask()
+let _ = run(r3, 123)
+// 123
 </code></pre>
 <h2>local()</h2>
 <p>The <code>local()</code> function creates a reader that allows you to transform the environment value before passing it to a subsequent reader.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> local&lt;&#x27;e, &#x27;a&gt; =<span class="hljs-function"> (&#x27;<span class="hljs-params">e</span> =&gt;</span> &#x27;e, t&lt;&#x27;e, &#x27;a&gt;) =&gt; t&lt;&#x27;e, &#x27;a&gt;
-<span class="hljs-keyword">let</span> local: local&lt;&#x27;e, &#x27;a&gt; =<span class="hljs-function"> (<span class="hljs-params">f</span>, <span class="hljs-params">m</span>) =&gt;</span> <span class="hljs-constructor">Reader(<span class="hljs-params">env</span> =&gt; <span class="hljs-params">run</span>(<span class="hljs-params">m</span>, <span class="hljs-params">f</span>(<span class="hljs-params">env</span>)</span>))
+<pre><code class="language-res">type local&lt;'e, 'a&gt; = ('e =&gt; 'e, t&lt;'e, 'a&gt;) =&gt; t&lt;'e, 'a&gt;
+let local: local&lt;'e, 'a&gt; = (f, m) =&gt; Reader(env =&gt; run(m, f(env)))
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r4 = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
-<span class="hljs-keyword">let</span> r5 = local(e =&gt; -e, r4)
-<span class="hljs-keyword">let</span> _ = run(r5, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 0</span>
+<pre><code class="language-res">let r4 = Reader(e =&gt; e + 1)
+let r5 = local(e =&gt; -e, r4)
+let _ = run(r5, 1)
+// 0
 </code></pre>
 <h2>map()</h2>
 <p>The <code>map()</code> function creates a reader that applies a function to the result provided by the reader.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> map&lt;&#x27;e, &#x27;a, &#x27;b&gt; =<span class="hljs-function"> (&#x27;<span class="hljs-params">a</span> =&gt;</span> &#x27;b, t&lt;&#x27;e, &#x27;a&gt;) =&gt; t&lt;&#x27;e, &#x27;b&gt;
-<span class="hljs-keyword">let</span> map: map&lt;&#x27;e, &#x27;a, &#x27;b&gt; =<span class="hljs-function"> (<span class="hljs-params">f</span>, <span class="hljs-params">m</span>) =&gt;</span> <span class="hljs-constructor">Reader(<span class="hljs-params">env</span> =&gt; <span class="hljs-params">f</span>(<span class="hljs-params">run</span>(<span class="hljs-params">m</span>, <span class="hljs-params">env</span>)</span>))
+<pre><code class="language-res">type map&lt;'e, 'a, 'b&gt; = ('a =&gt; 'b, t&lt;'e, 'a&gt;) =&gt; t&lt;'e, 'b&gt;
+let map: map&lt;'e, 'a, 'b&gt; = (f, m) =&gt; Reader(env =&gt; f(run(m, env)))
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r6 = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
-<span class="hljs-keyword">let</span> r7 = map(x =&gt; x<span class="hljs-operator"> * </span><span class="hljs-number">10</span>, r6)
-<span class="hljs-keyword">let</span> _ = run(r7, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 20</span>
+<pre><code class="language-res">let r6 = Reader(e =&gt; e + 1)
+let r7 = map(x =&gt; x * 10, r6)
+let _ = run(r7, 1)
+// 20
 </code></pre>
 <h2>bind()</h2>
 <p>The <code>bind()</code> function is similar to map, except that the applied function must return a reader rather than a value. This allows two readers to be bound together.</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> bind&lt;&#x27;e, &#x27;a, &#x27;b&gt; =<span class="hljs-function"> (&#x27;<span class="hljs-params">a</span> =&gt;</span> t&lt;&#x27;e, &#x27;b&gt;, t&lt;&#x27;e, &#x27;a&gt;) =&gt; t&lt;&#x27;e, &#x27;b&gt;
-<span class="hljs-keyword">let</span> bind: bind&lt;&#x27;e, &#x27;a, &#x27;b&gt; =<span class="hljs-function"> (<span class="hljs-params">f</span>, <span class="hljs-params">m</span>) =&gt;</span> <span class="hljs-constructor">Reader(<span class="hljs-params">env</span> =&gt; <span class="hljs-params">run</span>(<span class="hljs-params">f</span>(<span class="hljs-params">run</span>(<span class="hljs-params">m</span>, <span class="hljs-params">env</span>)</span>), env))
+<pre><code class="language-res">type bind&lt;'e, 'a, 'b&gt; = ('a =&gt; t&lt;'e, 'b&gt;, t&lt;'e, 'a&gt;) =&gt; t&lt;'e, 'b&gt;
+let bind: bind&lt;'e, 'a, 'b&gt; = (f, m) =&gt; Reader(env =&gt; run(f(run(m, env)), env))
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r8 = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
-<span class="hljs-keyword">let</span> r9 = bind(x =&gt; <span class="hljs-constructor">Reader(<span class="hljs-params">_</span> =&gt; <span class="hljs-params">x</span> <span class="hljs-operator">*</span> 2)</span>, r8)
-<span class="hljs-keyword">let</span> _ = run(r9, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 4</span>
+<pre><code class="language-res">let r8 = Reader(e =&gt; e + 1)
+let r9 = bind(x =&gt; Reader(_ =&gt; x * 2), r8)
+let _ = run(r9, 1)
+// 4
 </code></pre>
 <p>For this example, we could also use the <code>return()</code> function:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> r10 = <span class="hljs-constructor">Reader(<span class="hljs-params">e</span> =&gt; <span class="hljs-params">e</span> + 1)</span>
-<span class="hljs-keyword">let</span> r11 = bind(x =&gt; return(x<span class="hljs-operator"> * </span><span class="hljs-number">2</span>), r10)
-<span class="hljs-keyword">let</span> _ = run(r11, <span class="hljs-number">1</span>)
-<span class="hljs-comment">// 4</span>
+<pre><code class="language-res">let r10 = Reader(e =&gt; e + 1)
+let r11 = bind(x =&gt; return(x * 2), r10)
+let _ = run(r11, 1)
+// 4
 </code></pre>
 <p>And a more sophisitcated example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> greet =<span class="hljs-function"> (<span class="hljs-params">name</span>, <span class="hljs-params">greeting</span>) =&gt;</span> greeting<span class="hljs-operator"> ++ </span><span class="hljs-string">&quot;: &quot;</span><span class="hljs-operator"> ++ </span>name
-<span class="hljs-keyword">let</span> lines = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Array</span>.</span></span>map(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log)
-<span class="hljs-keyword">let</span> ra = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;One&quot;</span>)</span>)
-<span class="hljs-keyword">let</span> rb = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;Two&quot;</span>)</span>)
-<span class="hljs-keyword">let</span> rc = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;Three&quot;</span>)</span>)
+<pre><code class="language-res">let greet = (name, greeting) =&gt; greeting ++ &quot;: &quot; ++ name
+let lines = Array.map(Js.log)
+let ra = Reader(greet(&quot;One&quot;))
+let rb = Reader(greet(&quot;Two&quot;))
+let rc = Reader(greet(&quot;Three&quot;))
 
-<span class="hljs-keyword">let</span> r12 = bind(a =&gt; bind(b =&gt; bind(c =&gt; return(lines(<span class="hljs-literal">[<span class="hljs-identifier">a</span>, <span class="hljs-identifier">b</span>, <span class="hljs-identifier">c</span>]</span>)), rc), rb), ra)
-<span class="hljs-keyword">let</span> _ = run(r12, <span class="hljs-string">&quot;Hello&quot;</span>)
-<span class="hljs-comment">// Hello: One</span>
-<span class="hljs-comment">// Hello: Two</span>
-<span class="hljs-comment">// Hello: Three</span>
+let r12 = bind(a =&gt; bind(b =&gt; bind(c =&gt; return(lines([a, b, c])), rc), rb), ra)
+let _ = run(r12, &quot;Hello&quot;)
+// Hello: One
+// Hello: Two
+// Hello: Three
 </code></pre>
 <h2>bindFlip()</h2>
 <p>An example which flips the the bind arguments</p>
-<pre><code class="language-re"><span class="hljs-keyword">type</span> bindFlip&lt;&#x27;a, &#x27;e, &#x27;b&gt; =<span class="hljs-function"> (<span class="hljs-params">t</span>&lt;&#x27;<span class="hljs-params">e</span>, &#x27;<span class="hljs-params">a</span>&gt;, &#x27;<span class="hljs-params">a</span> =&gt;</span> t&lt;&#x27;e, &#x27;b&gt;) =&gt; t&lt;&#x27;e, &#x27;b&gt;
-<span class="hljs-keyword">let</span> bindFlip: bindFlip&lt;&#x27;a, &#x27;e, &#x27;b&gt; =<span class="hljs-function"> (<span class="hljs-params">m</span>, <span class="hljs-params">f</span>) =&gt;</span> bind(f, m)
+<pre><code class="language-res">type bindFlip&lt;'a, 'e, 'b&gt; = (t&lt;'e, 'a&gt;, 'a =&gt; t&lt;'e, 'b&gt;) =&gt; t&lt;'e, 'b&gt;
+let bindFlip: bindFlip&lt;'a, 'e, 'b&gt; = (m, f) =&gt; bind(f, m)
 </code></pre>
 <p>Example:</p>
-<pre><code class="language-re"><span class="hljs-keyword">let</span> greet =<span class="hljs-function"> (<span class="hljs-params">name</span>, <span class="hljs-params">greeting</span>) =&gt;</span> greeting<span class="hljs-operator"> ++ </span><span class="hljs-string">&quot;: &quot;</span><span class="hljs-operator"> ++ </span>name
-<span class="hljs-keyword">let</span> lines = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Array</span>.</span></span>map(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log)
-<span class="hljs-keyword">let</span> ra = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;One&quot;</span>)</span>)
-<span class="hljs-keyword">let</span> rb = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;Two&quot;</span>)</span>)
-<span class="hljs-keyword">let</span> rc = <span class="hljs-constructor">Reader(<span class="hljs-params">greet</span>(<span class="hljs-string">&quot;Three&quot;</span>)</span>)
+<pre><code class="language-res">let greet = (name, greeting) =&gt; greeting ++ &quot;: &quot; ++ name
+let lines = Array.map(Js.log)
+let ra = Reader(greet(&quot;One&quot;))
+let rb = Reader(greet(&quot;Two&quot;))
+let rc = Reader(greet(&quot;Three&quot;))
 
-<span class="hljs-keyword">let</span> r13 = bind<span class="hljs-constructor">Flip(<span class="hljs-params">ra</span>, <span class="hljs-params">a</span> =&gt; <span class="hljs-params">bindFlip</span>(<span class="hljs-params">rb</span>, <span class="hljs-params">b</span> =&gt; <span class="hljs-params">bindFlip</span>(<span class="hljs-params">rc</span>, <span class="hljs-params">c</span> =&gt; <span class="hljs-params">return</span>(<span class="hljs-params">lines</span>([<span class="hljs-params">a</span>, <span class="hljs-params">b</span>, <span class="hljs-params">c</span>])</span>))))
-<span class="hljs-keyword">let</span> _ = run(r13, <span class="hljs-string">&quot;Goodbye&quot;</span>)
-<span class="hljs-comment">// Goodbye: One</span>
-<span class="hljs-comment">// Goodbye: Two</span>
-<span class="hljs-comment">// Goodbye: Three</span>
+let r13 = bindFlip(ra, a =&gt; bindFlip(rb, b =&gt; bindFlip(rc, c =&gt; return(lines([a, b, c])))))
+let _ = run(r13, &quot;Goodbye&quot;)
+// Goodbye: One
+// Goodbye: Two
+// Goodbye: Three
 </code></pre>
 <h2>References</h2>
 <p>Reader monad in reasonml<br>

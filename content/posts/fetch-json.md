@@ -35,7 +35,7 @@ This has a JSON response that looks like:
 
 We can do a simple JSON fetch using the following:
 
-```re
+```res
 let _ =
   Fetch.fetch("https://aws.random.cat/meow")
   ->Js.Promise.then_(Fetch.Response.json, _)
@@ -48,7 +48,7 @@ Next, let’s convert this to a function that returns the cat data.
 
 In this case the response type is very simple:
 
-```re
+```res
 type catData = {file: string};
 ```
 
@@ -56,7 +56,7 @@ type catData = {file: string};
 
 Let's declare a Decode module with a catData function that converts the generic `Js.Json.t` type into a proper `catData` type.
 
-```re
+```res
 module Decode = {
   open Json.Decode
   let catData = (data: Js.Json.t) => {
@@ -67,7 +67,7 @@ module Decode = {
 
 Next we’ll create a fetchCat function to perform the fetch and convert the response.
 
-```re
+```res
 let fetchCat = () =>
   Fetch.fetch("https://aws.random.cat/meow")
   ->Js.Promise.then_(Fetch.Response.json, _)
@@ -82,7 +82,7 @@ Next let’s convert the fetch function into something more re-usable.
 
 For this we can abstract out the url and the decoder.
 
-```re
+```res
 let fetchJson = (url, decoder) =>
   Fetch.fetch(url)
   ->Js.Promise.then_(Fetch.Response.json, _)

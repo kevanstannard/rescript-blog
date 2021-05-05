@@ -11,7 +11,7 @@ Use the `@bs.scope()` annotation.
 
 ## Simple global module value
 
-```re
+```res
 @bs.val @bs.scope("Math") external random : unit => float = "random";
 let someNumber = random();
 ```
@@ -24,7 +24,7 @@ var someNumber = Math.random();
 
 ## Nested global module value
 
-```re
+```res
 @bs.val @bs.scope(("window", "location", "ancestorOrigins"))
 external length: int = "length"
 

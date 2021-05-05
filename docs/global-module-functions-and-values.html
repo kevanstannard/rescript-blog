@@ -2,19 +2,19 @@
 </code></pre>
 <p>Use the <code>@bs.scope()</code> annotation.</p>
 <h2>Simple global module value</h2>
-<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> @bs.scope(<span class="hljs-string">&quot;Math&quot;</span>) <span class="hljs-keyword">external</span> random :<span class="hljs-function"> <span class="hljs-params">unit</span> =&gt;</span> <span class="hljs-built_in">float</span> = <span class="hljs-string">&quot;random&quot;</span>;
-<span class="hljs-keyword">let</span> someNumber = random<span class="hljs-literal">()</span>;
+<pre><code class="language-res">@bs.val @bs.scope(&quot;Math&quot;) external random : unit =&gt; float = &quot;random&quot;;
+let someNumber = random();
 </code></pre>
 <p>Which generates:</p>
-<pre><code class="language-js"><span class="hljs-keyword">var</span> someNumber = <span class="hljs-built_in">Math</span>.random();
+<pre><code class="language-js">var someNumber = Math.random();
 </code></pre>
 <h2>Nested global module value</h2>
-<pre><code class="language-re">@bs.<span class="hljs-keyword">val</span> @bs.scope((<span class="hljs-string">&quot;window&quot;</span>, <span class="hljs-string">&quot;location&quot;</span>, <span class="hljs-string">&quot;ancestorOrigins&quot;</span>))
-<span class="hljs-keyword">external</span> length: <span class="hljs-built_in">int</span> = <span class="hljs-string">&quot;length&quot;</span>
+<pre><code class="language-res">@bs.val @bs.scope((&quot;window&quot;, &quot;location&quot;, &quot;ancestorOrigins&quot;))
+external length: int = &quot;length&quot;
 
-<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Js</span>.</span></span>log(length)
+Js.log(length)
 </code></pre>
 <p>Generates:</p>
-<pre><code class="language-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">window</span>.location.ancestorOrigins.length);
+<pre><code class="language-js">console.log(window.location.ancestorOrigins.length);
 </code></pre>
 </div></div></body></html>

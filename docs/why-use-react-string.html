@@ -2,11 +2,11 @@
 </code></pre>
 <p>When writing JSX in ReScript, you will need to use the <code>ReasonReact.string()</code> function when rendering string values.</p>
 <p>For example:</p>
-<pre><code class="language-re">&lt;h1&gt;{<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReasonReact</span>.</span></span><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello&quot;</span>)}&lt;/h1&gt;
+<pre><code class="language-res">&lt;h1&gt;{ReasonReact.string(&quot;Hello&quot;)}&lt;/h1&gt;
 </code></pre>
 <p>So why do we need to do this?</p>
 <p>The <code>string()</code> function in Reason React is implemented as:</p>
-<pre><code class="language-re"><span class="hljs-keyword">external</span> <span class="hljs-built_in">string</span>:<span class="hljs-function"> <span class="hljs-params">string</span> =&gt;</span> element = <span class="hljs-string">&quot;%identity&quot;</span>;
+<pre><code class="language-res">external string: string =&gt; element = &quot;%identity&quot;;
 </code></pre>
 <p>Firstly, a quick reminder about <code>%identity</code>. This is special instruction has no behaviour, but allows the conversion of the type <code>string</code> to <code>element</code>.</p>
 <p>So when we write <code>ReasonReact.string(&quot;Hello&quot;)</code> we are not doing anything with the value, but we are just changing it's type to <code>element</code>, which allows it to be a compatible child of an HTML tag.</p>

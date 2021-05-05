@@ -11,7 +11,7 @@ ReScript provides a [Dom.Storage2](https://rescript-lang.org/docs/manual/latest/
 
 Example:
 
-```re
+```res
 Dom.Storage2.setItem(Dom.Storage2.localStorage, "message", "hello")
 
 let messageOpt = Dom.Storage2.getItem(Dom.Storage2.localStorage, "message")

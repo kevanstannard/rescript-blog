@@ -11,7 +11,7 @@ Multiline strings are created by enclosing the string with backticks.
 
 For example:
 
-```re
+```res
 let message = `
 Hello
 World
