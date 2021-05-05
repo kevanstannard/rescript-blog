@@ -1,0 +1,27 @@
+<!doctype html><html data-reactroot=""><head><title>Creating JavaScript objects with optional properties</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Creating JavaScript objects with optional properties</h1><p>Thu May 06 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<p>We can use the <code>%obj</code> decorator to help with creating JS objects that have optional properties.</p>
+<h2>Example</h2>
+<pre><code class="language-res">type t
+
+@obj
+external make: (~first: string=?, ~last: string=?, unit) =&gt; t = &quot;&quot;
+
+let helloFn = make(~first=&quot;Hello&quot;)
+let worldFn = make(~last=&quot;World&quot;)
+let helloWorldFn = make(~first=&quot;Hello&quot;, ~last=&quot;World&quot;)
+
+let hello = helloFn()
+let world = worldFn()
+let helloWorld = helloWorldFn()
+
+Js.log(hello)
+Js.log(world)
+Js.log(helloWorld)
+</code></pre>
+<p>Which produces:</p>
+<pre><code>{ first: 'Hello' }
+{ last: 'World' }
+{ first: 'Hello', last: 'World' }
+</code></pre>
+</div></div></body></html>
