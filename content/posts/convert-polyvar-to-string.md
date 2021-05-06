@@ -3,6 +3,10 @@ title: How to convert a polymorphic variable to a string?
 date: 2021-05-06 11:55:07
 ---
 
+```
+ReScript version: rescript@9.1.2
+```
+
 We can use the coercion operator `:>`.
 
 ```res

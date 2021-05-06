@@ -1,0 +1,19 @@
+<!doctype html><html data-reactroot=""><head><title>How to find unique objects in an array by a key?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to find unique objects in an array by a key?</h1><p>Thu May 06 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<p>Convert to a <code>Dict</code> and get its values.</p>
+<pre><code class="language-res">type person = {
+  id: int,
+  name: string,
+}
+
+let uniqueById = persons =&gt;
+  persons
+  -&gt;Js.Array2.map(person =&gt; (Js.Int.toString(person.id), person))
+  -&gt;Js.Dict.fromArray
+  -&gt;Js.Dict.values
+
+let persons = [{id: 1, name: &quot;One&quot;}, {id: 2, name: &quot;Two&quot;}, {id: 1, name: &quot;Three&quot;}]
+
+let uniquePersons = uniqueById(persons)
+</code></pre>
+</div></div></body></html>
