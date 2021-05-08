@@ -1,0 +1,37 @@
+<!doctype html><html data-reactroot=""><head><title>How to detect the existance of a global value?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to detect the existance of a global value?</h1><p>Sun May 09 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<p>We can use <code>%external</code> to detect global values.</p>
+<p>For example:</p>
+<pre><code class="language-res">type audioContext
+
+let audioContext: option&lt;audioContext&gt; = %external(\&quot;AudioContext&quot;)
+</code></pre>
+<p>Which complies to:</p>
+<pre><code class="language-js">var Caml_option = require(&quot;rescript/lib/js/caml_option.js&quot;);
+
+var audioContext =
+  typeof AudioContext === &quot;undefined&quot; ? undefined : AudioContext;
+
+var audioContext$1 =
+  audioContext === undefined ? undefined : Caml_option.some(audioContext);
+</code></pre>
+<p>If the variable name starts with <code>_</code> then we don't need to escape it:</p>
+<pre><code class="language-res">switch %external(__DEV__) {
+| Some(_) =&gt; Js.log(&quot;dev mode&quot;)
+| None =&gt; Js.log(&quot;production mode&quot;)
+}
+</code></pre>
+<p>Which compiles to:</p>
+<pre><code class="language-js">var match = typeof __DEV__ === &quot;undefined&quot; ? undefined : __DEV__;
+
+if (match !== undefined) {
+  console.log(&quot;dev mode&quot;);
+} else {
+  console.log(&quot;production mode&quot;);
+}
+</code></pre>
+<h2>References</h2>
+<ul>
+<li><a href="https://rescript-lang.org/docs/manual/latest/bind-to-global-js-values#special-global-values">Special Global Values</a></li>
+</ul>
+</div></div></body></html>
