@@ -1,0 +1,15 @@
+<!doctype html><html data-reactroot=""><head><title>Importing files using Webpack</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Importing files using Webpack</h1><p>Thu May 27 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<pre><code class="language-res">module Webpack = {
+  type url = {href: string, pathname: string}
+
+  @scope((&quot;import&quot;, &quot;meta&quot;)) @val external importMetaUrl: string = &quot;url&quot;
+  @new external makeFileUrl: (string, string) =&gt; url = &quot;URL&quot;
+}
+
+let url = Webpack.makeFileUrl(&quot;./images/logo.png&quot;, Webpack.importMetaUrl)
+</code></pre>
+<p>Which produces a URL that can be used in front end code.</p>
+<pre><code class="language-js">var url = new URL(&quot;./images/logo.png&quot;, import.meta.url);
+</code></pre>
+</div></div></body></html>

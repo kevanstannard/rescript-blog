@@ -1,0 +1,23 @@
+<!doctype html><html data-reactroot=""><head><title>Removing the unnecssary &quot;param&quot; argument in callbacks with no arguments.</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Removing the unnecssary &quot;param&quot; argument in callbacks with no arguments.</h1><p>Sun May 30 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+</code></pre>
+<p>When writing callbacks with no arguments, ReScript introduces an unnecessary <code>param</code> argument. For example, this code:</p>
+<pre><code class="language-res">@val external send: (string, unit =&gt; unit) =&gt; unit = &quot;send&quot;
+send(&quot;Hello&quot;, () =&gt; Js.log(&quot;Done&quot;))
+</code></pre>
+<p>Generates JS:</p>
+<pre><code class="language-js">send(&quot;Hello&quot;, function (param) {
+  console.log(&quot;Done&quot;);
+});
+</code></pre>
+<p>Notice the <code>param</code> argument.</p>
+<p>This can interefere in some situations.</p>
+<p>The solution is to use the <code>@uncurry</code> decorator on the callback:</p>
+<pre><code class="language-res">@val external send: (string, @uncurry (unit =&gt; unit)) =&gt; unit = &quot;send&quot;
+send(&quot;Hello&quot;, () =&gt; Js.log(&quot;Done&quot;))
+</code></pre>
+<p>Which produces:</p>
+<pre><code class="language-js">send(&quot;Hello&quot;, function () {
+  console.log(&quot;Done&quot;);
+});
+</code></pre>
+</div></div></body></html>
