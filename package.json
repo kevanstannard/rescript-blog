@@ -7,11 +7,12 @@
     "re:watch": "rescript build -w",
     "blog:build": "node scripts/build -- ./docs",
     "blog:serve": "node scripts/serve -- ./docs",
-    "blog:watch": "watch 'npm run blog:build -s' ./content ./src ./static",
+    "blog:watch": "chokidar './content' './src' './static' -c 'npm run blog:build -s'",
     "dev": "npm run blog:serve & npm run blog:watch"
   },
   "dependencies": {
     "browser-sync": "^2.26.14",
+    "chokidar-cli": "^2.1.0",
     "copyfiles": "^2.4.1",
     "front-matter": "^4.0.2",
     "glob": "^7.1.6",
@@ -23,7 +24,6 @@
     "reason-react": "^0.9.1",
     "rescript": "^9.1.2",
     "rimraf": "^3.0.2",
-    "watch": "^1.0.2",
     "yargs": "^17.0.1"
   }
 }
