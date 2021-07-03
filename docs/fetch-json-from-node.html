@@ -1,0 +1,40 @@
+<!doctype html><html data-reactroot=""><head><title>How to fetch JSON data from Node?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to fetch JSON data from Node?</h1><p>Sun Jul 04 2021</p><div><pre><code>ReScript version: rescript@9.1.3
+</code></pre>
+<p>Use ad-hoc fetching:</p>
+<pre><code class="language-res">%%raw(`
+const fetch = require('node-fetch');
+if (!globalThis.fetch) {
+	globalThis.fetch = fetch;
+}
+`)
+
+module Fetch = {
+  module Response = {
+    type t&lt;'a&gt;
+    @send external json: t&lt;'a&gt; =&gt; Promise.t&lt;'a&gt; = &quot;json&quot;
+  }
+}
+
+module Xkcd = {
+  type comic = {
+    img: string,
+    title: string,
+  }
+
+  @val external fetch: string =&gt; Promise.t&lt;Fetch.Response.t&lt;comic&gt;&gt; = &quot;fetch&quot;
+
+  let fetchCurrentComic = () =&gt;
+    fetch(&quot;http://xkcd.com/info.0.json&quot;)-&gt;Promise.then(Fetch.Response.json)
+}
+
+Xkcd.fetchCurrentComic()
+-&gt;Promise.thenResolve(result =&gt; {
+  Js.log(result)
+})
+-&gt;Promise.catch(error =&gt; {
+  Js.log(error)
+  Promise.resolve()
+})
+-&gt;ignore
+</code></pre>
+</div></div></body></html>
