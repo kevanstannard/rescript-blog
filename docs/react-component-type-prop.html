@@ -1,0 +1,10 @@
+<!doctype html><html data-reactroot=""><head><title>How to pass a &quot;type&quot; prop to an external React component</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to pass a &quot;type&quot; prop to an external React component</h1><p>Sat Jul 17 2021</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>When passing a <code>type</code> prop to an <strong>external</strong> React component, we can use the <code>~_type</code> syntax for the prop name and it will be changed to <code>type</code> in the component.</p>
+<p>For example:</p>
+<pre><code class="language-res">module Switch = {
+  @react.component @module(&quot;./Switch&quot;)
+  external make: (~_type: @string [@as(&quot;switch&quot;) #switch_ | #checkbox]) =&gt; React.element = &quot;default&quot;
+}
+</code></pre>
+</div></div></body></html>
