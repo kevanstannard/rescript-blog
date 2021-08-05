@@ -2,14 +2,14 @@
   "name": "rescript-blog",
   "private": true,
   "scripts": {
-    "postinstall": "npm run re:build",
     "res:build": "rescript build",
     "res:watch": "rescript build -w",
     "blog:build": "node scripts/build -- ./docs",
     "blog:serve": "node scripts/serve -- ./docs",
     "blog:watch": "chokidar './content' './src' './static' -c 'npm run blog:build -s'",
+    "postinstall": "npm run res:build",
     "build": "npx rescript clean && npm run res:build && npm run blog:build",
-    "dev": "npm run blog:serve & npm run blog:watch"
+    "start": "npm run blog:serve & npm run blog:watch"
   },
   "dependencies": {
     "browser-sync": "^2.27.5",
