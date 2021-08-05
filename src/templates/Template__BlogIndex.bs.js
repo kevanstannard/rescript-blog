@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require("react");
-var Template__Html$RescriptBlog = require("./Template__Html.bs.js");
+var Template__Html = require("./Template__Html.bs.js");
 
 function Template__BlogIndex$BlogPost(Props) {
   var blogPost = Props.blogPost;
@@ -18,7 +18,7 @@ var BlogPost = {
 function Template__BlogIndex(Props) {
   var blogPosts = Props.blogPosts;
   var title = "ReScript Blog";
-  return React.createElement(Template__Html$RescriptBlog.make, {
+  return React.createElement(Template__Html.make, {
               title: title,
               children: null
             }, React.createElement("p", undefined, React.createElement("a", {

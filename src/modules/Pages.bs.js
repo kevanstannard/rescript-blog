@@ -2,22 +2,22 @@
 'use strict';
 
 var Fs = require("fs");
+var $$File = require("./File.bs.js");
 var Path = require("path");
 var Curry = require("rescript/lib/js/curry.js");
 var Rimraf = require("rimraf");
 var Caml_obj = require("rescript/lib/js/caml_obj.js");
+var Markdown = require("../bindings/Markdown.bs.js");
 var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var Caml_option = require("rescript/lib/js/caml_option.js");
 var FrontMatter = require("front-matter");
 var Belt_SortArray = require("rescript/lib/js/belt_SortArray.js");
-var File$RescriptBlog = require("./File.bs.js");
-var Markdown$RescriptBlog = require("../bindings/Markdown.bs.js");
 
 function parseContent(data, filePath) {
   var fm = FrontMatter(data);
   var match = fm.attributes;
   var id = match.id;
-  var body = Markdown$RescriptBlog.render(fm.body);
+  var body = Markdown.render(fm.body);
   var pageId = id !== undefined ? id : Path.basename(filePath, ".md");
   return {
           filePath: filePath,
@@ -29,7 +29,7 @@ function parseContent(data, filePath) {
 }
 
 function readContentFile(filePath) {
-  var __x = File$RescriptBlog.readFile(filePath);
+  var __x = $$File.readFile(filePath);
   return __x.then(function (content) {
               return Promise.resolve(parseContent(content, filePath));
             });
@@ -40,7 +40,7 @@ function readContentFiles(filePaths) {
 }
 
 function readContentCollection(dirPath) {
-  var __x = File$RescriptBlog.glob(dirPath + "/*.md");
+  var __x = $$File.glob(dirPath + "/*.md");
   return __x.then(readContentFiles);
 }
 
@@ -132,7 +132,7 @@ function createBlog(collectionDir, outputDir, indexName, renderBlogPost, renderB
                 var __x = Promise.all(Belt_Array.map(blogPosts, (function (param) {
                             var html = Curry._1(renderBlogPost, param);
                             var filePath = outputDir + "/" + param.id + ".html";
-                            return File$RescriptBlog.writeFile(filePath, html);
+                            return $$File.writeFile(filePath, html);
                           })));
                 return __x.then(function (param) {
                             return Promise.resolve(undefined);
@@ -141,7 +141,7 @@ function createBlog(collectionDir, outputDir, indexName, renderBlogPost, renderB
               var createIndex = function (param) {
                 var html = Curry._1(renderBlogIndex, blogPosts);
                 var filePath = outputDir + "/" + indexName + ".html";
-                return File$RescriptBlog.writeFile(filePath, html);
+                return $$File.writeFile(filePath, html);
               };
               ensureDirectoryExists(outputDir);
               var __x = createPosts(undefined);
@@ -156,7 +156,7 @@ function createPages(collectionDir, outputDir, renderPage) {
               var __x = Promise.all(Belt_Array.map(contentCollectionToPages(param), (function (param) {
                           var html = Curry._1(renderPage, param);
                           var filePath = outputDir + "/" + param.id + ".html";
-                          return File$RescriptBlog.writeFile(filePath, html);
+                          return $$File.writeFile(filePath, html);
                         })));
               return __x.then(function (param) {
                           return Promise.resolve(undefined);
