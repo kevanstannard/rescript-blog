@@ -1,11 +1,12 @@
-<!doctype html><html data-reactroot=""><head><title>Creating JavaScript objects with optional properties</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Creating JavaScript objects with optional properties</h1><p>Thu May 06 2021</p><div><pre><code>ReScript version: rescript@9.1.2
+<!doctype html><html data-reactroot=""><head><title>Creating JavaScript objects with optional properties</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Creating JavaScript objects with optional properties</h1><p>Fri Aug 06 2021</p><div><pre><code>ReScript version: rescript@9.1.2
 </code></pre>
-<p>We can use the <code>%obj</code> decorator to help with creating JS objects that have optional properties.</p>
-<h2>Example</h2>
-<pre><code class="language-res">type t
+<p>We can use the <code>%obj</code> or the <code>@deriving(abstract)</code> decorator to help with creating JS objects that have optional properties. They may be used slightly differently.</p>
+<h2>@obj Example</h2>
+<pre><code class="language-res">// Opaque type
+type t
 
-@obj
-external make: (~first: string=?, ~last: string=?, unit) =&gt; t = &quot;&quot;
+// Special external syntax
+@obj external make: (~first: string=?, ~last: string=?, unit) =&gt; t = &quot;&quot;
 
 let helloFn = make(~first=&quot;Hello&quot;)
 let worldFn = make(~last=&quot;World&quot;)
@@ -23,5 +24,29 @@ Js.log(helloWorld)
 <pre><code>{ first: 'Hello' }
 { last: 'World' }
 { first: 'Hello', last: 'World' }
+</code></pre>
+<h2>@deriving(abstract) Example</h2>
+<pre><code class="language-res">@deriving(abstract)
+type person = {
+  id: int,
+  @optional first: string,
+  @optional last: string,
+}
+
+let p1 = person(~id=1, ())
+let p2 = person(~id=2, ~first=&quot;Hello&quot;, ())
+let p3 = person(~id=3, ~first=&quot;World&quot;, ())
+let p4 = person(~id=4, ~first=&quot;Hello&quot;, ~last=&quot;World&quot;, ())
+
+Js.log(p1)
+Js.log(p2)
+Js.log(p3)
+Js.log(p4)
+</code></pre>
+<p>Which produces:</p>
+<pre><code>{ id: 1 }
+{ id: 2, first: 'Hello' }
+{ id: 3, first: 'World' }
+{ id: 4, first: 'Hello', last: 'World' }
 </code></pre>
 </div></div></body></html>
