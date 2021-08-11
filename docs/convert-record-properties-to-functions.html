@@ -1,0 +1,22 @@
+<!doctype html><html data-reactroot=""><head><title>Convert Record properties into accessor functions</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Convert Record properties into accessor functions</h1><p>Thu Aug 12 2021</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>ReScript provides a decorator <code>@deriving(accessors)</code> that generators record property accessor functions.</p>
+<p>Example:</p>
+<pre><code class="language-res">@deriving(accessors)
+type monster = {
+  name: string,
+  isFriendly: bool,
+}
+
+let monster = {
+  name: &quot;Harry&quot;,
+  isFriendly: true,
+}
+
+Js.log(name(monster))
+Js.log(isFriendly(monster))
+
+Js.log(monster-&gt;name)
+Js.log(monster-&gt;isFriendly)
+</code></pre>
+</div></div></body></html>
