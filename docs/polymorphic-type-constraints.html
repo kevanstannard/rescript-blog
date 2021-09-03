@@ -1,0 +1,21 @@
+<!doctype html><html data-reactroot=""><head><title>Polymorphic type constraints</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Polymorphic type constraints</h1><p>Sat Sep 04 2021</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>Consider the following polymorphic functions:</p>
+<pre><code class="language-res">let id1: 'a =&gt; 'a = x =&gt; x
+let id2: 'a =&gt; 'a = x =&gt; x + 1
+</code></pre>
+<p>These compile successfully, but why does <code>id2</code> compile? Since it now only accepts an <code>int</code> shouldn't it trigger a compiler warning?</p>
+<p>Types of the form <code>'a</code>, <code>'b</code>, etc. are known as type variables. What's important to note here is that they are actually <strong>placeholders for an undetermined type</strong>. This means that the type system will <em>fill these types in with more specific types</em> if needed.</p>
+<p>However, if we wanted to ensure the implementation actually accepts polymorphic types, then we need to use a slightly different syntax:</p>
+<pre><code class="language-res">let id1: 'a. 'a =&gt; 'a = x =&gt; x // OK
+let id2: 'a. 'a =&gt; 'a = x =&gt; x + 1 // Error
+</code></pre>
+<p>We can read <code>'a.</code> as &quot;for all types of 'a&quot;.</p>
+<p>And here's an example with multiple types:</p>
+<pre><code class="language-res">let fst: 'a 'b. ('a, 'b) =&gt; 'a = (a, _) =&gt; a
+</code></pre>
+<h2>References</h2>
+<ul>
+<li><a href="https://www.craigfe.io/posts/polymorphic-type-constraints">https://www.craigfe.io/posts/polymorphic-type-constraints</a></li>
+</ul>
+</div></div></body></html>
