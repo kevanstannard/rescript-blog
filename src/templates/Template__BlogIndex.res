@@ -2,9 +2,9 @@ module BlogPost = {
   @react.component
   let make = (~blogPost: Pages.blogPost) => {
     <p>
-      <a href={blogPost.id ++ ".html"}> {ReasonReact.string(blogPost.title)} </a>
+      <a href={blogPost.id ++ ".html"}> {React.string(blogPost.title)} </a>
       <br />
-      <span> {ReasonReact.string(Js.Date.toDateString(blogPost.date))} </span>
+      <span> {React.string(Js.Date.toDateString(blogPost.date))} </span>
     </p>
   }
 }
@@ -13,10 +13,10 @@ module BlogPost = {
 let make = (~blogPosts: array<Pages.blogPost>) => {
   let title = "ReScript Blog"
   <Template__Html title={title}>
-    <p> <a href="about.html"> {ReasonReact.string(`About this blog →`)} </a> </p>
-    <h1> {ReasonReact.string(title)} </h1>
+    <p> <a href="about.html"> {React.string(`About this blog →`)} </a> </p>
+    <h1> {React.string(title)} </h1>
     {blogPosts
     ->Js.Array2.map(blogPost => <BlogPost key={blogPost.id} blogPost={blogPost} />)
-    ->ReasonReact.array}
+    ->React.array}
   </Template__Html>
 }
