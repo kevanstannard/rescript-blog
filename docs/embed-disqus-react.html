@@ -1,0 +1,32 @@
+<!doctype html><html data-reactroot=""><head><title>How embed a Disqus discussion in ReScript React?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How embed a Disqus discussion in ReScript React?</h1><p>Sat Dec 18 2021</p><div><pre><code>rescript@9.1.4
+</code></pre>
+<p>The simplest approach is to use the <code>disqus-react</code> package.</p>
+<p>You will need to install the <code>disqus-react</code> and <code>prop-types</code> packages.</p>
+<p>At the time of writing this was:</p>
+<pre><code>disqus-react@1.1.2
+prop-types@15.7.2
+</code></pre>
+<p>We can then create a binding to the library</p>
+<pre><code class="language-res">// DisqusReact.res
+
+module DiscussionEmbed = {
+  type config = {
+    url: string,
+    identifier: string,
+  }
+
+  @module(&quot;disqus-react&quot;) @react.component
+  external make: (~shortname: string, ~config: config) =&gt; React.element = &quot;DiscussionEmbed&quot;
+}
+</code></pre>
+<p>And we can then use this in a ReScript React component.</p>
+<p>Example Product page:</p>
+<pre><code class="language-res">&lt;DisqusReact.DiscussionEmbed
+  shortname=&quot;disqus-account-short-name&quot;
+  config={{
+    identifier: &quot;product-&quot; ++ productId,
+    url: &quot;https://www.example.com/product/&quot; ++ productId,
+  }}
+/&gt;
+</code></pre>
+</div></div></body></html>
