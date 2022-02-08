@@ -1,0 +1,15 @@
+<!doctype html><html data-reactroot=""><head><title>How to access __filename and __dirname in ES6 modules in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to access __filename and __dirname in ES6 modules in ReScript?</h1><p>Wed Feb 09 2022</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<pre><code class="language-res">module Url = {
+  @module(&quot;url&quot;) external fileURLToPath: string =&gt; string = &quot;fileURLToPath&quot;
+}
+
+module Path = {
+  @module(&quot;path&quot;) external dirname: string =&gt; string = &quot;dirname&quot;
+}
+
+@val external importMetaUrl: string = &quot;import.meta.url&quot;
+let __filename = Url.fileURLToPath(importMetaUrl)
+let __dirname = Path.dirname(__filename)
+</code></pre>
+</div></div></body></html>
