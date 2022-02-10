@@ -121,15 +121,15 @@ This was influenced by it being a NextJS project. I imagine I might use a differ
 
 The plugin is exceptional. Auto formatting, auto fixing, syntax highlighting, syntax prompts and great responsiveness made overall development a great experience.
 
-One feature of automatically pre-filling some syntax with a template, such as a `switch` statement, was not useful for me personally and I found myself regularly deleting the template code and writing what I actually wanted, but only minor inconvenience.
+One feature of automatically pre-filling some syntax with a template, such as a `switch` statement, was not useful for me personally and I found myself regularly deleting the template code and writing what I actually wanted, but only a minor inconvenience.
 
 ## ReScript Community
 
-Amazing community on the forum, very helpful and friendly to newcomers. Many very experienced ReScript developers are there regularly providing their time and support.
+Amazing community on the forum, very helpful and friendly to newcomers. Many very experienced developers are there regularly providing their time and support.
 
 ## ReScript Project
 
-I just wanted to share only one concern - it appears that only two members of the seven member ReScript team participate in the forum, and the success of ReScript project appears to depend on those people. This is the only concern I have with advocating for ReScript on commercial projects, but I'm hopeful this is something the team will address in time.
+I just wanted to share only one concern - it appears that only two members of the seven member ReScript team participate in the forum, and the success of ReScript project appears to depend on those people. This is the only concern I have with advocating for ReScript on commercial projects, but I'm hopeful this is something the team can address in time.
 
 ## Final Thoughts
 
@@ -137,7 +137,7 @@ I'm grateful to @Hongbo and the rest of the team for the enormous effort put int
 
 It's unique in the JS dev space. There are other compile to JS languages, but none that cater directly to JS devs, as far as I'm aware.
 
-So in the meantime, I'll so what I can to help contribute to the project from time to time.
+So in the meantime, I'll do what I can to help contribute to the project from time to time.
 
 Lastly; a reflection of how I feel when working on JS vs TypeScript vs ReScript projects:
 
