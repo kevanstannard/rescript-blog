@@ -1,5 +1,5 @@
 ---
-title: ReScript Reflections
+title: Reflections on a ReScript project
 date: 2022-02-10 11:54:56
 ---
 
@@ -141,7 +141,7 @@ So in the meantime, I'll so what I can to help contribute to the project from ti
 
 Lastly; a reflection of how I feel when working on JS vs TypeScript vs ReScript projects:
 
-![JavaScript vs TypeScript vs ReScript](/static/js-ts-res.jpeg)
+![JavaScript vs TypeScript vs ReScript](static/js-ts-res.jpeg)
 
 ## The Project
 
