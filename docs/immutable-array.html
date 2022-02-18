@@ -1,0 +1,18 @@
+<!doctype html><html data-reactroot=""><head><title>How to create an immutable array?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to create an immutable array?</h1><p>Sat Feb 19 2022</p><div><p>Simple version with shallow copy only:</p>
+<pre><code class="language-res">module ImmutableArray: {
+  type t&lt;'a&gt;
+  let make: unit =&gt; t&lt;'a&gt;
+  let push: (t&lt;'a&gt;, 'a) =&gt; t&lt;'a&gt;
+} = {
+  type t&lt;'a&gt; = array&lt;'a&gt;
+  let make = () =&gt; []
+  let push = (arr, value) =&gt; Belt.Array.concat(arr, [value])
+}
+
+let arr0: ImmutableArray.t&lt;int&gt; = ImmutableArray.make()
+let arr1 = ImmutableArray.push(arr0, 1)
+
+Js.log(arr0 === arr0) // true
+Js.log(arr0 === arr1) // false
+</code></pre>
+</div></div></body></html>
