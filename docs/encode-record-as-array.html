@@ -1,0 +1,67 @@
+<!doctype html><html data-reactroot=""><head><title>How to encode a record as an array?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to encode a record as an array?</h1><p>Sat Dec 18 2021</p><div><pre><code>rescript@9.1.4
+</code></pre>
+<p>When all keys of a record are numeric and sequential:</p>
+<pre><code class="language-res">type t = {
+  @as(&quot;0&quot;) x: int,
+  @as(&quot;1&quot;) y: int,
+  @as(&quot;2&quot;) z: int,
+}
+
+let x = {x: 1, y: 2, z: 3}
+</code></pre>
+<p>Then the record is encoded as an array:</p>
+<pre><code class="language-js">var x = [
+  1,
+  2,
+  3
+];
+</code></pre>
+<p>When not sequential:</p>
+<pre><code class="language-res">type t = {
+  @as(&quot;3&quot;) x: int,
+  @as(&quot;4&quot;) y: int,
+  @as(&quot;5&quot;) z: int,
+}
+
+let x = {x: 1, y: 2, z: 3}
+</code></pre>
+<p>Then it's encoded as an object:</p>
+<pre><code class="language-js">var x = {
+  &quot;0&quot;: 1,
+  &quot;2&quot;: 2,
+  &quot;4&quot;: 3
+};
+</code></pre>
+<p>When not starting from <code>0</code>:</p>
+<pre><code class="language-res">type t = {
+  @as(&quot;1&quot;) x: int,
+  @as(&quot;2&quot;) y: int,
+  @as(&quot;3&quot;) z: int,
+}
+
+let x = {x: 1, y: 2, z: 3}
+</code></pre>
+<p>Then it's encoded as an object:</p>
+<pre><code class="language-js">var x = {
+  &quot;1&quot;: 1,
+  &quot;2&quot;: 2,
+  &quot;3&quot;: 3
+};
+</code></pre>
+<p>When different types:</p>
+<pre><code class="language-res">type t = {
+  @as(&quot;0&quot;) x: int,
+  @as(&quot;1&quot;) y: float,
+  @as(&quot;2&quot;) z: bool,
+}
+
+let x = {x: 1, y: 2.0, z: true}
+</code></pre>
+<p>Same rules as above:</p>
+<pre><code class="language-res">var x = [
+  1,
+  2.0,
+  true
+];
+</code></pre>
+</div></div></body></html>
