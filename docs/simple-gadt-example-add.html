@@ -1,0 +1,19 @@
+<!doctype html><html data-reactroot=""><head><title>Simple GADT Example</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Simple GADT Example</h1><p>Tue Feb 22 2022</p><div><pre><code class="language-res">type rec expr&lt;_&gt; =
+  | Int(int): expr&lt;int&gt;
+  | Float(float): expr&lt;float&gt;
+
+let add:
+  type a. (expr&lt;a&gt;, expr&lt;a&gt;) =&gt; expr&lt;a&gt; =
+  (a, b) =&gt; {
+    switch (a, b) {
+    | (Int(a), Int(b)) =&gt; Int(a + b)
+    | (Float(a), Float(b)) =&gt; Float(a +. b)
+    }
+  }
+</code></pre>
+<p>Some notes about ReScript GADT support:</p>
+<blockquote>
+<p>GADTs are hard to explain, hard to understand, and we are not sure yet if it makes sense to trade clarity of the code with more expressive type constraint possibilities. GADTs are actually so meta that the Reason docs linked to an article called <a href="https://blog.mads-hartmann.com/ocaml/2015/01/05/gadt-ocaml.html">Detecting use-cases for GADTs in OCaml</a>, which is always a good sign that a feature might be too complex for the broader audience.</p>
+</blockquote>
+<p>Ref: <a href="https://forum.rescript-lang.org/t/long-term-goals-vis-a-vis-typescript/332/18">https://forum.rescript-lang.org/t/long-term-goals-vis-a-vis-typescript/332/18</a></p>
+</div></div></body></html>
