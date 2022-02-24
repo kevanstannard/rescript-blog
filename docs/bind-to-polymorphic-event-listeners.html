@@ -1,0 +1,27 @@
+<!doctype html><html data-reactroot=""><head><title>How to bind to polymorphic event listeners in ReScript?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to bind to polymorphic event listeners in ReScript?</h1><p>Fri Feb 25 2022</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>Service worker binding example.</p>
+<pre><code class="language-res">module Self = {
+  type t
+
+  @val external instance: t = &quot;self&quot;
+
+  // Keep unsafe addEventListener private, and consumers
+  // may only use the safe event listener functions.
+  %%private(
+    @send
+    external addEventListener: (t, [#install | #activate | #fetch], 'a =&gt; unit) =&gt; unit =
+      &quot;addEventListener&quot;
+  )
+
+  let addInstallEventListener: (t, InstallEvent.t =&gt; unit) =&gt; unit = (self, cb) =&gt;
+    addEventListener(self, #install, cb)
+
+  let addActivateEventListener: (t, ActivateEvent.t =&gt; unit) =&gt; unit = (self, cb) =&gt;
+    addEventListener(self, #activate, cb)
+
+  let addFetchEventListener: (t, FetchEvent.t =&gt; unit) =&gt; unit = (self, cb) =&gt;
+    addEventListener(self, #fetch, cb)
+}
+</code></pre>
+</div></div></body></html>
