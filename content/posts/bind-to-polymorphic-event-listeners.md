@@ -10,6 +10,21 @@ ReScript version: rescript@9.1.4
 Service worker binding example.
 
 ```res
+module InstallEvent = {
+  type t
+  @send external waitUntil: (t, Promise.t<unit>) => unit = "waitUntil"
+}
+
+module ActivateEvent = {
+  type t
+  @send external waitUntil: (t, Promise.t<unit>) => unit = "waitUntil"
+}
+
+module FetchEvent = {
+  type t
+  @send external respondWith: (t, 'a) => unit = "respondWith"
+}
+
 module Self = {
   type t
 
