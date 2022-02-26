@@ -1,0 +1,21 @@
+<!doctype html><html data-reactroot=""><head><title>Type for an empty object</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Type for an empty object</h1><p>Sat Feb 26 2022</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>The type for an empty object is <code>{.}</code>.</p>
+<p>This can be created using <code>Js.Obj.empty()</code></p>
+<p>Example:</p>
+<pre><code class="language-res">let f: {.} =&gt; {..} = o =&gt; {
+  Js.Obj.assign(o, {&quot;x&quot;: 0})
+}
+
+let a = f(Js.Obj.empty()) // OK
+let b = f({&quot;y&quot;: 0}) // Error
+</code></pre>
+<p>However if we change <code>{.}</code> to <code>{..}</code>:</p>
+<pre><code class="language-res">let f: {..} =&gt; {..} = o =&gt; {
+  Js.Obj.assign(o, {&quot;x&quot;: 0})
+}
+
+let a = f(Js.Obj.empty()) // OK
+let b = f({&quot;y&quot;: 0}) // OK
+</code></pre>
+</div></div></body></html>

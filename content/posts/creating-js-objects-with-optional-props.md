@@ -4,7 +4,7 @@ date: 2021-08-06 07:11:13
 ---
 
 ```
-ReScript version: rescript@9.1.2
+ReScript version: rescript@9.1.4
 ```
 
 We can use the `%obj` or the `@deriving(abstract)` decorator to help with creating JS objects that have optional properties. They may be used slightly differently.
@@ -18,13 +18,9 @@ type t
 // Special external syntax
 @obj external make: (~first: string=?, ~last: string=?, unit) => t = ""
 
-let helloFn = make(~first="Hello")
-let worldFn = make(~last="World")
-let helloWorldFn = make(~first="Hello", ~last="World")
-
-let hello = helloFn()
-let world = worldFn()
-let helloWorld = helloWorldFn()
+let hello = make(~first="Hello", ())
+let world = make(~last="World", ())
+let helloWorld = make(~first="Hello", ~last="World", ())
 
 Js.log(hello)
 Js.log(world)
@@ -37,6 +33,23 @@ Which produces:
 { first: 'Hello' }
 { last: 'World' }
 { first: 'Hello', last: 'World' }
+```
+
+Or the type can be inferred using `_` as the return value:
+
+```res
+@obj external make: (~first: string=?, ~last: string=?, unit) => _ = ""
+
+let hello: {..} = make(~first="Hello", ())
+```
+
+Which produces the inferred type:
+
+```js
+{
+  "first": Js.undefined<string>,
+  "last": Js.undefined<string>,
+}
 ```
 
 ## @deriving(abstract) Example
