@@ -1,0 +1,21 @@
+<!doctype html><html data-reactroot=""><head><title>Understanding optional named arguments?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Understanding optional named arguments?</h1><p>Wed Mar 02 2022</p><div><pre><code>ReScript version: rescript@9.1.4
+</code></pre>
+<p>Consider the following code, and note the difference in optional type annotations:</p>
+<pre><code class="language-res">let f: (~foo: string=?, unit) =&gt; string = (~foo: option&lt;string&gt;=?, ()) =&gt;
+  switch foo {
+  | None =&gt; &quot;&quot;
+  | Some(x) =&gt; x
+  }
+
+let _ = f()
+let _ = f(~foo=&quot;&quot;)
+</code></pre>
+<blockquote>
+<p>The entire function f is annotated as <code>(~foo: string=?) =&gt; string</code>. This what code outside of the function sees. foo is a string because <strong>outside</strong> code will call it like <code>f(~foo=&quot;bar&quot;)</code>.</p>
+</blockquote>
+<blockquote>
+<p>The inline type annotation for foo is <code>option&lt;string&gt;</code> though, because that’s what code <strong>inside</strong> the function sees.</p>
+</blockquote>
+<h1>Reference</h1>
+<p><a href="https://forum.rescript-lang.org/t/binding-to-an-option-value/3087/4?u=kevanstannard">https://forum.rescript-lang.org/t/binding-to-an-option-value/3087/4?u=kevanstannard</a></p>
+</div></div></body></html>
