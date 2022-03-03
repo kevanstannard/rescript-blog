@@ -1,5 +1,5 @@
 ---
-title: Understanding optional named arguments?
+title: Understanding optional named arguments
 date: 2022-03-01 20:01:00
 ---
 
