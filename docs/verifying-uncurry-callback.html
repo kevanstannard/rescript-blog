@@ -1,0 +1,43 @@
+<!doctype html><html data-reactroot=""><head><title>How to verify uncurring a callback is working?</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>How to verify uncurring a callback is working?</h1><p>Sun Mar 20 2022</p><div><p>Consider the following:</p>
+<pre><code class="language-res">@val external test: ((int, int) =&gt; int) =&gt; unit = &quot;test&quot;
+
+let f = x =&gt; x
+let g = _ =&gt; f
+
+test(g)
+</code></pre>
+<p>Which generates JS:</p>
+<pre><code class="language-js">function f(x) {
+  return x;
+}
+
+function g(param) {
+  return f;
+}
+
+test(g);
+</code></pre>
+<p>Note that the call to the <code>test()</code> function <strong>is not uncurried</strong>.</p>
+<p>Now with <code>@uncurry</code> on the callback function:</p>
+<pre><code class="language-res">@val external test: (@uncurry (int, int) =&gt; int) =&gt; unit = &quot;test&quot;
+
+let f = x =&gt; x
+let g = _ =&gt; f
+
+test(g)
+</code></pre>
+<p>Which generates JS:</p>
+<pre><code class="language-js">function f(x) {
+  return x;
+}
+
+function g(param) {
+  return f;
+}
+
+test(function (param, param$1) {
+  return f(param$1);
+});
+</code></pre>
+<p>Notice here that the call to the test function <strong>is uncurried</strong>.</p>
+</div></div></body></html>

@@ -1,0 +1,16 @@
+<!doctype html><html data-reactroot=""><head><title>Check if a file is actually a file in Node</title><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css" rel="stylesheet"/><link href="static/styles.css" rel="stylesheet"/></head><body><div class="container"><p><a href="index.html">← Back to index</a></p><h1>Check if a file is actually a file in Node</h1><p>Fri Mar 18 2022</p><div><pre><code class="language-res">module Fs = {
+  module Stats = {
+    type t
+    @send external isDirectory: t =&gt; bool = &quot;isDirectory&quot;
+    @send external isFile: t =&gt; bool = &quot;isFile&quot;
+  }
+
+  @module(&quot;fs&quot;) external statSync: string =&gt; Stats.t = &quot;statSync&quot;
+}
+
+let isFile = (path: string): bool =&gt; {
+  let stats = Fs.statSync(path)
+  Fs.Stats.isFile(stats)
+}
+</code></pre>
+</div></div></body></html>
